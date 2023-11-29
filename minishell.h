@@ -26,6 +26,9 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 // lu_inputparsing.c
 void	inputparsing(t_cmd *cmd);
 
+// lexer.c
+void	lexer(t_cmd *cmd);
+
 
 
 #endif

@@ -3,7 +3,7 @@
 void	inputparsing(t_cmd *cmd)
 {
 	cmd->input = readline("PPP-Prompt: ");
-	
+	lexer(cmd);
 	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
 	{
 
