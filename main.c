@@ -21,8 +21,6 @@ int	main(int argc, char **argv)
 		return (100);
 	while (my_love_for_viktoria > 0)
 	{
-		ft_putstr_fd("PPP-Prompt:", 1);
-
 		inputparsing(&cmd);
 
 	}

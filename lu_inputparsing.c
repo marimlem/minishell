@@ -2,9 +2,9 @@
 
 void	inputparsing(t_cmd *cmd)
 {
-	cmd->input = get_next_line(0);
+	cmd->input = readline("PPP-Prompt: ");
 	
-	if (ft_strncmp(cmd->input, "exit", 4) == 0)
+	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
 	{
 
 		free(cmd->input);

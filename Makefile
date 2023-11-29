@@ -14,10 +14,10 @@ CC = cc
 all:	$(LIBFT) $(NAME)
 
 $(NAME):	$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 
 $(OBJ):	$(SRC)
-	$(CC) -c $(CFLAGS) $(SRC) 
+	$(CC) -c $(CFLAGS) $(SRC) -lreadline
 
 $(LIBFT):	
 	make bonus -C $(LIB_D)
