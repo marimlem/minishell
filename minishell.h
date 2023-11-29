@@ -13,6 +13,13 @@
 
 # define my_love_for_viktoria 2147483647
 
+# define EVEN 0
+# define ODD 1
+# define DBLQUOTE 34
+# define SGLQUOTE 39
+
+
+
 typedef struct	s_cmd{
 	char *input;
 	char **tok;
@@ -27,7 +34,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void	inputparsing(t_cmd *cmd);
 
 // lexer.c
-void	lexer(t_cmd *cmd);
+int	even_quotes(t_cmd *cmd);
 
 
 
