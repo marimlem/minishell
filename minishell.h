@@ -8,6 +8,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
+
+# include "libft/libft.h"
 # include "get_next_line.h"
 
 
@@ -20,11 +23,18 @@
 
 
 
+typedef struct	s_tok{
+	char *tok;
+	int	typ;
+	struct s_tok *next;
+	struct s_tok *before;
+
+}	t_tok;
+
 typedef struct	s_cmd{
 	char *input;
-	char **tok;
+	t_tok *start;
 }	t_cmd;
-
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -34,6 +44,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 void	inputparsing(t_cmd *cmd);
 
 // lexer.c
+void	lexer(t_cmd *cmd);
 int	even_quotes(t_cmd *cmd);
 
 

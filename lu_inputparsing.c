@@ -7,7 +7,7 @@ void	inputparsing(t_cmd *cmd)
 		return ;
 	if (even_quotes(cmd) == EVEN)
 	{
-		// lexer(cmd);
+		lexer(cmd);
 		// printf("even!");
 	}
 	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
