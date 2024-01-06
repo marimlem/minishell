@@ -14,8 +14,6 @@
 # include "get_next_line.h"
 
 
-# define my_love_for_viktoria 2147483647
-
 # define EVEN 0
 # define ODD 1
 # define DBLQUOTE 34

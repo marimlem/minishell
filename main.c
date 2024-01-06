@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 1)
 		return (100);
-	while (my_love_for_viktoria > 0)
+	while (1)
 	{
 		inputparsing(&cmd);
 
