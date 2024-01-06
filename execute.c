@@ -67,6 +67,8 @@ void	cmd_execute(t_cmd *cmd)
 	t_tok	*p;
 	char	*file;
 	char	**args;
+	__pid_t	pid;
+	__pid_t	status;
 			// int	i = 0;
 
 	p = cmd->start->next;
@@ -83,5 +85,13 @@ void	cmd_execute(t_cmd *cmd)
 			// {
 			// 	printf("mat: %s\n", args[i++]);
 			// }
-	execve(file, args, NULL);
+	pid = fork();
+	if (pid == -1)
+	{
+		return ; // set error
+	}
+	else if (pid == 0)
+		execve(file, args, NULL);
+	else
+		waitpid(pid, &status, 0);
 }
