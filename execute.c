@@ -3,6 +3,22 @@
 	// char *file = "/usr/bin/ls";
     // char *const args[] = {"/usr/bin/ls", "-a", "-l", NULL};
     // char *const env[] = {"ENV=World", NULL};
+void	executor(t_cmd *cmd)
+{
+	cmd_execute(cmd);
+	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
+	{
+
+		free(cmd->input);
+		cmd->input = NULL;
+		exit(0); //leak of one
+	}
+	if (cmd->input)
+	{
+		free(cmd->input);
+		cmd->input = NULL;
+	}
+}
 
 int	cmd_lstsize(t_tok *lst)
 {

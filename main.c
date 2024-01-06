@@ -22,8 +22,10 @@ int	main(int argc, char **argv)
 	while (1)
 	{
 		inputparsing(&cmd);
+		executor(&cmd);
 
 	}
+
 	(void) argv;
 	// (void) command;
 	return (0);

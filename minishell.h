@@ -40,6 +40,7 @@ typedef struct	s_cmd{
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // execute.c
+void	executor(t_cmd *cmd);
 void	cmd_execute(t_cmd *cmd);
 
 // lu_inputparsing.c
