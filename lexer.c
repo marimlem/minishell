@@ -1,14 +1,25 @@
 #include "minishell.h"
 
-void	tok_init(t_cmd *cmd)
+t_tok	*lex_lstnew(char *ptr)
 {
-	cmd->start = (t_tok *) malloc(sizeof(t_tok) * 1);
-	if (cmd->start == NULL)
-		return ; // set error
-	cmd->start->tok = NULL;
-	cmd->start->typ = 0;
-	cmd->start->next = NULL;
-	cmd->start->before = NULL;
+	t_tok *list;
+
+	list = (t_tok *) malloc(sizeof(t_tok) * 1);
+	if (list == NULL)
+		return (NULL); // set error
+	list->tok = NULL;
+	list->typ = 0;
+	list->next = NULL;
+	list->before = NULL;
+	if (ptr == NULL)
+		return (list);
+	list->tok = ft_strdup(ptr);
+	if (list->tok == NULL)
+	{
+		free (list);
+		return (NULL);
+	}
+	return (list);
 }
 
 int	isnot_deli(char c)
@@ -34,46 +45,72 @@ int	isnot_deli(char c)
 // 	}
 // }
 
+// void	node_add(t_tok *p, char *in)
+// {
+// 	p = p->next;
+
+// }
+
 void	init_list(t_cmd *cmd, char **cmd_split)
 {
-	int	i;
+	int	y;
+	// int	i;
+	// int	j;
 	t_tok *p;
-
+	
+	cmd->start = lex_lstnew(NULL);
+	if (cmd->start == NULL)
+		return ; // set error
 	p = cmd->start;
-
-	i = 0;
-	while (cmd_split[i])
+	y = 0;
+	// i = 0;
+	// j = 0;
+	while (cmd_split[y])
 	{
-		new_node()
+		p->next = lex_lstnew(cmd_split[y]);
+		if (p->next == NULL)
+		{ // error; have to free and exit
+			break;
+		}
+		p = p->next;
+		y++;
 	}
+
+				//testing purposes: checking if the list is filled
+				// p = cmd->start;
+				// while (p)
+				// {
+				// 	printf("list: %s\n", p->tok);
+				// 	p = p->next;
+				// }
 }
 
-void	split_cmd(t_cmd *cmd)
+char	**split_cmd(t_cmd *cmd)
 {
-	char	**cmd_split;
+	char	**matrix;
 	int	i; //testing purposes
 
 	i = 0;
 
-	cmd_split = ft_split(cmd->input, ' ');
-	if (cmd_split == NULL)
-		return;
-	while (cmd_split && cmd_split[i]) //testing purposes
+	matrix = ft_split(cmd->input, ' ');
+	if (matrix == NULL)
+		return (NULL);
+	while (matrix && matrix[i]) //testing purposes
 	{
-		printf("test: %s\n", cmd_split[i]);
+		printf("test: %s\n", matrix[i]);
 		i++;
 	}
-	init_list(cmd, cmd_split);
+
 	// cmd_split = split_split(cmd_split);
+	return (matrix);
 }
 
 void	lexer(t_cmd *cmd)
 {
-	tok_init(cmd);
-	if (cmd->start == NULL)
-		return ; // set error
-	split_cmd(cmd);
+	char	**matrix;
 	
+	matrix = split_cmd(cmd);
+	init_list(cmd, matrix);
 }
 
 
