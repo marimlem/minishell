@@ -88,18 +88,18 @@ void	init_list(t_cmd *cmd, char **cmd_split)
 char	**split_cmd(t_cmd *cmd)
 {
 	char	**matrix;
-	int	i; //testing purposes
+	// int	i; //testing purposes
 
-	i = 0;
+	// i = 0;
 
 	matrix = ft_split(cmd->input, ' ');
 	if (matrix == NULL)
 		return (NULL);
-	while (matrix && matrix[i]) //testing purposes
-	{
-		printf("test: %s\n", matrix[i]);
-		i++;
-	}
+	// while (matrix && matrix[i]) //testing purposes
+	// {
+	// 	printf("test: %s\n", matrix[i]);
+	// 	i++;
+	// }
 
 	// cmd_split = split_split(cmd_split);
 	return (matrix);

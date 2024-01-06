@@ -10,6 +10,7 @@ void	inputparsing(t_cmd *cmd)
 		lexer(cmd);
 		// printf("even!");
 	}
+	cmd_execute(cmd);
 	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
 	{
 

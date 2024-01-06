@@ -21,6 +21,8 @@
 # define DBLQUOTE 34
 # define SGLQUOTE 39
 
+# define BIN "/usr/bin/"
+
 
 
 typedef struct	s_tok{
@@ -39,6 +41,8 @@ typedef struct	s_cmd{
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
+// execute.c
+void	cmd_execute(t_cmd *cmd);
 
 // lu_inputparsing.c
 void	inputparsing(t_cmd *cmd);
