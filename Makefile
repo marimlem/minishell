@@ -3,7 +3,7 @@ NAME = minishell
 LIB_D = ./libft/
 LIBFT = $(LIB_D)libft.a
 
-SRC = main.c lu_inputparsing.c ft_strncmp.c get_next_line.c get_next_line_utils.c
+SRC = main.c lexer.c execute.c lu_inputparsing.c ft_strncmp.c get_next_line.c get_next_line_utils.c
 OBJ = $(SRC:%.c=%.o)
 
 CFLAGS = -Wall -Werror -Wextra
