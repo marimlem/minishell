@@ -54,6 +54,10 @@ void	inputparsing(t_cmd *cmd);
 void	lexer(t_cmd *cmd);
 int	even_quotes(t_cmd *cmd);
 
+// signals.c
+void	sig_c(int sig);
+
+
 
 
 #endif
