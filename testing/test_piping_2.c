@@ -26,7 +26,8 @@ int main(void) {
 		close (fd[1]);
 
 		char *file = "/bin/echo";
-    	char *const args[] = {"/bin/echo", "~/42/minishell", NULL};
+    	// char *const args[] = {"/bin/echo", "~/42/minishell", NULL};
+    	char *const args[] = {"/bin/echo", "/home/luca/42/minishell/testing", NULL};
 		// char *const env[] = {NULL};
 
 
@@ -56,6 +57,7 @@ int main(void) {
 			return 2; //error
 		args1[2] = NULL;
 		read(0, str, 111);
+		printf("read: %s", str);
 		args1[1] =ft_strdup(str);
 		if (args1[1] ==NULL)
 			return 2; //error
@@ -67,11 +69,12 @@ int main(void) {
 			printf("\n%d\n", args1[1][i]);
 			write (1, &args1[1][i++], 1);
 		}
+		args1[1][i-1] = 0;
 		// write(1, "end", 3);
 		i=0;
 		while (args1[i])
 		{
-			printf("%s\n", args1[i]);
+			printf("%s*", args1[i]);
 			i++;
 		}
 			
