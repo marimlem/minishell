@@ -25,7 +25,7 @@
 
 # define BIN "/usr/bin/"
 
-
+int	g_sig_int;
 
 typedef struct	s_tok{
 	char *tok;

@@ -17,6 +17,7 @@ int	main(int argc, char **argv)
 	// char *command;
 	t_cmd	cmd;
 
+	g_sig_int = 0;
 	if (argc != 1)
 		return (100);
 	signal(SIGINT, sig_c);
