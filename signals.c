@@ -3,6 +3,8 @@
 void	sig_c(int sig)
 {
 	(void) sig;
+	while (g_sig_int == 1)
+		pause();
 	if (g_sig_int == 0)
 	{
 		g_sig_int = 1;
