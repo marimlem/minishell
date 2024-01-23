@@ -32,7 +32,9 @@ void	lex_lstsqueezein(t_tok *current, char *str)
 
 
 	// find | < << > >> outside of quotes that are not alone-standing
-		// e.g. ls| grep a
+		// done: ls| grep a
+		// todo: ls |grep a
+		// todo echo "he | he" | grep a
 void	separate_pipe(t_cmd *cmd, t_tok *current)
 {
 	// int	i;
@@ -42,8 +44,22 @@ void	separate_pipe(t_cmd *cmd, t_tok *current)
 	if (ft_strchr(current->tok, '|') != NULL && ft_strlen(current->tok) > 1)
 	{
 		str = ft_strchr(current->tok, '|');
-		lex_lstsqueezein(current, str);
-		str[0] = 0;
+		if (current->tok[0] == '|') //if: pipe is the first char of a string
+		{
+			lex_lstsqueezein(current, &str[1]);
+			current->tok[1] = 0;
+		}
+		// else if (str[1]) //if: there's something more directly after |
+		// {
+		// 	lex_lstsqueezein(current, &str[1]);
+		// 	lex_lstsqueezein(current, "|");
+		// }
+		else
+		{
+			lex_lstsqueezein(current, str);
+			str[0] = 0;
+
+		}
 		// printf("strchr: %s\n", ft_strchr(current->tok, '|'));
 		// printf("list new: %s\n", current->next->tok);
 		// printf("list after new: %s\n", current->next->next->tok);
@@ -66,7 +82,7 @@ void	split_list(t_cmd *cmd)
 		separate_pipe(cmd, current);
 		current = current->next;
 	}
-	// lst_print(cmd->node);
+	lst_print(cmd->node);
 
 
 
