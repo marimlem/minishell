@@ -51,13 +51,15 @@ char	**create_arg_mat(t_tok *p, char *file)
 	mat[i] = ft_strdup(file);
 	if (mat[i++] == NULL)
 		return (NULL); // set error
-	p = p->next;
-	while (p != NULL)
+	// p = p->next;
+	while (p->tok != NULL && i != size)
 	{
 		mat[i] = ft_strdup(p->tok);
 		if (mat[i++] == NULL)
 			return (NULL); // set error
 		p = p->next;
+		if (p == NULL)
+			break ;
 	}
 	return (mat);
 }
@@ -72,8 +74,6 @@ void	cmd_execute(t_cmd *cmd)
 			// int	i = 0;
 
 	p = cmd->node;
-	if (p == NULL)
-		return ;
 	file = ft_strjoin(BIN, p->tok);
 	if (file == NULL)
 		return ; // set error

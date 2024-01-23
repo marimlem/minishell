@@ -59,19 +59,22 @@ void	init_list(t_cmd *cmd, char **cmd_split)
 	t_tok *p;
 	
 	y = 0;
-	cmd->node = lex_lstnew(cmd_split[y++]);
-	if (cmd->node == NULL)
-		return ; // set error
+	// cmd->node = lex_lstnew(cmd_split[y++]);
+	// if (cmd->node == NULL)
+	// 	return ; // set error
 	p = cmd->node;
 	// i = 0;
 	// j = 0;
 	while (cmd_split[y])
 	{
-		p->next = lex_lstnew(cmd_split[y]);
-		if (p->next == NULL)
+		p= lex_lstnew(cmd_split[y]);
+		if (p == NULL)
 		{ // error; have to free and exit
 			break;
 		}
+		else if (y == 0)
+			cmd->node = p;
+
 		p = p->next;
 		y++;
 	}
