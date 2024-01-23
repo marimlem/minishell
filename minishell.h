@@ -37,7 +37,7 @@ typedef struct	s_tok{
 
 typedef struct	s_cmd{
 	char *input;
-	t_tok *start;
+	t_tok *node;
 }	t_cmd;
 
 // ft_strncmp.c

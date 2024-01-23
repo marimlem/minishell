@@ -71,7 +71,7 @@ void	cmd_execute(t_cmd *cmd)
 	__pid_t	status;
 			// int	i = 0;
 
-	p = cmd->start->next;
+	p = cmd->node;
 	if (p == NULL)
 		return ;
 	file = ft_strjoin(BIN, p->tok);

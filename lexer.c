@@ -58,11 +58,11 @@ void	init_list(t_cmd *cmd, char **cmd_split)
 	// int	j;
 	t_tok *p;
 	
-	cmd->start = lex_lstnew(NULL);
-	if (cmd->start == NULL)
-		return ; // set error
-	p = cmd->start;
 	y = 0;
+	cmd->node = lex_lstnew(cmd_split[y++]);
+	if (cmd->node == NULL)
+		return ; // set error
+	p = cmd->node;
 	// i = 0;
 	// j = 0;
 	while (cmd_split[y])
@@ -77,7 +77,7 @@ void	init_list(t_cmd *cmd, char **cmd_split)
 	}
 
 				//testing purposes: checking if the list is filled
-				// p = cmd->start;
+				// p = cmd->node;
 				// while (p)
 				// {
 				// 	printf("list: %s\n", p->tok);
@@ -104,6 +104,26 @@ char	**split_cmd(t_cmd *cmd)
 	// cmd_split = split_split(cmd_split);
 	return (matrix);
 }
+/* 
+void	separate_pipe(t_cmd *cmd, t_cmd *current)
+{
+	return;
+}
+
+
+void	split_list(t_cmd *cmd)
+{
+	t_cmd	*current;
+
+	current = cmd->node->next;
+	// find | < << > >> outside of quotes that are not alone-standing
+		// e.g. ls| grep a
+	separate_pipe(cmd, current)
+
+	// find quotes 
+
+
+} */
 
 void	lexer(t_cmd *cmd)
 {
@@ -111,6 +131,7 @@ void	lexer(t_cmd *cmd)
 	
 	matrix = split_cmd(cmd);
 	init_list(cmd, matrix);
+	// split_list(cmd); //WIP HERE
 }
 
 
