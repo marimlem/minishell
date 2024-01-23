@@ -1,93 +1,5 @@
 #include "minishell.h"
 
-t_tok	*lex_lstnew(char *ptr)
-{
-	t_tok *list;
-
-	list = (t_tok *) malloc(sizeof(t_tok) * 1);
-	if (list == NULL)
-		return (NULL); // set error
-	list->tok = NULL;
-	list->typ = 0;
-	list->next = NULL;
-	list->before = NULL;
-	if (ptr == NULL)
-		return (list);
-	list->tok = ft_strdup(ptr);
-	if (list->tok == NULL)
-	{
-		free (list);
-		return (NULL);
-	}
-	return (list);
-}
-
-int	isnot_deli(char c)
-{
-	if (c == '<' || c == '>' || c == '|')
-		return (1);
-	
-	return (0);
-}
-
-// char	**split_split(char **in);
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i =0;
-// 	j =0;
-// 	while (in[i] && in[i][j])
-// 	{
-// 		if (c == '<' || c == '>' || c == '|')
-			
-// 		j++;
-// 	}
-// }
-
-// void	node_add(t_tok *p, char *in)
-// {
-// 	p = p->next;
-
-// }
-
-void	init_list(t_cmd *cmd, char **cmd_split)
-{
-	int	y;
-	// int	i;
-	// int	j;
-	t_tok *p;
-	
-	y = 0;
-	// cmd->node = lex_lstnew(cmd_split[y++]);
-	// if (cmd->node == NULL)
-	// 	return ; // set error
-	p = cmd->node;
-	// i = 0;
-	// j = 0;
-	while (cmd_split[y])
-	{
-		p= lex_lstnew(cmd_split[y]);
-		if (p == NULL)
-		{ // error; have to free and exit
-			break;
-		}
-		else if (y == 0)
-			cmd->node = p;
-
-		p = p->next;
-		y++;
-	}
-
-				//testing purposes: checking if the list is filled
-				// p = cmd->node;
-				// while (p)
-				// {
-				// 	printf("list: %s\n", p->tok);
-				// 	p = p->next;
-				// }
-}
-
 char	**split_cmd(t_cmd *cmd)
 {
 	char	**matrix;
@@ -107,26 +19,59 @@ char	**split_cmd(t_cmd *cmd)
 	// cmd_split = split_split(cmd_split);
 	return (matrix);
 }
-/* 
-void	separate_pipe(t_cmd *cmd, t_cmd *current)
+
+void	lex_lstsqueezein(t_tok *current, char *str)
 {
+	t_tok	*new;
+	
+	new = lex_lstnew(str);
+	new->next = current->next;
+	current->next = new;
+	return ;
+}
+
+
+	// find | < << > >> outside of quotes that are not alone-standing
+		// e.g. ls| grep a
+void	separate_pipe(t_cmd *cmd, t_tok *current)
+{
+	// int	i;
+	char	*str;
+
+	// i=0;
+	if (ft_strchr(current->tok, '|') != NULL && ft_strlen(current->tok) > 1)
+	{
+		str = ft_strchr(current->tok, '|');
+		lex_lstsqueezein(current, str);
+		str[0] = 0;
+		// printf("strchr: %s\n", ft_strchr(current->tok, '|'));
+		// printf("list new: %s\n", current->next->tok);
+		// printf("list after new: %s\n", current->next->next->tok);
+	}
+	(void)cmd;
 	return;
 }
 
 
+
 void	split_list(t_cmd *cmd)
 {
-	t_cmd	*current;
+	t_tok	*current;
 
-	current = cmd->node->next;
-	// find | < << > >> outside of quotes that are not alone-standing
-		// e.g. ls| grep a
-	separate_pipe(cmd, current)
+	current = cmd->node;
+	// lst_print(cmd->node);
+	while (current && current->tok)
+	{
+		// printf("current: %s\n", current->tok);
+		separate_pipe(cmd, current);
+		current = current->next;
+	}
+	// lst_print(cmd->node);
 
-	// find quotes 
 
 
-} */
+	// todo: find quotes and piece them into one node
+}
 
 void	lexer(t_cmd *cmd)
 {
@@ -134,7 +79,7 @@ void	lexer(t_cmd *cmd)
 	
 	matrix = split_cmd(cmd);
 	init_list(cmd, matrix);
-	// split_list(cmd); //WIP HERE
+	split_list(cmd); //WIP HERE
 }
 
 

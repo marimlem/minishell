@@ -54,6 +54,14 @@ void	inputparsing(t_cmd *cmd);
 void	lexer(t_cmd *cmd);
 int	even_quotes(t_cmd *cmd);
 
+// lex_utils.c
+t_tok	*lex_lstnew(char *ptr);
+int	isnot_deli(char c);
+t_tok	*lex_lstlast(t_tok *lst);
+void	lex_lstadd_back(t_tok **lst, t_tok *new);
+void	init_list(t_cmd *cmd, char **cmd_split);
+void	lst_print(t_tok *lst);
+
 
 
 #endif
