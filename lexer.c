@@ -70,6 +70,51 @@ void	separate_pipe(t_cmd *cmd, t_tok *current)
 
 
 
+void	lex_lst_rmone(t_tok *current)
+{
+	t_tok *to_delete;
+	t_tok *next;
+
+	to_delete = current->next;
+	next = current->next->next;
+	current->next = next;
+	if (to_delete->tok)
+		free (to_delete->tok);
+	to_delete->next = NULL;
+	free (to_delete);
+}
+
+void	quote_merge(t_cmd *cmd)
+{
+	t_tok	*current;
+	int	i;
+	int	quote;
+	
+	i = 0;
+	quote = 0;
+	current = cmd->node;
+	while (current && current->tok)
+	{
+		if (quote == 0 && current->tok[i] == 0)
+		{
+			current = current->next;
+			i = 0;
+			continue;
+		}
+		else if (quote == 0 && (current->tok[i] == SGLQUOTE || current->tok[i] == DBLQUOTE))
+			quote = current->tok[i];
+		else if (quote != 0 && (current->tok[i] == quote))
+			quote = 0;
+		else if (quote != 0 && (current->tok[i] == 0))
+		{// append and remove next node
+			current->tok = ft_strjoin(current->tok, current->next->tok); //careful of strjoin leaks
+			lex_lst_rmone(current);
+			continue;
+		}
+		i++;
+	}
+}
+
 void	split_list(t_cmd *cmd)
 {
 	t_tok	*current;
@@ -87,6 +132,8 @@ void	split_list(t_cmd *cmd)
 
 
 	// todo: find quotes and piece them into one node
+	quote_merge(cmd);
+	lst_print(cmd->node);
 }
 
 void	lexer(t_cmd *cmd)
