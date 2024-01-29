@@ -121,7 +121,7 @@ void	quote_merge_2(t_cmd *cmd)
 				quote = current->tok[i];
 				current->tok[i] = 0;
 				current = current->next;
-				i = 0;
+				i = 1; //so it doesn't start at the quote
 				continue;
 			}
 			quote = current->tok[i];
