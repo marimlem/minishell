@@ -20,15 +20,7 @@ char	**split_cmd(t_cmd *cmd)
 	return (matrix);
 }
 
-void	lex_lstsqueezein(t_tok *current, char *str)
-{
-	t_tok	*new;
-	
-	new = lex_lstnew(str);
-	new->next = current->next;
-	current->next = new;
-	return ;
-}
+
 
 
 	// find | < << > >> outside of quotes that are not alone-standing
@@ -70,19 +62,6 @@ void	separate_pipe(t_cmd *cmd, t_tok *current)
 
 
 
-void	lex_lst_rmone(t_tok *current)
-{
-	t_tok *to_delete;
-	t_tok *next;
-
-	to_delete = current->next;
-	next = current->next->next;
-	current->next = next;
-	if (to_delete->tok)
-		free (to_delete->tok);
-	to_delete->next = NULL;
-	free (to_delete);
-}
 
 void	quote_merge(t_cmd *cmd)
 {
@@ -107,12 +86,68 @@ void	quote_merge(t_cmd *cmd)
 			quote = 0;
 		else if (quote != 0 && (current->tok[i] == 0))
 		{// append and remove next node
-			current->tok = ft_strjoin(current->tok, current->next->tok); //careful of strjoin leaks
+			current->tok = lex_strjoin(current->tok, current->next->tok, ' '); //careful of strjoin leaks
 			lex_lst_rmone(current);
 			continue;
 		}
 		i++;
 	}
+}
+
+void	quote_merge_2(t_cmd *cmd)
+{
+	int	quote;
+	t_tok	*current;
+	int	i;
+
+
+	i=0;
+	quote = 0;
+
+	current = cmd->node;
+	while (current && current->tok)
+	{
+		if (quote == 0 && current->tok[i] == 0)
+		{
+			current = current->next;
+			i = 0;
+			continue;
+		}
+		else if (quote == 0 && (current->tok[i] == SGLQUOTE || current->tok[i] == DBLQUOTE))
+		{
+			if (i != 0) // if not the first character
+			{
+				lex_lstsqueezein(current, &current->tok[i]);
+				quote = current->tok[i];
+				current->tok[i] = 0;
+				current = current->next;
+				i = 0;
+				continue;
+			}
+			quote = current->tok[i];
+		}
+		else if (quote != 0 && (current->tok[i] == quote))
+		{
+			current->typ = quote;
+			quote = 0;
+			if (current->tok[i + 1] != 0)
+			{
+				lex_lstsqueezein(current, &current->tok[i+1]);
+				current->tok[i+1] = 0;
+				current = current->next;
+				i = 0;
+				continue;
+			}
+		}
+		else if (quote != 0 && (current->tok[i] == 0))
+		{// append and remove next node
+			current->tok = lex_strjoin(current->tok, current->next->tok, ' '); //careful of strjoin leaks
+			lex_lst_rmone(current);
+			continue;
+		}
+		i++;
+	}
+
 }
 
 void	split_list(t_cmd *cmd)
@@ -121,10 +156,14 @@ void	split_list(t_cmd *cmd)
 
 	current = cmd->node;
 	// lst_print(cmd->node);
+
+	quote_merge_2(cmd);
+
 	while (current && current->tok)
 	{
 		// printf("current: %s\n", current->tok);
-		separate_pipe(cmd, current);
+		if (current->typ != SGLQUOTE && current->typ != DBLQUOTE)
+			separate_pipe(cmd, current);
 		current = current->next;
 	}
 	lst_print(cmd->node);
@@ -132,8 +171,8 @@ void	split_list(t_cmd *cmd)
 
 
 	// todo: find quotes and piece them into one node
-	quote_merge(cmd);
-	lst_print(cmd->node);
+	// quote_merge(cmd);
+	// lst_print(cmd->node);
 }
 
 void	lexer(t_cmd *cmd)

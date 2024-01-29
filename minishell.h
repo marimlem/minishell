@@ -62,6 +62,10 @@ void	lex_lstadd_back(t_tok **lst, t_tok *new);
 void	init_list(t_cmd *cmd, char **cmd_split);
 void	lst_print(t_tok *lst);
 
+// lex_utils2.c
+void	lex_lstsqueezein(t_tok *current, char *str);
+void	lex_lst_rmone(t_tok *current);
+char	*lex_strjoin(char const *s1, char const *s2, char deli);
 
 
 #endif
