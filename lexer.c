@@ -139,16 +139,20 @@ void	quote_merge_2(t_cmd *cmd)
 		{
 			current->typ = quote;
 			quote = 0;
-			if (current->tok[i + 1] != 0)
+			if (current->tok[i + 1] != 0 && current->tok[i + 1] != '|')
 			{
 				ft_memmove(&current->tok[i], &current->tok[i+1], ft_strlen(&current->tok[i+1]) + 1);
-				// lex_lstsqueezein(current, &current->tok[i+1]);
-				// current->tok[i] = 0;
-				// current = current->next;
-				// i = 0;
-				
 				continue;
 			}
+			else if (current->tok[i + 1] != 0 && current->tok[i + 1] == '|')
+			{
+				lex_lstsqueezein(current, &current->tok[i+1]);
+				current->tok[i] = 0;
+				current = current->next;
+				i = 0;
+				continue;
+			}
+
 			current->tok[i] = 0;
 		}
 		else if (quote != 0 && (current->tok[i] == 0))
