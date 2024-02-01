@@ -24,6 +24,8 @@ int	main(int argc, char **argv)
 		return 1;
 	cmd->input = NULL;
 	cmd->node = NULL;
+	cmd->i = 0;
+	cmd->q = 0;
 	while (1)
 	{
 		inputparsing(cmd);

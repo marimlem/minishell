@@ -38,6 +38,8 @@ typedef struct	s_tok{
 typedef struct	s_cmd{
 	char *input;
 	t_tok *node;
+	int	i;
+	int	q;
 }	t_cmd;
 
 // ft_strncmp.c
@@ -55,7 +57,7 @@ void	lexer(t_cmd *cmd);
 int	even_quotes(t_cmd *cmd);
 
 // lexer2.c
-void	quote_merge_2(t_cmd *cmd)
+void	quote_merge_2(t_cmd *cmd);
 
 
 // lex_utils.c
