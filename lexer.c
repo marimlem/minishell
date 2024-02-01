@@ -115,16 +115,25 @@ void	quote_merge_2(t_cmd *cmd)
 		}
 		else if (quote == 0 && (current->tok[i] == SGLQUOTE || current->tok[i] == DBLQUOTE))
 		{
-			if (i != 0) // if not the first character
+			quote = current->tok[i];
+			if (i != 0 && current->tok[i-1] == '|') // if not the first character
 			{
-				lex_lstsqueezein(current, &current->tok[i]);
-				quote = current->tok[i];
+				lex_lstsqueezein(current, &current->tok[i+1]);
 				current->tok[i] = 0;
 				current = current->next;
-				i = 1; //so it doesn't start at the quote
+				i = 0; 
 				continue;
 			}
-			quote = current->tok[i];
+			else if (i != 0) 
+			{ // case: hello"world" => helloworld
+				ft_memmove(&current->tok[i], &current->tok[i+1], ft_strlen(&current->tok[i+1]) + 1);
+				// current->tok[ft_strlen(&current->tok[i+1]) + 1] = 0;
+				current->typ = quote;
+			}
+			else if (i == 0)
+			{
+				current->tok = &current->tok[i+1];
+			}
 		}
 		else if (quote != 0 && (current->tok[i] == quote))
 		{
@@ -132,12 +141,15 @@ void	quote_merge_2(t_cmd *cmd)
 			quote = 0;
 			if (current->tok[i + 1] != 0)
 			{
-				lex_lstsqueezein(current, &current->tok[i+1]);
-				current->tok[i+1] = 0;
-				current = current->next;
-				i = 0;
+				ft_memmove(&current->tok[i], &current->tok[i+1], ft_strlen(&current->tok[i+1]) + 1);
+				// lex_lstsqueezein(current, &current->tok[i+1]);
+				// current->tok[i] = 0;
+				// current = current->next;
+				// i = 0;
+				
 				continue;
 			}
+			current->tok[i] = 0;
 		}
 		else if (quote != 0 && (current->tok[i] == 0))
 		{// append and remove next node
