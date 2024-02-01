@@ -9,8 +9,8 @@
 
 
 # include <stddef.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 
 
@@ -53,6 +53,9 @@ void	inputparsing(t_cmd *cmd);
 // lexer.c
 void	lexer(t_cmd *cmd);
 int	even_quotes(t_cmd *cmd);
+
+// lexer2.c
+
 
 // lex_utils.c
 t_tok	*lex_lstnew(char *ptr);
