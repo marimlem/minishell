@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-char	**split_cmd(t_cmd *cmd)
+char	**split_data(t_data *d)
 {
 	char	**matrix;
 	// int	i; //testing purposes
 
 	// i = 0;
 
-	matrix = ft_split(cmd->input, ' ');
+	matrix = ft_split(d->input, ' ');
 	if (matrix == NULL)
 		return (NULL);
 	// while (matrix && matrix[i]) //testing purposes
@@ -16,7 +16,7 @@ char	**split_cmd(t_cmd *cmd)
 	// 	i++;
 	// }
 
-	// cmd_split = split_split(cmd_split);
+	// d_split = split_split(d_split);
 	return (matrix);
 }
 
@@ -27,7 +27,7 @@ char	**split_cmd(t_cmd *cmd)
 		// done: ls| grep a
 		// todo: ls |grep a
 		// todo echo "he | he" | grep a
-void	separate_pipe(t_cmd *cmd, t_tok *current)
+void	separate_pipe(t_data *d, t_tok *current)
 {
 	// int	i;
 	char	*str;
@@ -56,14 +56,14 @@ void	separate_pipe(t_cmd *cmd, t_tok *current)
 		// printf("list new: %s\n", current->next->tok);
 		// printf("list after new: %s\n", current->next->next->tok);
 	}
-	(void)cmd;
+	(void)d;
 	return;
 }
 
 
 
 
-void	quote_merge(t_cmd *cmd)
+void	quote_merge(t_data *d)
 {
 	t_tok	*current;
 	int	i;
@@ -71,7 +71,7 @@ void	quote_merge(t_cmd *cmd)
 	
 	i = 0;
 	quote = 0;
-	current = cmd->node;
+	current = d->node;
 	while (current && current->tok)
 	{
 		if (quote == 0 && current->tok[i] == 0)
@@ -94,35 +94,35 @@ void	quote_merge(t_cmd *cmd)
 	}
 }
 
-void	split_list(t_cmd *cmd)
+void	split_list(t_data *d)
 {
 	t_tok	*current;
 
-	current = cmd->node;
+	current = d->node;
 	while (current && current->tok)
 	{
 		// printf("current: %s\n", current->tok);
 		if (current->typ != SGLQUOTE && current->typ != DBLQUOTE)
-			separate_pipe(cmd, current);
+			separate_pipe(d, current);
 		current = current->next;
 	}
-	lst_print(cmd->node);
+	lst_print(d->node);
 
 
 
 	// todo: find quotes and piece them into one node
-	// quote_merge(cmd);
-	// lst_print(cmd->node);
+	// quote_merge(d);
+	// lst_print(d->node);
 }
 
-void	lexer(t_cmd *cmd)
+void	lexer(t_data *d)
 {
 	char	**matrix;
 	
-	matrix = split_cmd(cmd);
-	init_list(cmd, matrix);
-	quote_merge_2(cmd); //WIP HERE
-	split_list(cmd);
+	matrix = split_data(d);
+	init_list(d, matrix);
+	quote_merge_2(d); //WIP HERE
+	split_list(d);
 
 }
 
@@ -130,20 +130,20 @@ void	lexer(t_cmd *cmd)
 
 // check for unclosed quotes, error if odd number
 // doesn't consider quotes of other type after opened quote
-int even_quotes(t_cmd *cmd)
+int even_quotes(t_data *d)
 {
 	int	i;
 	char	quote;
 
 	i=0;
 	quote = 0;
-	while (cmd && cmd->input && cmd->input[i])
+	while (d && d->input && d->input[i])
 	{
-		if (quote == 0 && (cmd->input[i] == SGLQUOTE || cmd->input[i] == DBLQUOTE))
+		if (quote == 0 && (d->input[i] == SGLQUOTE || d->input[i] == DBLQUOTE))
 		{
-			quote = cmd->input[i];
+			quote = d->input[i];
 		}
-		else if (cmd->input[i] == quote)
+		else if (d->input[i] == quote)
 		{
 			quote = 0;
 		}

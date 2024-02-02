@@ -56,7 +56,7 @@ void	lex_lstadd_back(t_tok **lst, t_tok *new)
 	else
 		*lst = new;
 }
-void	init_list(t_cmd *cmd, char **cmd_split)
+void	init_list(t_data *d, char **d_split)
 {
 	int	y;
 	// int	i;
@@ -64,29 +64,29 @@ void	init_list(t_cmd *cmd, char **cmd_split)
 	t_tok *p;
 	
 	y = 0;
-	// cmd->node = lex_lstnew(cmd_split[y++]);
-	// if (cmd->node == NULL)
+	// d->node = lex_lstnew(d_split[y++]);
+	// if (d->node == NULL)
 	// 	return ; // set error
-	p = cmd->node;
+	p = d->node;
 	// i = 0;
 	// j = 0;
-	while (cmd_split[y])
+	while (d_split[y])
 	{
-		p= lex_lstnew(cmd_split[y]);
+		p= lex_lstnew(d_split[y]);
 		if (p == NULL)
 		{ // error; have to free and exit
 			break;
 		}
 		else if (y == 0)
-			cmd->node = p;
+			d->node = p;
 		else 
-			lex_lstadd_back(&cmd->node, p);
+			lex_lstadd_back(&d->node, p);
 		p = p->next;
 		y++;
 	}
 
 				//testing purposes: checking if the list is filled
-				// p = cmd->node;
+				// p = d->node;
 				// while (p)
 				// {
 				// 	printf("list: %s\n", p->tok);

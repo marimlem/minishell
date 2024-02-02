@@ -40,29 +40,29 @@ typedef struct	s_tok{
 
 }	t_tok;
 
-typedef struct	s_cmd{
+typedef struct	s_data{
 	char *input;
 	t_tok *node;
 	int	i;
 	int	q;
-}	t_cmd;
+}	t_data;
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // execute.c
-void	executor(t_cmd *cmd);
-void	cmd_execute(t_cmd *cmd);
+void	executor(t_data *d);
+void	d_execute(t_data *d);
 
 // lu_inputparsing.c
-void	inputparsing(t_cmd *cmd);
+void	inputparsing(t_data *d);
 
 // lexer.c
-void	lexer(t_cmd *cmd);
-int	even_quotes(t_cmd *cmd);
+void	lexer(t_data *d);
+int	even_quotes(t_data *d);
 
 // lexer2.c
-void	quote_merge_2(t_cmd *cmd);
+void	quote_merge_2(t_data *d);
 
 
 // lex_utils.c
@@ -70,7 +70,7 @@ t_tok	*lex_lstnew(char *ptr);
 int	isnot_deli(char c);
 t_tok	*lex_lstlast(t_tok *lst);
 void	lex_lstadd_back(t_tok **lst, t_tok *new);
-void	init_list(t_cmd *cmd, char **cmd_split);
+void	init_list(t_data *d, char **d_split);
 void	lst_print(t_tok *lst);
 
 // lex_utils2.c

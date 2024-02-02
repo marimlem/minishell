@@ -15,21 +15,21 @@ void	ft_putstr_fd(char *s, int fd)
 int	main(int argc, char **argv)
 {
 	// char *command;
-	t_cmd	*cmd;
+	t_data	*d;
 
 	if (argc != 1)
 		return (100);
-	cmd = (t_cmd *) malloc(sizeof(t_cmd) * 1);
-	if (cmd == NULL)
+	d = (t_data *) malloc(sizeof(t_data) * 1);
+	if (d == NULL)
 		return 1;
-	cmd->input = NULL;
-	cmd->node = NULL;
-	cmd->i = 0;
-	cmd->q = 0;
+	d->input = NULL;
+	d->node = NULL;
+	d->i = 0;
+	d->q = 0;
 	while (1)
 	{
-		inputparsing(cmd);
-		//executor(cmd);
+		inputparsing(d);
+		//executor(d);
 
 	}
 

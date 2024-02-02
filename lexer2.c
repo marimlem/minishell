@@ -1,123 +1,123 @@
 #include "minishell.h"
 
 
-void	lex_outside_q(t_cmd *cmd, t_tok **current)
+void	lex_outside_q(t_data *d, t_tok **current)
 {
-	if ((*current)->tok[cmd->i] == 0)
+	if ((*current)->tok[d->i] == 0)
 	{
 		(*current) = (*current)->next;
-		cmd->i = -1;
+		d->i = -1;
 		return ;
 	}
-	else if ((*current)->tok[cmd->i] == SGLQUOTE || (*current)->tok[cmd->i] == DBLQUOTE)
+	else if ((*current)->tok[d->i] == SGLQUOTE || (*current)->tok[d->i] == DBLQUOTE)
 	{
-		cmd->q = (*current)->tok[cmd->i];
-		if (cmd->i != 0 && (*current)->tok[cmd->i-1] == '|') // if not the first character
+		d->q = (*current)->tok[d->i];
+		if (d->i != 0 && (*current)->tok[d->i-1] == '|') // if not the first character
 		{
-			lex_lstsqueezein((*current), &(*current)->tok[cmd->i+1]);
-			(*current)->tok[cmd->i] = 0;
+			lex_lstsqueezein((*current), &(*current)->tok[d->i+1]);
+			(*current)->tok[d->i] = 0;
 			(*current) = (*current)->next;
-			cmd->i = -1; 
+			d->i = -1; 
 			return ;
 		}
-		else if (cmd->i != 0) 
+		else if (d->i != 0) 
 		{ // case: hello"world" => helloworld
-			ft_memmove(&(*current)->tok[cmd->i], &(*current)->tok[cmd->i+1], ft_strlen(&(*current)->tok[cmd->i+1]) + 1);
-			// (*current)->tok[ft_strlen(&(*current)->tok[cmd->i+1]) + 1] = 0;
-			(*current)->typ = cmd->q;
+			ft_memmove(&(*current)->tok[d->i], &(*current)->tok[d->i+1], ft_strlen(&(*current)->tok[d->i+1]) + 1);
+			// (*current)->tok[ft_strlen(&(*current)->tok[d->i+1]) + 1] = 0;
+			(*current)->typ = d->q;
 		}
-		else if (cmd->i == 0)
+		else if (d->i == 0)
 		{
-			(*current)->tok = &(*current)->tok[cmd->i+1];
+			(*current)->tok = &(*current)->tok[d->i+1];
 		}
 	}
-	else if ((*current)->tok[cmd->i] == '<' || (*current)->tok[cmd->i] == '>')
+	else if ((*current)->tok[d->i] == '<' || (*current)->tok[d->i] == '>')
 	{
-		if (cmd->i != 0)
+		if (d->i != 0)
 		{
-			lex_lstsqueezein((*current), &(*current)->tok[cmd->i]);
-			(*current)->tok[cmd->i] = 0;
+			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
+			(*current)->tok[d->i] = 0;
 			(*current) = (*current)->next;
-			cmd->i = 0;
+			d->i = 0;
 		}
-		(*current)->typ = (*current)->tok[cmd->i++];
-		while ((*current)->tok[cmd->i] == '>' || (*current)->tok[cmd->i] == '<')
-			cmd->i++;
-		if ((*current)->tok[cmd->i] != 0)
+		(*current)->typ = (*current)->tok[d->i++];
+		while ((*current)->tok[d->i] == '>' || (*current)->tok[d->i] == '<')
+			d->i++;
+		if ((*current)->tok[d->i] != 0)
 		{
-			lex_lstsqueezein((*current), &(*current)->tok[cmd->i]);
-			(*current)->tok[cmd->i] = 0;
+			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
+			(*current)->tok[d->i] = 0;
 			(*current) = (*current)->next;
-			cmd->i = 0;
+			d->i = 0;
 		}
 		return ;
 	}
 }
 
 
-void	lex_inside_q(t_cmd *cmd, t_tok **current)
+void	lex_inside_q(t_data *d, t_tok **current)
 {
-	if ((*current)->tok[cmd->i] == cmd->q)
+	if ((*current)->tok[d->i] == d->q)
 	{
-		(*current)->typ = cmd->q;
-		cmd->q = 0;
-		if ((*current)->tok[cmd->i + 1] != 0 && (*current)->tok[cmd->i + 1] != '|')
+		(*current)->typ = d->q;
+		d->q = 0;
+		if ((*current)->tok[d->i + 1] != 0 && (*current)->tok[d->i + 1] != '|')
 		{
-			ft_memmove(&(*current)->tok[cmd->i], &(*current)->tok[cmd->i+1], ft_strlen(&(*current)->tok[cmd->i+1]) + 1);
-			cmd->i--;
+			ft_memmove(&(*current)->tok[d->i], &(*current)->tok[d->i+1], ft_strlen(&(*current)->tok[d->i+1]) + 1);
+			d->i--;
 			return ;
 		}
-		else if ((*current)->tok[cmd->i + 1] != 0 && (*current)->tok[cmd->i + 1] == '|')
+		else if ((*current)->tok[d->i + 1] != 0 && (*current)->tok[d->i + 1] == '|')
 		{
-			lex_lstsqueezein((*current), &(*current)->tok[cmd->i+1]);
-			(*current)->tok[cmd->i] = 0;
+			lex_lstsqueezein((*current), &(*current)->tok[d->i+1]);
+			(*current)->tok[d->i] = 0;
 			(*current) = (*current)->next;
 			(*current)->typ = '|';
-			cmd->i = -1;
+			d->i = -1;
 			return ;
 		}
-		(*current)->tok[cmd->i] = 0;
+		(*current)->tok[d->i] = 0;
 	}
-	else if ((*current)->tok[cmd->i] == 0)
+	else if ((*current)->tok[d->i] == 0)
 	{// append and remove next node
 		(*current)->tok = lex_strjoin((*current)->tok, (*current)->next->tok, ' '); //careful of strjoin leaks
 		lex_lst_rmone((*current));
-		cmd->i--;
+		d->i--;
 		return ;
 	}
 	
 }
 
-void	lex_variable(t_cmd *cmd, t_tok **current)
+void	lex_variable(t_data *d, t_tok **current)
 {
 	int	start;
 
-	start = cmd->i;
-	if ((*current)->tok[cmd->i] != '$')
+	start = d->i;
+	if ((*current)->tok[d->i] != '$')
 		return ;
-	cmd->i++;
+	d->i++;
 	start++;
-	while ((*current)->tok[cmd->i] && (*current)->tok[cmd->i] != '\'' && ((*current)->tok[cmd->i] != '\"') && ((*current)->tok[cmd->i] != ' ')) //add other whitespaces too?
+	while ((*current)->tok[d->i] && (*current)->tok[d->i] != '\'' && ((*current)->tok[d->i] != '\"') && ((*current)->tok[d->i] != ' ')) //add other whitespaces too?
 	{
-		cmd->i++;
+		d->i++;
 	}
 }
 
-void	quote_merge_2(t_cmd *cmd)
+void	quote_merge_2(t_data *d)
 {
 	t_tok	*current;
 
 	
-	current = cmd->node;
+	current = d->node;
 	while (current && current->tok)
 	{
-//		if (cmd->q == 0 || cmd->q == DBLQUOTE)
-//			lex_variable(cmd, &current);
-		if (cmd->q == 0)
-			lex_outside_q(cmd, &current);
-		else if (cmd->q != 0)
-			lex_inside_q(cmd, &current);
-		cmd->i++;
+//		if (d->q == 0 || d->q == DBLQUOTE)
+//			lex_variable(d, &current);
+		if (d->q == 0)
+			lex_outside_q(d, &current);
+		else if (d->q != 0)
+			lex_inside_q(d, &current);
+		d->i++;
 	}
 
 }
