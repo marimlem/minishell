@@ -103,6 +103,7 @@ void	lst_print(t_tok *lst)
 	while (ptr && ptr->tok)
 	{
 		ft_putstr_fd(ptr->tok, 1);
+		ft_putnbr_fd(ptr->typ, 1);
 		ft_putstr_fd("\n", 1);
 		ptr = ptr->next;
 	}
