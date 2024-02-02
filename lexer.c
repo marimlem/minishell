@@ -121,9 +121,9 @@ void	lexer(t_cmd *cmd)
 	
 	matrix = split_cmd(cmd);
 	init_list(cmd, matrix);
-	quote_merge_2(cmd);
-	split_list(cmd); //WIP HERE
-	
+	quote_merge_2(cmd); //WIP HERE
+	split_list(cmd);
+
 }
 
 
