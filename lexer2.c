@@ -71,27 +71,16 @@ void	lex_inside_q(t_cmd *cmd, t_tok **current)
 
 void	lex_variable(t_cmd *cmd, t_tok **current)
 {
+	int	start;
+
+	start = cmd->i;
 	if ((*current)->tok[cmd->i] != '$')
 		return ;
-	if (cmd->i != 0)
-	{
-		lex_lstsqueezein(*current, &(*current)->tok[i]);
-		(*current)->tok[i] = 0;
-		(*current) = (*current)->next;
-		cmd->i = 0;
-	}
 	cmd->i++;
+	start++;
 	while ((*current)->tok[cmd->i] && (*current)->tok[cmd->i] != '\'' && ((*current)->tok[cmd->i] != '\"') && ((*current)->tok[cmd->i] != ' ')) //add other whitespaces too?
 	{
 		cmd->i++;
-	}
-	(*current)->typ = VAR;
-	if ((*current)->tok[cmd->i] != 0)
-	{
-		lex_lstsqueezein(*current, &(*current)->tok[i]);
-		(*current)->tok[i] = 0;
-		(*current) = (*current)->next;
-		cmd->i = 0;
 	}
 }
 
@@ -103,16 +92,12 @@ void	quote_merge_2(t_cmd *cmd)
 	current = cmd->node;
 	while (current && current->tok)
 	{
-		//somefunction(&current);
-		if (cmd->q == 0 || cmd->q == DBLQUOTE)
-			lex_variable(cmd, &current);
+//		if (cmd->q == 0 || cmd->q == DBLQUOTE)
+//			lex_variable(cmd, &current);
 		if (cmd->q == 0)
 			lex_outside_q(cmd, &current);
 		else if (cmd->q != 0)
 			lex_inside_q(cmd, &current);
-
-
-			
 		cmd->i++;
 	}
 

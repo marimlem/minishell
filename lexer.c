@@ -99,10 +99,6 @@ void	split_list(t_cmd *cmd)
 	t_tok	*current;
 
 	current = cmd->node;
-	// lst_print(cmd->node);
-
-	quote_merge_2(cmd);
-
 	while (current && current->tok)
 	{
 		// printf("current: %s\n", current->tok);
@@ -125,7 +121,9 @@ void	lexer(t_cmd *cmd)
 	
 	matrix = split_cmd(cmd);
 	init_list(cmd, matrix);
+	quote_merge_2(cmd);
 	split_list(cmd); //WIP HERE
+	
 }
 
 
