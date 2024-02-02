@@ -23,10 +23,13 @@
 # define DBLQUOTE 34
 # define SGLQUOTE 39
 # define PIPE 124
+# define RDR_R 62 // >
+# define RDR_APP 63 // >> append
+# define RDR_L 60 // <
+# define RDR_DEL 61 // << delimiter
 
 
 # define BIN "/usr/bin/"
-
 
 
 typedef struct	s_tok{

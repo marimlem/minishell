@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 void	lex_outside_q(t_cmd *cmd, t_tok **current)
 {
 	if ((*current)->tok[cmd->i] == 0)
@@ -30,12 +31,30 @@ void	lex_outside_q(t_cmd *cmd, t_tok **current)
 			(*current)->tok = &(*current)->tok[cmd->i+1];
 		}
 	}
-	else if (cmd->q == 0 && ((*current)->tok[cmd->i] == '<' || (*current)->tok[cmd->i] == '>'))
-	{ //should do smth here
+	else if ((*current)->tok[cmd->i] == '<' || (*current)->tok[cmd->i] == '>')
+	{
+		if (cmd->i != 0)
+		{
+			lex_lstsqueezein((*current), &(*current)->tok[cmd->i]);
+			(*current)->tok[cmd->i] = 0;
+			(*current) = (*current)->next;
+			cmd->i = 0;
+		}
+		(*current)->typ = (*current)->tok[cmd->i++];
+		while ((*current)->tok[cmd->i] == '>' || (*current)->tok[cmd->i] == '<')
+			cmd->i++;
+		if ((*current)->tok[cmd->i] != 0)
+		{
+			lex_lstsqueezein((*current), &(*current)->tok[cmd->i]);
+			(*current)->tok[cmd->i] = 0;
+			(*current) = (*current)->next;
+			cmd->i = 0;
+		}
 		return ;
 	}
-
 }
+
+
 void	lex_inside_q(t_cmd *cmd, t_tok **current)
 {
 	if ((*current)->tok[cmd->i] == cmd->q)
