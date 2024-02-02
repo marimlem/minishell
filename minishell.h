@@ -29,6 +29,8 @@
 # define RDR_DEL 61 // << delimiter
 
 
+# define ERR_LEX_ALL 101
+
 # define BIN "/usr/bin/"
 
 
@@ -45,6 +47,7 @@ typedef struct	s_data{
 	t_tok *node;
 	int	i;
 	int	q;
+	int	error;
 }	t_data;
 
 // ft_strncmp.c

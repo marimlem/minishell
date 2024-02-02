@@ -75,6 +75,7 @@ void	init_list(t_data *d, char **d_split)
 		p= lex_lstnew(d_split[y]);
 		if (p == NULL)
 		{ // error; have to free and exit
+			d->error = ERR_LEX_ALL;
 			break;
 		}
 		else if (y == 0)

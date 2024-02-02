@@ -9,7 +9,10 @@ char	**split_data(t_data *d)
 
 	matrix = ft_split(d->input, ' ');
 	if (matrix == NULL)
+	{
+		d->error = ERR_LEX_ALL;
 		return (NULL);
+	}
 	// while (matrix && matrix[i]) //testing purposes
 	// {
 	// 	printf("test: %s\n", matrix[i]);
@@ -120,7 +123,11 @@ void	lexer(t_data *d)
 	char	**matrix;
 	
 	matrix = split_data(d);
+	if (matrix == NULL)
+		return ;
 	init_list(d, matrix);
+	if (d->error != 0)
+		return ;
 	quote_merge_2(d); //WIP HERE
 	split_list(d);
 
