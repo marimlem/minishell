@@ -22,6 +22,8 @@
 # define ODD 1
 # define DBLQUOTE 34
 # define SGLQUOTE 39
+# define VAR 36
+
 
 # define BIN "/usr/bin/"
 
