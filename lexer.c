@@ -1,136 +1,97 @@
 #include "minishell.h"
 
-t_tok	*lex_lstnew(char *ptr)
+int	lex_is_separator(char c)
 {
-	t_tok *list;
-
-	list = (t_tok *) malloc(sizeof(t_tok) * 1);
-	if (list == NULL)
-		return (NULL); // set error
-	list->tok = NULL;
-	list->typ = 0;
-	list->next = NULL;
-	list->before = NULL;
-	if (ptr == NULL)
-		return (list);
-	list->tok = ft_strdup(ptr);
-	if (list->tok == NULL)
-	{
-		free (list);
-		return (NULL);
-	}
-	return (list);
-}
-
-int	isnot_deli(char c)
-{
-	if (c == '<' || c == '>' || c == '|')
+	if (c == S || c == T || c == N)
 		return (1);
-	
+	if (c == '|' || c == '<' || c == '>')
+		return (2);
 	return (0);
 }
 
-// char	**split_split(char **in);
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i =0;
-// 	j =0;
-// 	while (in[i] && in[i][j])
-// 	{
-// 		if (c == '<' || c == '>' || c == '|')
-			
-// 		j++;
-// 	}
-// }
-
-// void	node_add(t_tok *p, char *in)
-// {
-// 	p = p->next;
-
-// }
-
-void	init_list(t_cmd *cmd, char **cmd_split)
+void	lexer(t_data *d)
 {
-	int	y;
-	// int	i;
-	// int	j;
-	t_tok *p;
-	
-	cmd->start = lex_lstnew(NULL);
-	if (cmd->start == NULL)
-		return ; // set error
-	p = cmd->start;
-	y = 0;
-	// i = 0;
-	// j = 0;
-	while (cmd_split[y])
+	t_tok *current;
+	//new try:
+	init_list2(d, d->input);
+	current = d->node;
+	d->i = 0;
+	while (current && current->tok)
 	{
-		p->next = lex_lstnew(cmd_split[y]);
-		if (p->next == NULL)
-		{ // error; have to free and exit
+		if (current->tok[d->i] == 0)
 			break;
+		else if (d->q == 0 && (current->tok[d->i] == DBLQUOTE || current->tok[d->i] == SGLQUOTE))
+		{
+			d->q = current->tok[d->i];
+			d->i++;
 		}
-		p = p->next;
-		y++;
+		else if (d->q != 0 && current->tok[d->i] == d->q)
+		{
+			d->q = 0;
+			d->i++;
+		}
+		else if (d->q != 0)
+			d->i++;
+		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1)
+		{
+			while (lex_is_separator(current->tok[d->i]) == 1)
+			{
+				current->tok[d->i] = 0;
+				d->i++;
+			}
+			if (current->tok[d->i] == 0)
+				break;
+			lex_lstsqueezein(&current, &current->tok[d->i]);
+			current = current->next;
+			d->i = 0;
+		}
+		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 2)
+		{
+			if (d->i != 0)
+			{
+				lex_lstsqueezein(&current, &current->tok[d->i]);
+				current->tok[d->i] = 0;
+				current = current->next;
+				d->i = 1;
+
+			}
+			while (lex_is_separator(current->tok[d->i]) == 2)
+			{
+				d->i++;
+			}
+			if (current->tok[d->i])
+			{
+				lex_lstsqueezein(&current, &current->tok[d->i]);
+				current->tok[d->i] = 0;
+				current = current->next;
+				d->i = 0;
+
+			}
+
+		}
+		else if (d->q == 0)
+			d->i++;
+
 	}
-
-				//testing purposes: checking if the list is filled
-				// p = cmd->start;
-				// while (p)
-				// {
-				// 	printf("list: %s\n", p->tok);
-				// 	p = p->next;
-				// }
+	lst_print(d->node);
 }
-
-char	**split_cmd(t_cmd *cmd)
-{
-	char	**matrix;
-	// int	i; //testing purposes
-
-	// i = 0;
-
-	matrix = ft_split(cmd->input, ' ');
-	if (matrix == NULL)
-		return (NULL);
-	// while (matrix && matrix[i]) //testing purposes
-	// {
-	// 	printf("test: %s\n", matrix[i]);
-	// 	i++;
-	// }
-
-	// cmd_split = split_split(cmd_split);
-	return (matrix);
-}
-
-void	lexer(t_cmd *cmd)
-{
-	char	**matrix;
-	
-	matrix = split_cmd(cmd);
-	init_list(cmd, matrix);
-}
-
-
 
 // check for unclosed quotes, error if odd number
 // doesn't consider quotes of other type after opened quote
-int even_quotes(t_cmd *cmd)
+int even_quotes(t_data *d)
 {
 	int	i;
 	char	quote;
 
 	i=0;
 	quote = 0;
-	while (cmd && cmd->input && cmd->input[i])
+	while (d && d->input && d->input[i])
 	{
-		if (quote == 0 && (cmd->input[i] == SGLQUOTE || cmd->input[i] == DBLQUOTE))
+		if (quote == 0 && (d->input[i] == SGLQUOTE || d->input[i] == DBLQUOTE))
 		{
-			quote = cmd->input[i];
+			quote = d->input[i];
 		}
-		else if (cmd->input[i] == quote)
+		else if (d->input[i] == quote)
 		{
 			quote = 0;
 		}

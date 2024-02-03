@@ -3,24 +3,24 @@
 	// char *file = "/usr/bin/ls";
     // char *const args[] = {"/usr/bin/ls", "-a", "-l", NULL};
     // char *const env[] = {"ENV=World", NULL};
-void	executor(t_cmd *cmd)
+void	executor(t_data *d)
 {
-	cmd_execute(cmd);
-	if (ft_strncmp(cmd->input, "exit", 4) == 0) //only for testing
+	d_execute(d);
+	if (ft_strncmp(d->input, "exit", 4) == 0) //only for testing
 	{
 
-		free(cmd->input);
-		cmd->input = NULL;
+		free(d->input);
+		d->input = NULL;
 		exit(0); //leak of one
 	}
-	if (cmd->input)
+	if (d->input)
 	{
-		free(cmd->input);
-		cmd->input = NULL;
+		free(d->input);
+		d->input = NULL;
 	}
 }
 
-int	cmd_lstsize(t_tok *lst)
+int	d_lstsize(t_tok *lst)
 {
 	int		i;
 	t_tok	*current;
@@ -42,7 +42,7 @@ char	**create_arg_mat(t_tok *p, char *file)
 	int	i;
 
 	i = 0;
-	size = cmd_lstsize(p);
+	size = d_lstsize(p);
 	// printf("size: %d\n", size);
 	mat = (char**) malloc(sizeof(char *) * (size + 1));
 	if (mat == NULL)
@@ -51,18 +51,20 @@ char	**create_arg_mat(t_tok *p, char *file)
 	mat[i] = ft_strdup(file);
 	if (mat[i++] == NULL)
 		return (NULL); // set error
-	p = p->next;
-	while (p != NULL)
+	// p = p->next;
+	while (p->tok != NULL && i != size)
 	{
 		mat[i] = ft_strdup(p->tok);
 		if (mat[i++] == NULL)
 			return (NULL); // set error
 		p = p->next;
+		if (p == NULL)
+			break ;
 	}
 	return (mat);
 }
 
-void	cmd_execute(t_cmd *cmd)
+void	d_execute(t_data *d)
 {
 	t_tok	*p;
 	char	*file;
@@ -71,9 +73,7 @@ void	cmd_execute(t_cmd *cmd)
 	__pid_t	status;
 			// int	i = 0;
 
-	p = cmd->start->next;
-	if (p == NULL)
-		return ;
+	p = d->node;
 	file = ft_strjoin(BIN, p->tok);
 	if (file == NULL)
 		return ; // set error

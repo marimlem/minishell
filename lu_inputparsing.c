@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-void	inputparsing(t_cmd *cmd)
+void	inputparsing(t_data *d)
 {
-	cmd->input = readline("minishell:$ ");
-	if (!cmd || !cmd->input)
+	d->input = readline("minishell:$ ");
+	if (!d || !d->input)
 		return ;
-	if (even_quotes(cmd) == EVEN)
+	if (even_quotes(d) == EVEN)
 	{
-		lexer(cmd);
+		lexer(d);
 		// printf("even!");
 	}
 
