@@ -66,19 +66,15 @@ void	d_execute(t_data *d);
 void	inputparsing(t_data *d);
 
 // lexer.c
+int	lex_is_separator(char c);
 void	lexer(t_data *d);
 int	even_quotes(t_data *d);
-
-// lexer2.c
-void	quote_merge_2(t_data *d);
 
 
 // lex_utils.c
 t_tok	*lex_lstnew(char *ptr);
-int	isnot_deli(char c);
 t_tok	*lex_lstlast(t_tok *lst);
 void	lex_lstadd_back(t_tok **lst, t_tok *new);
-void	init_list(t_data *d, char **d_split);
 void	lst_print(t_tok *lst);
 void	init_list2(t_data *d, char *input);
 

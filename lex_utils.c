@@ -22,13 +22,6 @@ t_tok	*lex_lstnew(char *ptr)
 	return (list);
 }
 
-int	isnot_deli(char c)
-{
-	if (c == '<' || c == '>' || c == '|')
-		return (1);
-	
-	return (0);
-}
 
 t_tok	*lex_lstlast(t_tok *lst)
 {
@@ -64,45 +57,6 @@ void	init_list2(t_data *d, char *input)
 	{ // error; have to free and exit
 		d->error = ERR_LEX_ALL;
 	}
-}
-
-void	init_list(t_data *d, char **d_split)
-{
-	int	y;
-	// int	i;
-	// int	j;
-	t_tok *p;
-	
-	y = 0;
-	// d->node = lex_lstnew(d_split[y++]);
-	// if (d->node == NULL)
-	// 	return ; // set error
-	p = d->node;
-	// i = 0;
-	// j = 0;
-	while (d_split[y])
-	{
-		p= lex_lstnew(d_split[y]);
-		if (p == NULL)
-		{ // error; have to free and exit
-			d->error = ERR_LEX_ALL;
-			break;
-		}
-		else if (y == 0)
-			d->node = p;
-		else 
-			lex_lstadd_back(&d->node, p);
-		p = p->next;
-		y++;
-	}
-
-				//testing purposes: checking if the list is filled
-				// p = d->node;
-				// while (p)
-				// {
-				// 	printf("list: %s\n", p->tok);
-				// 	p = p->next;
-				// }
 }
 
 void	lst_print(t_tok *lst)
