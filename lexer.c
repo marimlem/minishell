@@ -25,7 +25,7 @@ char	**split_data(t_data *d)
 
 
 
-
+/* 
 	// find | < << > >> outside of quotes that are not alone-standing
 		// done: ls| grep a
 		// todo: ls |grep a
@@ -62,7 +62,7 @@ void	separate_pipe(t_data *d, t_tok *current)
 	(void)d;
 	return;
 }
-
+ */
 
 
 
@@ -96,7 +96,7 @@ void	quote_merge(t_data *d)
 		i++;
 	}
 }
-
+/* 
 void	split_list(t_data *d)
 {
 	t_tok	*current;
@@ -117,10 +117,81 @@ void	split_list(t_data *d)
 	// quote_merge(d);
 	// lst_print(d->node);
 }
+ */
+int	lex_is_separator(char c)
+{
+	if (c == S || c == T || c == N)
+		return (1);
+	if (c == '|' || c == '<' || c == '>')
+		return (2);
+	return (0);
+}
 
 void	lexer(t_data *d)
 {
-	char	**matrix;
+	t_tok *current;
+	//new try:
+	init_list2(d, d->input);
+	current = d->node;
+	d->i = 0;
+	while (current && current->tok)
+	{
+		if (current->tok[d->i] == 0)
+			break;
+		else if (d->q == 0 && (current->tok[d->i] == DBLQUOTE || current->tok[d->i] == SGLQUOTE))
+		{
+			d->q = current->tok[d->i];
+			d->i++;
+		}
+		else if (d->q != 0 && current->tok[d->i] == d->q)
+		{
+			d->q = 0;
+			d->i++;
+		}
+		else if (d->q != 0)
+			d->i++;
+		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1)
+		{
+			lex_lstsqueezein(&current, &current->tok[d->i + 1]);
+			current->tok[d->i] = 0;
+			current = current->next;
+			d->i = 1;
+		}
+		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 2)
+		{
+			if (d->i != 0)
+			{
+				lex_lstsqueezein(&current, &current->tok[d->i]);
+				current->tok[d->i] = 0;
+				current = current->next;
+				d->i = 1;
+
+			}
+			while (lex_is_separator(current->tok[d->i]) == 2)
+			{
+				d->i++;
+			}
+			if (current->tok[d->i])
+			{
+				lex_lstsqueezein(&current, &current->tok[d->i]);
+				current->tok[d->i] = 0;
+				current = current->next;
+				d->i = 0;
+
+			}
+
+		}
+		else if (d->q == 0)
+			d->i++;
+
+	}
+	lst_print(d->node);
+
+
+
+
+	//orig:
+/* 	char	**matrix;
 	
 	matrix = split_data(d);
 	if (matrix == NULL)
@@ -129,7 +200,7 @@ void	lexer(t_data *d)
 	if (d->error != 0)
 		return ;
 	quote_merge_2(d); //WIP HERE
-	split_list(d);
+	split_list(d); */
 
 }
 

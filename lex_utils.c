@@ -56,6 +56,16 @@ void	lex_lstadd_back(t_tok **lst, t_tok *new)
 	else
 		*lst = new;
 }
+void	init_list2(t_data *d, char *input)
+{
+
+	d->node = lex_lstnew(input);
+	if (d->node == NULL)
+	{ // error; have to free and exit
+		d->error = ERR_LEX_ALL;
+	}
+}
+
 void	init_list(t_data *d, char **d_split)
 {
 	int	y;

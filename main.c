@@ -20,7 +20,7 @@ void	lex_lst_del(t_tok *lst)
 	{
 		lex_lst_del(c->next);
 		if (c->tok)
-			free (c->tok);
+			free (c->tok); //invalid free
 		c->next = NULL;
 		free (c);
 	}

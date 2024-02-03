@@ -20,6 +20,11 @@
 
 # define EVEN 0
 # define ODD 1
+
+# define S 32
+# define T 9
+# define N 10
+
 # define DBLQUOTE 34
 # define SGLQUOTE 39
 # define PIPE 124
@@ -75,9 +80,11 @@ t_tok	*lex_lstlast(t_tok *lst);
 void	lex_lstadd_back(t_tok **lst, t_tok *new);
 void	init_list(t_data *d, char **d_split);
 void	lst_print(t_tok *lst);
+void	init_list2(t_data *d, char *input);
+
 
 // lex_utils2.c
-void	lex_lstsqueezein(t_tok *current, char *str);
+void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
 

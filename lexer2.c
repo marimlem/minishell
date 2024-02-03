@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-
+/* 
 void	lex_outside_q(t_data *d, t_tok **current)
 {
 	if ((*current)->tok[d->i] == 0)
@@ -9,10 +9,31 @@ void	lex_outside_q(t_data *d, t_tok **current)
 		d->i = -1;
 		return ;
 	}
+	else if ((*current)->tok[d->i] == '<' || (*current)->tok[d->i] == '>' || (*current)->tok[d->i] == '|')
+	{
+		if (d->i > 0)
+		{
+			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
+			(*current)->tok[d->i] = 0;
+			(*current) = (*current)->next;
+			d->i = 0;
+		}
+		(*current)->typ = (*current)->tok[d->i++];
+		while ((*current)->tok[d->i] == '>' || (*current)->tok[d->i] == '<' || (*current)->tok[d->i] == '|')
+			d->i++;
+		if ((*current)->tok[d->i] != 0)
+		{
+			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
+			(*current)->tok[d->i] = 0;
+			(*current) = (*current)->next;
+			d->i = 0;
+		}
+		return ;
+	}
 	else if ((*current)->tok[d->i] == SGLQUOTE || (*current)->tok[d->i] == DBLQUOTE)
 	{
 		d->q = (*current)->tok[d->i];
-		if (d->i != 0 && (*current)->tok[d->i-1] == '|') // if not the first character
+		if (d->i > 0 && ((*current)->tok[d->i-1] == '|' || (*current)->tok[d->i-1] == '>' || (*current)->tok[d->i-1] == '<')) // if not the first character
 		{
 			lex_lstsqueezein((*current), &(*current)->tok[d->i+1]);
 			(*current)->tok[d->i] = 0;
@@ -30,27 +51,6 @@ void	lex_outside_q(t_data *d, t_tok **current)
 		{
 			(*current)->tok = &(*current)->tok[d->i+1];
 		}
-	}
-	else if ((*current)->tok[d->i] == '<' || (*current)->tok[d->i] == '>')
-	{
-		if (d->i != 0)
-		{
-			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
-			(*current)->tok[d->i] = 0;
-			(*current) = (*current)->next;
-			d->i = 0;
-		}
-		(*current)->typ = (*current)->tok[d->i++];
-		while ((*current)->tok[d->i] == '>' || (*current)->tok[d->i] == '<')
-			d->i++;
-		if ((*current)->tok[d->i] != 0)
-		{
-			lex_lstsqueezein((*current), &(*current)->tok[d->i]);
-			(*current)->tok[d->i] = 0;
-			(*current) = (*current)->next;
-			d->i = 0;
-		}
-		return ;
 	}
 }
 
@@ -113,6 +113,7 @@ void	quote_merge_2(t_data *d)
 	{
 //		if (d->q == 0 || d->q == DBLQUOTE)
 //			lex_variable(d, &current);
+
 		if (d->q == 0)
 			lex_outside_q(d, &current);
 		else if (d->q != 0)
@@ -120,4 +121,4 @@ void	quote_merge_2(t_data *d)
 		d->i++;
 	}
 
-}
+} */

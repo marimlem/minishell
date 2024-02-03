@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-void	lex_lstsqueezein(t_tok *current, char *str)
+void	lex_lstsqueezein(t_tok **current, char *str)
 {
 	t_tok	*new;
 	
 	new = lex_lstnew(str);
 	if (new == NULL)
 		return ;
-	new->next = current->next;
-	current->next = new;
+	new->next = (*current)->next;
+	(*current)->next = new;
 	return ;
 }
 
