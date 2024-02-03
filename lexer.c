@@ -152,10 +152,16 @@ void	lexer(t_data *d)
 			d->i++;
 		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1)
 		{
-			lex_lstsqueezein(&current, &current->tok[d->i + 1]);
-			current->tok[d->i] = 0;
+			while (lex_is_separator(current->tok[d->i]) == 1)
+			{
+				current->tok[d->i] = 0;
+				d->i++;
+			}
+			if (current->tok[d->i] == 0)
+				break;
+			lex_lstsqueezein(&current, &current->tok[d->i]);
 			current = current->next;
-			d->i = 1;
+			d->i = 0;
 		}
 		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 2)
 		{
