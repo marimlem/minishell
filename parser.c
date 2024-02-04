@@ -70,6 +70,7 @@ void	p_var(t_data *d)
 	}
 }
 
+// checks if operators are in syntactically good order (not first, not last, not two in a row)
 void	p_syn_check(t_data *d)
 {
 	t_tok *current;
@@ -99,6 +100,35 @@ void	p_syn_check(t_data *d)
 		d->error = ERR_PAR_SYN;
 }
 
+// quote handler and expander
+void	p_quote_exp(t_data *d)
+{
+	t_tok *current;
+	int	q;
+
+	q = 0;
+	d->i = 0;
+	current = d->node;
+	while (current && current->tok)
+	{
+		while (current->tok[d->i])
+		{
+			if (q == 0 && (current->tok[d->i] == SGLQUOTE || current->tok[d->i] == DBLQUOTE))
+				q = current->tok[d->i];
+			if (q != 0 && current->tok[d->i] == q)
+				q = 0;
+			if (q != SGLQUOTE && current->tok[d->i] == '$')
+			{
+				// expanding here
+			}
+			
+			d->i++;
+		}
+		current = current->next;
+	}
+
+}
+
 void	parser(t_data *d)
 {
 	p_op_type(d);
@@ -111,7 +141,7 @@ void	parser(t_data *d)
 	if (d->error != 0)
 		return ;
 
-	// exp_n_rmquote();
+	p_quote_exp(d);
 
 	lst_print(d->node);
 

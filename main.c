@@ -53,6 +53,7 @@ int	main(int argc, char **argv)
 		return 1;
 	d->input = NULL;
 	d->node = NULL;
+	d->var_node = NULL;
 	d->i = 0;
 	d->q = 0;
 	d->error = 0;
