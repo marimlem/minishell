@@ -70,13 +70,47 @@ void	p_var(t_data *d)
 	}
 }
 
+void	p_syn_check(t_data *d)
+{
+	t_tok *current;
+	int	t;
+	int	last;
+
+	t = 0;
+	last = 0;
+	current = d->node;
+	while (current && current->tok)
+	{
+		if (t == 0 && current->typ == OP)
+		{
+			d->error = ERR_PAR_SYN;
+			return ;
+		}
+		else if (current->typ == OP && last == OP)
+		{
+			d->error = ERR_PAR_SYN;
+			return ;
+		}
+		last = current->typ;
+		t++;
+		current = current->next;
+	}
+	if (last == OP)
+		d->error = ERR_PAR_SYN;
+}
+
 void	parser(t_data *d)
 {
 	p_op_type(d);
+	if (d->error != 0)
+		return ;
 	// lst_print(d->node);
 	p_var(d);
 
-	
+	p_syn_check(d);
+	if (d->error != 0)
+		return ;
+
 	// exp_n_rmquote();
 
 	lst_print(d->node);
