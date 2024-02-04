@@ -78,7 +78,7 @@ void	lexer(t_data *d)
 			d->i++;
 
 	}
-	lst_print(d->node);
+	// lst_print(d->node);
 }
 
 // check for unclosed quotes, error if odd number

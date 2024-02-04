@@ -21,22 +21,34 @@
 # define EVEN 0
 # define ODD 1
 
-# define S 32
-# define T 9
-# define N 10
+# define S 32	//space
+# define T 9	//tab
+# define N 10	//new line
 
+// quotes
 # define DBLQUOTE 34
 # define SGLQUOTE 39
+
+# define CMD 444
+# define OP -5
+# define ARG 666
+
+
+
 # define PIPE 124
 # define RDR_R 62 // >
 # define RDR_APP 63 // >> append
 # define RDR_L 60 // <
 # define RDR_DEL 61 // << delimiter
 
-
-# define ERR_LEX_ALL 101
-
 # define BIN "/usr/bin/"
+
+
+
+// error codes
+# define ERR_LEX_ALL 101
+# define ERR_PAR_SYN 201
+
 
 
 typedef struct	s_tok{
@@ -83,6 +95,10 @@ void	init_list2(t_data *d, char *input);
 void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
+
+// parser.c
+void	parser(t_data *d);
+
 
 
 #endif

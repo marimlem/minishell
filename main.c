@@ -32,6 +32,9 @@ void	free_n_clean(t_data *d, int b)
 	lex_lst_del(d->node);
 	if (d->input)
 		free (d->input);
+	d->error = 0;
+	d->i = 0;
+	d->q = 0;
 	if (b == 0)
 		return ;
 	if (d)
@@ -57,7 +60,7 @@ int	main(int argc, char **argv)
 	{
 		inputparsing(d);
 		if (d->error != 0)
-			break ;
+			printf("Error (%d)\n", d->error);
 		//executor(d);
 		free_n_clean(d, 0);
 	}
