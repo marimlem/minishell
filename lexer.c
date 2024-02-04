@@ -59,6 +59,11 @@ void	lexer(t_data *d)
 			{
 				d->i++;
 			}
+			while (lex_is_separator(current->tok[d->i]) == 1)
+			{
+				current->tok[d->i] = 0;
+				d->i++;
+			}
 			if (current->tok[d->i])
 			{
 				lex_lstsqueezein(&current, &current->tok[d->i]);
