@@ -29,9 +29,8 @@
 # define DBLQUOTE 34
 # define SGLQUOTE 39
 
-# define CMD 444
 # define OP -5
-# define ARG 666
+# define VAR -10
 
 
 
@@ -58,10 +57,16 @@ typedef struct	s_tok{
 	struct s_tok *before;
 
 }	t_tok;
+typedef struct	s_var{
+	char *key;
+	char *val;
+	struct s_var *next;
+}	t_var;
 
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
+	t_var *var_node;
 	int	i;
 	int	q;
 	int	error;
