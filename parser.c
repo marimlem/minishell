@@ -100,21 +100,7 @@ void	p_syn_check(t_data *d)
 		d->error = ERR_PAR_SYN;
 }
 
-// finds variable in variable list
-// returns (1) on success
-int	is_variable(char *tok, t_var *node)
-{
-	int	i;
 
-	i=0;
-	if (node == NULL)
-		return (0);
-	else
-		//WIP
-	return (is_variable(tok, node->next))
-
-
-}
 
 
 // quote handler and expander
@@ -122,7 +108,7 @@ void	p_quote_exp(t_data *d)
 {
 	t_tok *current;
 	int	q;
-	char	*new;
+//	char	*new;
 
 	q = 0;
 	d->i = 0;
@@ -137,13 +123,15 @@ void	p_quote_exp(t_data *d)
 				q = 0;
 			if (q != SGLQUOTE && current->tok[d->i] == '$')
 			{
-				// expanding here
-				if (is_variable(&current->tok[d->i + 1]), d->var_node)
+				expander(d, current);
+				printf("***expander triggered***\n");
+
 			}
 			
 			d->i++;
 		}
 		current = current->next;
+		d->i = 0;
 	}
 
 }
@@ -153,12 +141,14 @@ void	parser(t_data *d)
 	p_op_type(d);
 	if (d->error != 0)
 		return ;
-	// lst_print(d->node);
 	p_var(d);
 
 	p_syn_check(d);
 	if (d->error != 0)
 		return ;
+	
+	
+	//lst_print(d->node);
 
 	p_quote_exp(d);
 

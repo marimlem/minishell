@@ -104,6 +104,12 @@ char	*lex_strjoin(char const *s1, char const *s2, char deli);
 // parser.c
 void	parser(t_data *d);
 
+// expander.c
+int	is_variable(char *tok, t_var *node);
+void	expand_var();
+void 	expand_empty();
+void 	expand_shellpid();
+void	expander(t_data *d, t_tok *current);
 
 
 #endif
