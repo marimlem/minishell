@@ -46,27 +46,37 @@
 
 // error codes
 # define ERR_LEX_ALL 101
-# define ERR_PAR_SYN 201
+# define ERR_PAR_ALL 201
+# define ERR_PAR_SYN 202
 
 
 
 typedef struct	s_tok{
-	char *tok;
-	int	typ;
-	struct s_tok *next;
-	struct s_tok *before;
+	char	*tok;
+	int		typ;
+	struct	s_tok *next;
+	struct	s_tok *before;
 
 }	t_tok;
 typedef struct	s_var{
-	char *key;
-	char *val;
-	struct s_var *next;
+	char	*key;
+	char	*val;
+	struct	s_var *next;
 }	t_var;
+
+// if
+typedef struct	s_com{
+	char	*file;
+	char	**args;
+	char	*rdr;
+	struct	s_com *next;
+}	t_com;
 
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
 	t_var *var_node;
+	t_com	*com;
 	int	i;
 	int	q;
 	int	error;

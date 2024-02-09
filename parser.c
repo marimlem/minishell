@@ -136,6 +136,17 @@ void	p_quote_exp(t_data *d)
 
 }
 
+void	init_com(t_data *d)
+{
+	d->com = (t_com *) malloc(sizeof(t_com));
+	if (d->com == NULL)
+	{
+		d->error = ERR_PAR_ALL;
+		return ;
+	}
+	
+}
+
 void	parser(t_data *d)
 {
 	p_op_type(d);
@@ -150,9 +161,12 @@ void	parser(t_data *d)
 	
 	//lst_print(d->node);
 
-	p_quote_exp(d);
+//	p_quote_exp(d);
+
+	init_com(d);
 
 	lst_print(d->node);
+
 
 
 	(void) d;
