@@ -153,6 +153,7 @@ void	parser(t_data *d)
 	if (d->error != 0)
 		return ;
 	p_var(d);
+	// if list is completely variable assignment, return
 
 	p_syn_check(d);
 	if (d->error != 0)
@@ -163,7 +164,7 @@ void	parser(t_data *d)
 
 //	p_quote_exp(d);
 
-	init_com(d);
+	// init_com(d);
 
 	lst_print(d->node);
 

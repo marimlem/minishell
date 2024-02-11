@@ -7,6 +7,7 @@ int	is_variable(char *tok, t_var *node)
 	int	i;
 
 	i=0;
+	i++;
 	if (node == NULL || node->key == NULL)
 		return (0);
 	else

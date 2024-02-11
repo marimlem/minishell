@@ -62,6 +62,7 @@ int	main(int argc, char **argv)
 		inputparsing(d);
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
+		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
 		free_n_clean(d, 0);
 	}
