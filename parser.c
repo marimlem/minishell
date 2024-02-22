@@ -2,6 +2,7 @@
 
 
 // finds and marks operator tokens
+// pipe = -124; rdr left = -60; rdr right = -62
 void	p_op_type(t_data *d)
 {
 	t_tok	*current;
@@ -27,7 +28,7 @@ void	p_op_type(t_data *d)
 			else if (ft_strlen(current->tok) == 1 || (current->tok[1] && current->tok[0] == current->tok[1]))
 			{
 				t = 1;
-				current->typ = OP;
+				current->typ = current->tok[0] * (-1);
 				current = current->next;
 				continue ;
 			}
@@ -71,6 +72,10 @@ void	p_var(t_data *d)
 }
 
 // checks if operators are in syntactically good order (not first, not last, not two in a row)
+// pipe cant be first or last
+// before a pipe, no other operator can be there ( > |  or | |)
+// two in a row check rdr except pipe followed by rdr; rdr must be followed by normal type token
+// last token cant be an operator
 void	p_syn_check(t_data *d)
 {
 	t_tok *current;
@@ -82,12 +87,17 @@ void	p_syn_check(t_data *d)
 	current = d->node;
 	while (current && current->tok)
 	{
-		if (t == 0 && current->typ == OP)
+		if (t == 0 && current->typ == '|' * (-1))
 		{
 			d->error = ERR_PAR_SYN;
 			return ;
 		}
-		else if (current->typ == OP && last == OP)
+		else if (current->typ == '|' * (-1) && last < -20)
+		{
+			d->error = ERR_PAR_SYN;
+			return ;
+		}
+		else if ((current->typ == '>' * (-1) || current->typ == '<' * (-1)) && (last == '>' * (-1) || last == '<' * (-1)))
 		{
 			d->error = ERR_PAR_SYN;
 			return ;
