@@ -53,7 +53,21 @@ void	lexer(t_data *d)
 				current->tok[d->i] = 0;
 				current = current->next;
 				d->i = 1;
-
+				if (current->tok[0] == '|' && (current->tok[1] == '<' || current->tok[1] == '>'))
+				{
+					lex_lstsqueezein(&current, &current->tok[d->i]);
+					current->tok[d->i] = 0;
+					current = current->next;
+					d->i = 1;
+				}
+			}
+			if (current->tok[d->i] == '|' && (current->tok[d->i+1] == '<' || current->tok[d->i+1] == '>'))
+			{
+				d->i++;
+				lex_lstsqueezein(&current, &current->tok[d->i]);
+				current->tok[d->i] = 0;
+				current = current->next;
+				d->i = 1;
 			}
 			while (lex_is_separator(current->tok[d->i]) == 2)
 			{
