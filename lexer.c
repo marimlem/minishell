@@ -41,7 +41,9 @@ void	lexer(t_data *d)
 			}
 			if (current->tok[d->i] == 0)
 				break;
-			lex_lstsqueezein(&current, &current->tok[d->i]);
+			//lex_lstsqueezein(&current, &current->tok[d->i]);
+			if () // needs to find out if it is the first node or not // case "a b" becomes "b" here
+			current->tok = ft_strdup(&current->tok[d->i]);
 			current = current->next;
 			d->i = 0;
 		}
