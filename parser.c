@@ -27,15 +27,18 @@ void	p_op_type(t_data *d)
 			}
 			else if (ft_strlen(current->tok) == 1 || (current->tok[1] && current->tok[0] == current->tok[1]))
 			{
-				t = 1;
+				if (current->tok[0] == '|')
+					t = 1;
 				current->typ = current->tok[0] * (-1);
 				current = current->next;
 				continue ;
 			}
 		}
 		else
+		{
 			current->typ = t;
-		t++;
+			t++;
+		}
 		current = current->next;
 	}
 }
@@ -145,16 +148,118 @@ void	p_quote_exp(t_data *d)
 	}
 
 }
+t_com	*com_lstnew()
+{
+	t_com *list;
 
+	list = (t_com *) malloc(sizeof(t_tok) * 1);
+	if (list == NULL)
+		return (NULL); // set error
+	list->file = NULL;
+	list->args = NULL;
+	list->rdr = NULL;
+	list->next = NULL;
+	return (list);	
+}
 void	init_com(t_data *d)
 {
-	d->com = (t_com *) malloc(sizeof(t_com));
+	d->com = com_lstnew();
 	if (d->com == NULL)
 	{
 		d->error = ERR_PAR_ALL;
 		return ;
 	}
 	
+}
+
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
+{
+	t_tok	*current;
+	t_com	*c_cur;
+	int		rdr_c;
+	int		r;
+	int		arg_c;
+	int		a;
+
+	current = t_node;
+	c_cur = c_node;
+	
+	rdr_c = 0;
+	arg_c = 0;
+	a = 0;
+	r = 0;
+
+	// count the args and rdrs until pipe
+	while (current && current->typ != '|' * (-1))
+	{
+		if (current->typ < 0)
+		{
+			rdr_c++;
+			current = current->next->next;
+		}
+		else
+		{
+			arg_c++;
+			current = current->next;
+		}
+	}
+	current = t_node;
+
+	// alloc space in com_current
+	c_cur->args = (char **) ft_calloc(arg_c + 1, sizeof(char *));
+	c_cur->rdr = (char **) ft_calloc(rdr_c + 1, sizeof(char *));
+	if (c_cur->args == NULL || c_cur->rdr == NULL)
+	{
+		d->error = ERR_PAR_ALL;
+		return ;
+	}
+
+	// fill in
+	while (current && current->tok)
+	{
+		if (current->typ == PIPE * (-1))
+		{
+			// connect new node to command
+			// and call this function again? and then return
+
+			fill_com(d, current->next, c_cur);
+			return ;
+		}
+		else if (current->typ < 0)
+		{
+			// alloc and append to rdr matrix
+			c_cur->rdr[r] = ft_strjoin(current->tok, current->next->tok);
+			if (c_cur->rdr[r] == NULL)
+			{
+				d->error = ERR_PAR_ALL;
+				return ;
+			}
+			r++;
+			current = current->next->next;
+		}
+		if (current->typ > 0)
+		{
+			// if file is NULL then strdup to it
+			// append string to args matrix
+			if (a == 0)
+			{
+				c_cur->file = ft_strdup(current->tok);
+				if (c_cur->file == NULL)
+				{
+					d->error = ERR_PAR_ALL;
+					return ;
+				}
+			}
+			c_cur->args[a] = ft_strdup(current->tok);
+			if (c_cur->args[a] == NULL)
+			{
+				d->error = ERR_PAR_ALL;
+				return ;
+			}
+			a++;
+			current = current->next;
+		}
+	}
 }
 
 void	parser(t_data *d)
@@ -173,10 +278,11 @@ void	parser(t_data *d)
 	//lst_print(d->node);
 
 //	p_quote_exp(d);
-
-	// init_com(d);
-
 	lst_print(d->node);
+
+	init_com(d);
+	fill_com(d, d->node, d->com);
+	printf("\nfile:%s\n\n", d->com->file);
 
 
 

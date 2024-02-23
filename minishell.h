@@ -68,7 +68,7 @@ typedef struct	s_var{
 typedef struct	s_com{
 	char	*file;
 	char	**args;
-	char	*rdr;
+	char	**rdr;
 	struct	s_com *next;
 }	t_com;
 
