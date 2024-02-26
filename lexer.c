@@ -32,6 +32,22 @@ void	lexer(t_data *d)
 		}
 		else if (d->q != 0)
 			d->i++;
+		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1 && d->i == 0)
+		{
+			while (lex_is_separator(current->tok[d->i]) == 1)
+			{
+				current->tok[d->i] = 0;
+				d->i++;
+			}
+			if (current->tok[d->i] == 0)
+				break;
+			if (d->i != 0)
+			{
+				ft_memmove(current->tok, &current->tok[d->i], ft_strlen(&current->tok[d->i]) + 1);
+			}
+			d->i = 1; //not sure about this; maybe = 0?
+		}
+
 		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1)
 		{
 			while (lex_is_separator(current->tok[d->i]) == 1)
@@ -41,9 +57,7 @@ void	lexer(t_data *d)
 			}
 			if (current->tok[d->i] == 0)
 				break;
-			//lex_lstsqueezein(&current, &current->tok[d->i]);
-			if () // needs to find out if it is the first node or not // case "a b" becomes "b" here
-			current->tok = ft_strdup(&current->tok[d->i]);
+			lex_lstsqueezein(&current, &current->tok[d->i]);
 			current = current->next;
 			d->i = 0;
 		}
