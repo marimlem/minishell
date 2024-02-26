@@ -30,8 +30,22 @@ void	expand_var()
 	return ;
 }
 
-void 	expand_empty()
+void 	expand_empty(t_data *d, char *new)
 {
+	int	i;
+
+
+	i = 0;
+	while (new[i] || lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE))
+	{
+		i++;
+	}
+	if (new[i])
+		memmove(&d->tmp[d->i], &new[i], ft_strlen(&new[i]) + 1);
+	else
+		d->tmp[d->i] = 0;
+
+	(void) d;
 	return ;
 }
 
@@ -50,17 +64,19 @@ int	is_env()
 	return (0);
 }
 
-void	expander(t_data *d, t_tok *current)
+void	expander(t_data *d, t_tok *current, char *new)
 {
+	// printf("\ntest: %s\n", d->tmp);
+	(void) current;
 // expanding here
-	if (current->tok[d->i + 1] == '$')
+	if (new[d->i + 1] == '$')
 		expand_shellpid();
-	else if (is_variable(&current->tok[d->i + 1], d->var_node) == 1)
+	else if (is_variable(&new[d->i + 1], d->var_node) == 1)
 		expand_var();
 	else if (is_env())
 		expand_env();
 	else
-		expand_empty();
+		expand_empty(d, new);
 }
 
 char	*l_to_p_trans(t_data *d, t_tok *current)
@@ -89,11 +105,14 @@ char	*l_to_p_trans(t_data *d, t_tok *current)
 			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]));
 			continue ;
 		}
+		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
+		{
+			d->tmp = &new[d->i];
+			// printf("\ntest: %s\n", d->tmp);
+			expander(d, current, &new[d->i]);
+			continue ; 
+		}
 		d->i++;	
-		// else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
-		// {
-		// 	expander();
-		// }
 		
 	}
 	

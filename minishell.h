@@ -77,6 +77,7 @@ typedef struct	s_data{
 	t_tok *node;
 	t_var *var_node;
 	t_com	*com;
+	char	*tmp;
 	int	i;
 	int	q;
 	int	error;
@@ -117,9 +118,9 @@ void	parser(t_data *d);
 // expander.c
 int	is_variable(char *tok, t_var *node);
 void	expand_var();
-void 	expand_empty();
+void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
-void	expander(t_data *d, t_tok *current);
+void	expander(t_data *d, t_tok *current, char *new);
 char	*l_to_p_trans(t_data *d, t_tok *current);
 
 

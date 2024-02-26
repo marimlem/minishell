@@ -136,7 +136,7 @@ void	p_quote_exp(t_data *d)
 				q = 0;
 			if (q != SGLQUOTE && current->tok[d->i] == '$')
 			{
-				expander(d, current);
+				// expander(d, current);
 				printf("***expander triggered***\n");
 
 			}
