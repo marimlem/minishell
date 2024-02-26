@@ -205,10 +205,23 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	}
 	current = t_node;
 
+	if (arg_c == 0)
+	{
+		d->error = 1; // set some useful error for not enough arguments / no command found
+		return ;
+	}
 	// alloc space in com_current
+	if (rdr_c != 0)
+	{
+		c_cur->rdr = (char **) ft_calloc(rdr_c + 1, sizeof(char *));
+		if (c_cur->rdr == NULL)
+		{
+			d->error = ERR_PAR_ALL;
+			return ;
+		}
+	}
 	c_cur->args = (char **) ft_calloc(arg_c + 1, sizeof(char *));
-	c_cur->rdr = (char **) ft_calloc(rdr_c + 1, sizeof(char *));
-	if (c_cur->args == NULL || c_cur->rdr == NULL)
+	if (c_cur->args == NULL)
 	{
 		d->error = ERR_PAR_ALL;
 		return ;
@@ -282,7 +295,7 @@ void	parser(t_data *d)
 
 	init_com(d);
 	fill_com(d, d->node, d->com);
-	printf("\nfile:%s\n\n", d->com->file);
+	// printf("\nfile:%s\n\n", d->com->file);
 
 
 
