@@ -263,7 +263,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			r++;
 			current = current->next->next;
 		}
-		if (current->typ > 0)
+		else if (current->typ > 0)
 		{
 			// if file is NULL then strdup to it
 			// append string to args matrix
@@ -312,6 +312,8 @@ void	parser(t_data *d)
 	init_com(d);
 	fill_com(d, d->node, d->com);
 
+
+// prints command list
 	c_cur = d->com;
 	while (c_cur && c_cur->args)
 	{
