@@ -269,14 +269,16 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			// append string to args matrix
 			if (a == 0)
 			{
-				c_cur->file = ft_strdup(current->tok);
+				c_cur->file = l_to_p_trans(d, current);
+				// c_cur->file = ft_strdup(current->tok);
 				if (c_cur->file == NULL)
 				{
 					d->error = ERR_PAR_ALL;
 					return ;
 				}
 			}
-			c_cur->args[a] = ft_strdup(current->tok);
+			c_cur->args[a] = l_to_p_trans(d, current);
+			// c_cur->args[a] = ft_strdup(current->tok);
 			if (c_cur->args[a] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
@@ -321,6 +323,12 @@ void	parser(t_data *d)
 		while (d->com->args[o])
 		{
 			printf("arg:%s\n", c_cur->args[o]);
+			o++;
+		}
+		o = 0;
+		while (c_cur->rdr && c_cur->rdr[o])
+		{
+			printf("rdr:%s\n", c_cur->rdr[o]);
 			o++;
 		}
 		c_cur = c_cur->next;

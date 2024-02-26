@@ -48,7 +48,7 @@
 # define ERR_LEX_ALL 101
 # define ERR_PAR_ALL 201
 # define ERR_PAR_SYN 202
-
+# define ERR_EXP_ALL 301
 
 
 typedef struct	s_tok{
@@ -120,6 +120,8 @@ void	expand_var();
 void 	expand_empty();
 void 	expand_shellpid();
 void	expander(t_data *d, t_tok *current);
+char	*l_to_p_trans(t_data *d, t_tok *current);
+
 
 
 #endif

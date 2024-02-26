@@ -52,7 +52,7 @@ int	is_env()
 
 void	expander(t_data *d, t_tok *current)
 {
-	// expanding here
+// expanding here
 	if (current->tok[d->i + 1] == '$')
 		expand_shellpid();
 	else if (is_variable(&current->tok[d->i + 1], d->var_node) == 1)
@@ -61,5 +61,42 @@ void	expander(t_data *d, t_tok *current)
 		expand_env();
 	else
 		expand_empty();
+}
+
+char	*l_to_p_trans(t_data *d, t_tok *current)
+{
+	char	*new;
+
+	d->i = 0;
+	d->q = 0;
+	new = ft_strdup(current->tok);
+	if (new == NULL)
+	{
+		d->error = ERR_EXP_ALL;
+		return (NULL);
+	}
+	while (new && new[d->i])
+	{
+		if (d->q == 0 && (new[d->i] == DBLQUOTE || new[d->i] == SGLQUOTE))
+		{
+			d->q = new[d->i];
+			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]) + 1);
+			continue ;
+		}
+		else if(d->q != 0 && d->q == new[d->i])
+		{
+			d->q = 0;
+			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]));
+			continue ;
+		}
+		d->i++;	
+		// else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
+		// {
+		// 	expander();
+		// }
+		
+	}
+	
+	return (new);
 
 }
