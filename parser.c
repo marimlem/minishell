@@ -320,7 +320,7 @@ void	parser(t_data *d)
 	while (c_cur && c_cur->args)
 	{
 		printf("\nfile:%s\n", c_cur->file);
-		while (d->com->args[o])
+		while (c_cur->args[o])
 		{
 			printf("arg:%s\n", c_cur->args[o]);
 			o++;
