@@ -161,6 +161,19 @@ t_com	*com_lstnew()
 	list->next = NULL;
 	return (list);	
 }
+
+void	com_lstsqueezein(t_com **current)
+{
+	t_com	*new;
+	
+	new = com_lstnew();
+	if (new == NULL)
+		return ;
+	new->next = (*current)->next;
+	(*current)->next = new;
+	return ;
+}
+
 void	init_com(t_data *d)
 {
 	d->com = com_lstnew();
@@ -234,8 +247,8 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 		{
 			// connect new node to command
 			// and call this function again? and then return
-
-			fill_com(d, current->next, c_cur);
+			com_lstsqueezein(&c_cur);
+			fill_com(d, current->next, c_cur->next);
 			return ;
 		}
 		else if (current->typ < 0)
@@ -277,6 +290,9 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 
 void	parser(t_data *d)
 {
+	int	o = 0;
+	t_com *c_cur;
+
 	p_op_type(d);
 	if (d->error != 0)
 		return ;
@@ -295,7 +311,19 @@ void	parser(t_data *d)
 
 	init_com(d);
 	fill_com(d, d->node, d->com);
-	// printf("\nfile:%s\n\n", d->com->file);
+
+	c_cur = d->com;
+	while (c_cur && c_cur->args)
+	{
+		printf("\nfile:%s\n", c_cur->file);
+		while (d->com->args[o])
+		{
+			printf("arg:%s\n", c_cur->args[o]);
+			o++;
+		}
+		c_cur = c_cur->next;
+		o= 0;
+	}
 
 
 
