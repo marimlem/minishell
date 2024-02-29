@@ -51,14 +51,15 @@ int	main(int argc, char **argv)
 	d = (t_data *) malloc(sizeof(t_data) * 1);
 	if (d == NULL)
 		return 1;
-	d->input = NULL;
-	d->node = NULL;
-	d->var_node = NULL;
-	d->i = 0;
-	d->q = 0;
-	d->error = 0;
 	while (1)
 	{
+		d->input = NULL;
+		d->node = NULL;
+		d->var_node = NULL;
+		d->i = 0;
+		d->q = 0;
+		d->error = 0;
+		
 		inputparsing(d);
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
