@@ -90,6 +90,18 @@ void	free_n_clean(t_data *d, int b)
 		free (d);
 }
 
+void	init_null(t_data *d)
+{
+	d->input = NULL;
+	d->node = NULL;
+	d->var_node = NULL;
+	d->com = NULL;
+	d->tmp = NULL;
+	d->i = 0;
+	d->q = 0;
+	d->error = 0;
+}
+
 int	main(int argc, char **argv)
 {
 	// char *command;
@@ -102,15 +114,7 @@ int	main(int argc, char **argv)
 		return 1;
 	while (1)
 	{
-		d->input = NULL;
-		d->node = NULL;
-		d->var_node = NULL;
-		d->com = NULL;
-		d->tmp = NULL;
-		d->i = 0;
-		d->q = 0;
-		d->error = 0;
-
+		init_null(d);
 		inputparsing(d);
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
