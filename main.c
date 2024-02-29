@@ -116,6 +116,11 @@ int	main(int argc, char **argv)
 	{
 		init_null(d);
 		inputparsing(d);
+		if (d->error == -1)
+		{
+			printf("exit minishell\n");
+			break ;
+		}
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
