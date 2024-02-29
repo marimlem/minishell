@@ -315,7 +315,7 @@ void	parser(t_data *d)
 	//lst_print(d->node);
 
 //	p_quote_exp(d);
-	lst_print(d->node);
+	// lst_print(d->node);
 
 	init_com(d);
 	fill_com(d, d->node, d->com);
@@ -325,16 +325,16 @@ void	parser(t_data *d)
 	c_cur = d->com;
 	while (c_cur && c_cur->args)
 	{
-		printf("\nfile:%s\n", c_cur->file);
+		printf("   file:%s\n", c_cur->file);
 		while (c_cur->args[o])
 		{
-			printf("arg:%s\n", c_cur->args[o]);
+			printf("   arg:%s\n", c_cur->args[o]);
 			o++;
 		}
 		o = 0;
 		while (c_cur->rdr && c_cur->rdr[o])
 		{
-			printf("rdr:%s\n", c_cur->rdr[o]);
+			printf("   rdr:%s\n", c_cur->rdr[o]);
 			o++;
 		}
 		c_cur = c_cur->next;

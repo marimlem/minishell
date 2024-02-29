@@ -62,6 +62,7 @@ void	com_lst_del(t_com *lst)
 		}
 		c->next = NULL;
 		free (c);
+
 	}
 
 }
@@ -126,6 +127,8 @@ int	main(int argc, char **argv)
 		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
 		free_n_clean(d, 0);
+		printf("\n");
+
 	}
 	free_n_clean(d, 1);
 	(void) argv;
