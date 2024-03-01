@@ -97,12 +97,14 @@ char	*l_to_p_trans(t_data *d, t_tok *current)
 		{
 			d->q = new[d->i];
 			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]) + 1);
+			new[ft_strlen(new)] = 0;
 			continue ;
 		}
-		else if(d->q != 0 && d->q == new[d->i])
+		else if(d->q != 0 && d->q == new[d->i]) // doubles up here
 		{
 			d->q = 0;
 			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]));
+			new[ft_strlen(new) - 1] = 0;
 			continue ;
 		}
 		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
