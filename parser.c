@@ -260,12 +260,20 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 		else if (current->typ < 0)
 		{
 			// alloc and append to rdr matrix
-			c_cur->rdr[r] = ft_strjoin(current->tok, current->next->tok);
+			d->tmp =  l_to_p_trans(d, current->next);
+			if (d->tmp == NULL)
+			{
+				d->error = ERR_PAR_ALL;
+				return ;
+			}
+			c_cur->rdr[r] = ft_strjoin(current->tok, d->tmp);
 			if (c_cur->rdr[r] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
+			free (d->tmp);
+			d->tmp = NULL;
 			r++;
 			current = current->next->next;
 		}
