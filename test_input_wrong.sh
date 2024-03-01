@@ -28,5 +28,6 @@ h ||
 | h
 || h
 | 
+h | h |
 exit
 EOF

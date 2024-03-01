@@ -1,1 +1,7 @@
-2023-08-28 PunyPromptPorthole Planungs Plenum
+
+
+valgrind --suppressions=supp.supp
+
+
+CTRL-SHIFT-O = go to functions in file
+CTRL-TAB = switch between open windows
