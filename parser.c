@@ -109,7 +109,7 @@ void	p_syn_check(t_data *d)
 		t++;
 		current = current->next;
 	}
-	if (last == OP)
+	if (last < -10) //what about var
 		d->error = ERR_PAR_SYN;
 }
 
