@@ -232,7 +232,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	// alloc space in com_current
 	if (rdr_c != 0)
 	{
-		c_cur->rdr = (char **) ft_calloc(rdr_c + 1, sizeof(char *));
+		c_cur->rdr = (char **) ft_calloc((rdr_c * 2) + 1, sizeof(char *));
 		if (c_cur->rdr == NULL)
 		{
 			d->error = ERR_PAR_ALL;
@@ -260,20 +260,18 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 		else if (current->typ < 0)
 		{
 			// alloc and append to rdr matrix
-			d->tmp =  l_to_p_trans(d, current->next);
-			if (d->tmp == NULL)
+			c_cur->rdr[r] = ft_strdup(current->tok);
+			if (c_cur->rdr[r++] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
-			c_cur->rdr[r] = ft_strjoin(current->tok, d->tmp);
+			c_cur->rdr[r] =  l_to_p_trans(d, current->next);
 			if (c_cur->rdr[r] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
-			free (d->tmp);
-			d->tmp = NULL;
 			r++;
 			current = current->next->next;
 		}
