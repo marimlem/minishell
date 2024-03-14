@@ -34,15 +34,15 @@ void 	expand_empty(t_data *d, char *new)
 {
 	int	i;
 
-	i = 0;
-	while (new[i] && (ft_isdigit(new[d->i + 1]) || ft_isalpha(new[d->i + 1])))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
+	i = 1;
+	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i])))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
 	{
 		i++;
 	}
 	if (new[i])
-		ft_memmove(&d->tmp[d->i], &new[i], ft_strlen(&new[i]) + 1);
+		ft_memmove(&d->tmp[0], &new[i], ft_strlen(&new[i]) + 1);
 	else
-		d->tmp[d->i] = 0;
+		d->tmp[0] = 0;
 
 	(void) d;
 	return ;
@@ -66,16 +66,19 @@ int	is_env()
 void	expander(t_data *d, t_tok *current, char *new)
 {
 	// printf("\ntest: %s\n", d->tmp);
+	int	i;
+
+	i = 0;
 	(void) current;
 // expanding here
-	if (!new[d->i + 1] || (!ft_isdigit(new[d->i + 1]) && !ft_isalpha(new[d->i + 1])))
+	if (!new[i + 1] || (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1])))
 	{
 		d->i++;
 		return ;
 	}
-	if (new[d->i + 1] == '$')
+	if (new[i + 1] == '$')
 		expand_shellpid();
-	else if (is_variable(&new[d->i + 1], d->var_node) == 1)
+	else if (is_variable(&new[i + 1], d->var_node) == 1)
 		expand_var();
 	else if (is_env())
 		expand_env();
