@@ -78,7 +78,7 @@ void	expander(t_data *d, t_tok *current, char *new)
 	}
 	if (new[i + 1] == '$')
 		expand_shellpid();
-	else if (is_variable(&new[i + 1], d->var_node) == 1)
+	else if (is_variable(new, d->var_node) == 1)
 		expand_var();
 	else if (is_env())
 		expand_env();

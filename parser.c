@@ -302,6 +302,60 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	}
 }
 
+
+// returns (1) if NOT all var
+int	is_all_var(t_data *d)
+{
+	t_tok *current;
+
+	current = d->node;
+	while (current && current->typ == VAR)
+	{
+		current = current->next;
+	}
+	if (current)
+		return (1);
+	return (0);
+}
+
+void	assign_var()
+{
+	return ;
+}
+
+void	rm_var(t_data *d)
+{
+	t_tok	*current;
+	t_tok	*last;
+
+	current = d->node;
+	last = NULL;
+	while (current)
+	{
+		if (current->typ == VAR)
+		{
+			if (last == NULL) // if VAR is first token
+			{
+				free (current->tok);
+				current->tok = NULL;
+				current = current->next;
+				if (current == NULL)
+					return ;
+				d->node = current;
+			}
+			else
+			{
+
+			}
+		}
+		else
+		{
+			last = current;
+			current = current->next;
+		}
+	}
+}
+
 void	parser(t_data *d)
 {
 	int	o = 0;
@@ -311,7 +365,16 @@ void	parser(t_data *d)
 	if (d->error != 0)
 		return ;
 	p_var(d);
-	// if list is completely variable assignment, return
+	// if list is completely variable assignment, create variable list, return
+	if (is_all_var(d) == 0)
+	{
+		assign_var();
+		return ;
+	}		
+	else // remove variable assignments from tokenlist
+	{
+		rm_var();
+	}
 
 	p_syn_check(d);
 	if (d->error != 0)
