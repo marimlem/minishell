@@ -123,6 +123,22 @@ void 	expand_shellpid();
 void	expander(t_data *d, char *new);
 char	*l_to_p_trans(t_data *d, char *token);
 
+// var_handling.c
+int	is_all_var(t_data *d);
+t_var	*var_lst_new();
+void	assign_var(t_data **d);
+void	rm_var(t_data *d);
+
+// tok_types.c
+void	p_op_type(t_data *d);
+void	p_var(t_data *d);
+void	p_syn_check(t_data *d);
+
+// command_utils.c
+t_com	*com_lstnew();
+void	com_lstsqueezein(t_com **current);
+void	init_com(t_data *d);
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 
 
 #endif
