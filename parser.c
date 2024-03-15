@@ -339,9 +339,16 @@ void	assign_var(t_data **d)
 	i = 0;
 	tok_c = (*d)->node;
 	var_c = (*d)->var_node;
-	while (var_c)
+	while (var_c && var_c->next)
 		var_c = var_c->next;
-	var_c = var_lst_new();
+	if (var_c)
+		var_c->next = var_lst_new();
+	else
+	{
+		(*d)->var_node = var_lst_new();
+		var_c = (*d)->var_node;
+	}
+	
 	if (var_c == NULL)
 	{
 		(*d)->error = 1; //alloc error
@@ -385,7 +392,7 @@ void	assign_var(t_data **d)
 		i = 0;
 
 	}
-	(*d)->var_node = var_c;
+	// (*d)->var_node = var_c;
 	return ;
 }
 
