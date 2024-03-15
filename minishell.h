@@ -120,8 +120,8 @@ int	is_variable(char *tok, t_var *node);
 void	expand_var();
 void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
-void	expander(t_data *d, t_tok *current, char *new);
-char	*l_to_p_trans(t_data *d, t_tok *current);
+void	expander(t_data *d, char *new);
+char	*l_to_p_trans(t_data *d, char *token);
 
 
 

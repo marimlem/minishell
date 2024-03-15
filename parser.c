@@ -266,7 +266,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
-			c_cur->rdr[r] =  l_to_p_trans(d, current->next);
+			c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok);
 			if (c_cur->rdr[r] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
@@ -281,7 +281,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			// append string to args matrix
 			if (a == 0)
 			{
-				c_cur->file = l_to_p_trans(d, current);
+				c_cur->file = l_to_p_trans(d, current->tok);
 				// c_cur->file = ft_strdup(current->tok);
 				if (c_cur->file == NULL)
 				{
@@ -289,7 +289,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 					return ;
 				}
 			}
-			c_cur->args[a] = l_to_p_trans(d, current);
+			c_cur->args[a] = l_to_p_trans(d, current->tok);
 			// c_cur->args[a] = ft_strdup(current->tok);
 			if (c_cur->args[a] == NULL)
 			{
@@ -354,7 +354,7 @@ void	assign_var(t_data *d)
 		var_c->key[i] = 0;
 		if (tok_c->tok[i] && tok_c->tok[i + 1])
 			// var_c->val = ft_strdup(&tok_c->tok[i + 1]); // strdup not good enough, need to expand :(
-			var_c->val = l_to_p_trans(d, tok_c);
+			var_c->val = l_to_p_trans(d, &tok_c->tok[i+1]);
 		else
 			var_c->val = (char *) ft_calloc(sizeof(char), 1);
 		if (var_c->val == NULL)

@@ -63,13 +63,12 @@ int	is_env()
 	return (0);
 }
 
-void	expander(t_data *d, t_tok *current, char *new)
+void	expander(t_data *d, char *new)
 {
 	// printf("\ntest: %s\n", d->tmp);
 	int	i;
 
 	i = 0;
-	(void) current;
 // expanding here
 	if (!new[i + 1] || (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1])))
 	{
@@ -86,13 +85,13 @@ void	expander(t_data *d, t_tok *current, char *new)
 		expand_empty(d, new);
 }
 
-char	*l_to_p_trans(t_data *d, t_tok *current)
+char	*l_to_p_trans(t_data *d, char *token)
 {
 	char	*new;
 
 	d->i = 0;
 	d->q = 0;
-	new = ft_strdup(current->tok);
+	new = ft_strdup(token);
 	if (new == NULL)
 	{
 		d->error = ERR_EXP_ALL;
@@ -118,7 +117,7 @@ char	*l_to_p_trans(t_data *d, t_tok *current)
 		{
 			d->tmp = &new[d->i];
 			// printf("\ntest: %s\n", d->tmp);
-			expander(d, current, &new[d->i]);
+			expander(d, &new[d->i]);
 			d->tmp = NULL;
 			continue ; 
 		}
