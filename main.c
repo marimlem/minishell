@@ -76,8 +76,6 @@ void	free_n_clean(t_data *d, int b)
 		free (d->input);
 	// if (d->node)
 		// free (d->node);
-	if (d->var_node)
-		free (d->var_node);
 	// if (d->com)
 		// free (d->com);
 	if (d->tmp)
@@ -95,7 +93,6 @@ void	init_null(t_data *d)
 {
 	d->input = NULL;
 	d->node = NULL;
-	d->var_node = NULL;
 	d->com = NULL;
 	d->tmp = NULL;
 	d->i = 0;
@@ -131,6 +128,9 @@ int	main(int argc, char **argv)
 
 	}
 	free_n_clean(d, 1);
+	if (d->var_node)
+		free (d->var_node);
+	d->var_node = NULL;
 	(void) argv;
 	// (void) command;
 	return (0);

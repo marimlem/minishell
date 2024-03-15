@@ -385,6 +385,7 @@ void	assign_var(t_data **d)
 		i = 0;
 
 	}
+	(*d)->var_node = var_c;
 	return ;
 }
 
