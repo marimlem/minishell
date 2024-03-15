@@ -345,7 +345,10 @@ void	rm_var(t_data *d)
 			}
 			else
 			{
-
+				last->next = current->next;
+				free (current->tok);
+				current->tok = NULL;
+				current = last->next;
 			}
 		}
 		else
@@ -373,7 +376,7 @@ void	parser(t_data *d)
 	}		
 	else // remove variable assignments from tokenlist
 	{
-		rm_var();
+		rm_var(d);
 	}
 
 	p_syn_check(d);
