@@ -2,31 +2,26 @@
 
 // finds variable in variable list
 // returns (1) on success
-int	is_variable(char *tok, t_var *node)
+int	is_variable(t_var *node, char *find)
 {
-	int	i;
-
-	i=0;
-	i++;
-	if (node == NULL || node->key == NULL)
+	if (node == NULL)
 		return (0);
+	if (is_variable(node->next, find) == 1)
+		return (1);
 	else
 	{
-		if (is_variable(tok, node->next) != 0)
+		if (ft_strncmp(node->key, find, ft_strlen(node->key) + ft_strlen(find)) == 0)
 			return (1);
-
-		if (ft_strncmp(node->key, tok, ft_strlen(node->key)) != 0) // strncmp lacking protection
-			return (0);
-		else
-			return (1);
+		return (0);
 	}
-	return (0);
-//	return (is_variable(tok, node->next))
+	
 }
 
 
-void	expand_var()
+void	expand_var(t_data *d, char *new)
 {
+	(void) d;
+	(void) new;
 	return ;
 }
 
@@ -77,8 +72,8 @@ void	expander(t_data *d, char *new)
 	}
 	if (new[i + 1] == '$')
 		expand_shellpid();
-	else if (is_variable(new, d->var_node) == 1)
-		expand_var();
+	else if (is_variable(d->var_node, new) == 1)
+		expand_var(d, new);
 	else if (is_env())
 		expand_env();
 	else
