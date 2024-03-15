@@ -318,8 +318,55 @@ int	is_all_var(t_data *d)
 	return (0);
 }
 
-void	assign_var()
+void	assign_var(t_data *d)
 {
+	int		i;
+	t_tok	*tok_c;
+	t_var	*var_c;
+
+	i = 0;
+	tok_c = d->node;
+	d->var_node = (t_var *) malloc(sizeof(t_var) * 1);
+	if (d->var_node == NULL)
+	{
+		d->error = 1; // alloc error
+		return ;
+	}
+	var_c = d->var_node;
+	var_c->key = NULL;
+	var_c->val = NULL;
+	var_c->next = NULL;
+	while (tok_c)
+	{
+		var_c->key = ft_strdup(tok_c->tok);
+		if (var_c->key == NULL)
+		{
+			d->error = 1;// alloc error
+			return ;
+		}
+		while (tok_c->tok && tok_c->tok[i] != '=')
+			i++;
+		if (tok_c->tok[i] != '=')
+		{
+			d->error = 2; //strange error, there should in all cases be an equal sign somewhere in the tok, but anyways, safe is safe
+			return ;
+		}
+		var_c->key[i] = 0;
+		if (tok_c->tok[i] && tok_c->tok[i + 1])
+			// var_c->val = ft_strdup(&tok_c->tok[i + 1]); // strdup not good enough, need to expand :(
+			var_c->val = l_to_p_trans(d, tok_c);
+		else
+			var_c->val = (char *) ft_calloc(sizeof(char), 1);
+		if (var_c->val == NULL)
+		{
+			d->error = 1; // alloc error
+			return ;
+		}
+		// have to add new node in varnode list here
+		tok_c = tok_c->next;
+		i = 0;
+
+	}
 	return ;
 }
 
@@ -362,16 +409,24 @@ void	rm_var(t_data *d)
 void	parser(t_data *d)
 {
 	int	o = 0;
-	t_com *c_cur;
+	t_com	*c_cur;
+	t_var	*varnode;
 
 	p_op_type(d);
 	if (d->error != 0)
 		return ;
 	p_var(d);
 	// if list is completely variable assignment, create variable list, return
+	lst_print(d->node);
 	if (is_all_var(d) == 0)
 	{
-		assign_var();
+		assign_var(d);
+		varnode = d->var_node;
+		while (varnode && varnode->key && varnode->val)
+		{
+			printf("key: %s\nval: %s\n", varnode->key, varnode->val);
+			varnode = varnode->next;
+		}
 		return ;
 	}		
 	else // remove variable assignments from tokenlist
@@ -384,7 +439,6 @@ void	parser(t_data *d)
 		return ;
 	
 	
-	//lst_print(d->node);
 
 //	p_quote_exp(d);
 	// lst_print(d->node);
