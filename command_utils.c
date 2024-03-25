@@ -57,7 +57,12 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	// count the args and rdrs until pipe
 	while (current && current->typ != '|' * (-1))
 	{
-		if (current->typ < 0)
+		if (current->typ == VAR)
+		{
+			arg_c++;
+			current = current->next;
+		}
+		else if (current->typ < 0) // this also affects variable assignments
 		{
 			rdr_c++;
 			if (current->next)
@@ -109,7 +114,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			fill_com(d, current->next, c_cur->next);
 			return ;
 		}
-		else if (current->typ < 0)
+		else if (current->typ < 0 && current->typ != VAR)
 		{
 			// alloc and append to rdr matrix
 			c_cur->rdr[r] = ft_strdup(current->tok);
@@ -127,7 +132,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			r++;
 			current = current->next->next;
 		}
-		else if (current->typ > 0)
+		else if (current->typ > 0 || current->typ == VAR) 
 		{
 			// if file is NULL then strdup to it
 			// append string to args matrix

@@ -25,10 +25,10 @@ void	parser(t_data *d)
 		}
 		return ;
 	}		
-	else // remove variable assignments from tokenlist
+/* 	else // remove variable assignments from tokenlist
 	{
 		rm_var(d);
-	}
+	} */
 
 	p_syn_check(d);
 	if (d->error != 0)
