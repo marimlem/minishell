@@ -1,10 +1,22 @@
 #include "minishell.h"
 
+
+int	is_varname()
+{
+	int i;
+
+	i = 0;
+	if (ft_isdigit(var[i])) 
+	{
+
+	}
+}
+
 // finds variable in variable list
 // returns (1) on success
 int	is_variable(t_var *node, char *find)
 {
-	if (node == NULL)
+	if (node && node->key == NULL)
 		return (0);
 	if (is_variable(node->next, find) == 1)
 		return (1);
@@ -30,7 +42,7 @@ void 	expand_empty(t_data *d, char *new)
 	int	i;
 
 	i = 1;
-	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i])))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
+	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
 	{
 		i++;
 	}
