@@ -103,6 +103,11 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 		return ;
 	}
 
+
+	// ignore variable assignments before other types
+	while (current && current->tok && current->typ == VAR)
+		current = current->next;
+
 	// fill in
 	while (current && current->tok)
 	{
