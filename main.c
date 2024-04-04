@@ -90,6 +90,12 @@ void	free_n_clean(t_data *d, int b)
 	d = NULL;
 }
 
+void	init_envlist(t_envlist **envlist)
+{
+	(*envlist)->key = NULL;
+	(*envlist)->value = NULL;
+}
+
 void	init_null(t_data *d)
 {
 	d->input = NULL;
@@ -102,20 +108,31 @@ void	init_null(t_data *d)
 	d->error = 0;
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	// char *command;
 	t_data	*d;
+	t_envlist	**env;
 
 	if (argc != 1)
 		return (100);
 	d = (t_data *) malloc(sizeof(t_data) * 1);
 	if (d == NULL)
 		return 1;
+	env = (t_envlist **)malloc(sizeof(t_envlist *));
+	if (!env)
+		return 1;
+	*env = (t_envlist *)malloc(sizeof(t_envlist));
+	if (!(*env))
+	{
+		free(env);
+		return 1;
+	}
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d);
+		ft_assign_key_and_value(env, envp);
+		inputparsing(d, *env);
 		if (d->error == -1)
 		{
 			printf("exit minishell\n");
@@ -128,7 +145,6 @@ int	main(int argc, char **argv)
 		
 		free_n_clean(d, 0);
 		printf("\n");
-
 	}
 	if (d->var_node)
 		free (d->var_node);
