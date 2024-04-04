@@ -87,6 +87,7 @@ void	free_n_clean(t_data *d, int b)
 		return ;
 	if (d)
 		free (d);
+	d = NULL;
 }
 
 void	init_null(t_data *d)
@@ -95,6 +96,7 @@ void	init_null(t_data *d)
 	d->node = NULL;
 	d->com = NULL;
 	d->tmp = NULL;
+	d->var_node = NULL;
 	d->i = 0;
 	d->q = 0;
 	d->error = 0;
@@ -123,14 +125,15 @@ int	main(int argc, char **argv)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
+		
 		free_n_clean(d, 0);
 		printf("\n");
 
 	}
-	free_n_clean(d, 1);
 	if (d->var_node)
 		free (d->var_node);
 	d->var_node = NULL;
+	free_n_clean(d, 1);
 	(void) argv;
 	// (void) command;
 	return (0);

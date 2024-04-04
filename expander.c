@@ -1,16 +1,16 @@
 #include "minishell.h"
 
 
-int	is_varname()
-{
-	int i;
+// int	is_varname()
+// {
+// 	int i;
 
-	i = 0;
-	if (ft_isdigit(var[i])) 
-	{
+// 	i = 0;
+// 	if (ft_isdigit(var[i])) 
+// 	{
 
-	}
-}
+// 	}
+// }
 
 // finds variable in variable list
 // returns (1) on success
