@@ -42,6 +42,11 @@ void 	expand_empty(t_data *d, char *new)
 	int	i;
 
 	i = 1;
+	if (new[i] && ft_isdigit(new[i]))
+	{
+		ft_memmove(&d->tmp[0], &new[i+1], ft_strlen(&new[i + 1]) + 1);
+		return ;
+	}
 	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
 	{
 		i++;
