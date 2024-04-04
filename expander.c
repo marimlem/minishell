@@ -77,16 +77,16 @@ void	expander(t_data *d, char *new)
 
 	i = 0;
 // expanding here
-	if (!new[i + 1] || (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1])))
+	if (!new[i + 1] || (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1]) && new[i + 1] != '_'))
 	{
 		d->i++;
 		return ;
 	}
-	if (new[i + 1] == '$')
-		expand_shellpid();
-	else if (is_variable(d->var_node, new) == 1)
-		expand_var(d, new);
-	else if (is_env())
+	// if (new[i + 1] == '$')
+	// 	expand_shellpid();
+	// else if (NULL) //is_variable(d->var_node, new) == 1)
+	// 	expand_var(d, new);
+	if (is_env())
 		expand_env();
 	else
 		expand_empty(d, new);
