@@ -5,11 +5,17 @@ void	inputparsing(t_data *d)
 	d->input = readline("minishell:$ ");
 	if (!d || !d->input)
 		return ;
-	if (even_quotes(d) == EVEN)
+	if (even_quotes(d) == ODD)
+		return ;
+	if (ft_strncmp(d->input, "exit", 4) == 0)
 	{
-		lexer(d);
-		// printf("even!");
+		d->error = -1;
+		return ;
 	}
+
+	lexer(d);
+	parser(d);
+		// printf("even!");
 
 	//parser
 

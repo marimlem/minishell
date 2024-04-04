@@ -21,35 +21,63 @@
 # define EVEN 0
 # define ODD 1
 
-# define S 32
-# define T 9
-# define N 10
+# define S 32	//space
+# define T 9	//tab
+# define N 10	//new line
 
+// quotes
 # define DBLQUOTE 34
 # define SGLQUOTE 39
+
+# define OP -5
+# define VAR -10
+
+
+
 # define PIPE 124
 # define RDR_R 62 // >
 # define RDR_APP 63 // >> append
 # define RDR_L 60 // <
 # define RDR_DEL 61 // << delimiter
 
-
-# define ERR_LEX_ALL 101
-
 # define BIN "/usr/bin/"
 
 
+
+// error codes
+# define ERR_LEX_ALL 101
+# define ERR_PAR_ALL 201
+# define ERR_PAR_SYN 202
+# define ERR_EXP_ALL 301
+
+
 typedef struct	s_tok{
-	char *tok;
-	int	typ;
-	struct s_tok *next;
-	struct s_tok *before;
+	char	*tok;
+	int		typ;
+	struct	s_tok *next;
+	struct	s_tok *before;
 
 }	t_tok;
+typedef struct	s_var{
+	char	*key;
+	char	*val;
+	struct	s_var *next;
+}	t_var;
+
+// if
+typedef struct	s_com{
+	char	*file;
+	char	**args;
+	char	**rdr;
+	struct	s_com *next;
+}	t_com;
 
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
+	t_var *var_node;
+	t_com	*com;
+	char	*tmp;
 	int	i;
 	int	q;
 	int	error;
@@ -83,6 +111,34 @@ void	init_list2(t_data *d, char *input);
 void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
+
+// parser.c
+void	parser(t_data *d);
+
+// expander.c
+int	is_variable(t_var *node, char *find);
+void	expand_var();
+void 	expand_empty(t_data *d, char *new);
+void 	expand_shellpid();
+void	expander(t_data *d, char *new);
+char	*l_to_p_trans(t_data *d, char *token);
+
+// var_handling.c
+int	is_all_var(t_data *d);
+t_var	*var_lst_new();
+void	assign_var(t_data **d);
+void	rm_var(t_data *d);
+
+// tok_types.c
+void	p_op_type(t_data *d);
+void	p_var(t_data *d);
+void	p_syn_check(t_data *d);
+
+// command_utils.c
+t_com	*com_lstnew();
+void	com_lstsqueezein(t_com **current);
+void	init_com(t_data *d);
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 
 
 #endif
