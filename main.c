@@ -124,7 +124,7 @@ int	main(int argc, char **argv)
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
-		//executor(d);
+		executor(d);
 		
 		free_n_clean(d, 0);
 		printf("\n");
