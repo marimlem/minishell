@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 
+# include <fcntl.h>
+
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -81,6 +83,8 @@ typedef struct	s_data{
 	int	i;
 	int	q;
 	int	error;
+	int	fd;
+	int	old_out;
 }	t_data;
 
 // ft_strncmp.c

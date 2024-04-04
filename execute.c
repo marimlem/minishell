@@ -3,9 +3,45 @@
 	// char *file = "/usr/bin/ls";
     // char *const args[] = {"/usr/bin/ls", "-a", "-l", NULL};
     // char *const env[] = {"ENV=World", NULL};
+
+
+void	rdr_handler(t_data *d)
+{
+	int	i;
+
+	i=0;
+	d->fd=0;
+	if (d->com->rdr[i][0] == '>') // redirect output to file
+	{
+		d->old_out = dup(STDOUT_FILENO);
+		// close(STDOUT_FILENO);
+		d->fd = open(d->com->rdr[i+1], O_WRONLY |O_CREAT, 0644);
+		if (d->fd < 0)
+		{
+			printf("rdr: error opening file\n");
+			return ;
+		}
+		dup2(d->fd, STDOUT_FILENO);
+	}
+}
+
+
 void	executor(t_data *d)
 {
-	d_execute(d);
+	if (d->com->rdr)
+	{
+		rdr_handler(d);
+
+		d_execute(d);
+		
+		//resetting rdr 
+		// printf("old out: %d\n", d->old_out);
+		dup2(d->old_out, 1);
+		close(d->fd);
+	}
+	else
+		d_execute(d);
+	
 
 }
 
