@@ -116,6 +116,10 @@ void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
 
+
+// main.c
+void	free_n_clean(t_data *d, int b);
+
 // parser.c
 void	parser(t_data *d);
 

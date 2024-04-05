@@ -84,6 +84,7 @@ void	d_execute(t_data *d)
 		if (execve(d->com->file, d->com->args, NULL) == -1)
 		{
 			printf("minishell: command not found: %s\n",&d->com->file[9]);
+			free_n_clean(d, 1);
 			exit(-1);
 		}
 	}
