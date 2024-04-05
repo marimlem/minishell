@@ -8,26 +8,40 @@
 void	rdr_handler(t_data *d)
 {
 	int	i;
+	int	j;
 
+
+	j = 0;
 	i=0;
-	d->fd=0;
-	if (d->com->rdr[i][0] == '>') // redirect output to file
+	d->old_out = (int*) ft_calloc(sizeof(int), 3);
+	if (d->old_out ==NULL)
+		return;
+	d->fd = (int*) ft_calloc(sizeof(int), 3);
+	if (d->fd ==NULL)
+		return;
+	while (d->com->rdr[i])
 	{
-		d->old_out = dup(STDOUT_FILENO);
-		// close(STDOUT_FILENO);
-		d->fd = open(d->com->rdr[i+1], O_WRONLY |O_CREAT, 0644);
-		if (d->fd < 0)
+		if (d->com->rdr[i][0] == '>' && d->com->rdr[i][1] == 0) // redirect output to file
 		{
-			printf("rdr: error opening file\n");
-			return ;
+			d->old_out[j] = dup(STDOUT_FILENO);
+			// close(STDOUT_FILENO);
+			d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
+			if (d->fd[j] < 0)
+			{
+				printf("rdr: error opening file\n");
+				return ;
+			}
+			dup2(d->fd[j++], STDOUT_FILENO);
 		}
-		dup2(d->fd, STDOUT_FILENO);
+		i = i + 2;
 	}
 }
 
 
 void	executor(t_data *d)
 {
+	int	i = 1;
+
 	if (d->com->rdr)
 	{
 		rdr_handler(d);
@@ -36,8 +50,13 @@ void	executor(t_data *d)
 		
 		//resetting rdr 
 		// printf("old out: %d\n", d->old_out);
-		dup2(d->old_out, 1);
-		close(d->fd);
+		while (d->old_out[i])
+		{
+
+			dup2(d->old_out[i], 1);
+			close(d->fd[i]);
+			i--;
+		}
 	}
 	else
 		d_execute(d);

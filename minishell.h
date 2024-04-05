@@ -83,8 +83,8 @@ typedef struct	s_data{
 	int	i;
 	int	q;
 	int	error;
-	int	fd;
-	int	old_out;
+	int	*fd;
+	int	*old_out;
 }	t_data;
 
 // ft_strncmp.c
