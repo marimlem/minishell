@@ -79,7 +79,14 @@ void	d_execute(t_data *d)
 		return ; // set error
 	}
 	else if (pid == 0)
-		execve(d->com->file, d->com->args, NULL);
+	{
+
+		if (execve(d->com->file, d->com->args, NULL) == -1)
+		{
+			printf("minishell: command not found: %s\n",&d->com->file[9]);
+			exit(-1);
+		}
+	}
 	else
 		waitpid(pid, &status, 0);
 }
