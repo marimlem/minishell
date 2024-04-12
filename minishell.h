@@ -99,7 +99,7 @@ void	executor(t_data *d);
 void	d_execute(t_data *d);
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d, t_envlist *envlist);
+void	inputparsing(t_data *d, t_envlist **envlist);
 
 // lexer.c
 int	lex_is_separator(char c);
