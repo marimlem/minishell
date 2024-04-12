@@ -129,12 +129,12 @@ int	main(int argc, char **argv, char **envp)
 		free(env);
 		return 1;
 	}
+	init_envlist(env);
+	ft_assign_key_and_value(env, envp);
 	while (1)
 	{
 		init_null(d);
-		init_envlist(env);
-		ft_assign_key_and_value(env, envp);
-		inputparsing(d, *env);
+		inputparsing(d, env);
 		if (d->error == -1)
 		{
 			printf("exit minishell\n");

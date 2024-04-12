@@ -19,17 +19,14 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 	t_envlist	*current;
 	t_envlist	*new;
 
-	if (envlist == NULL || *envlist == NULL)
+	current = *envlist;
+	if (current->key == NULL && current->value == NULL && current->next == NULL)
 	{
-		*envlist = (t_envlist *)malloc(sizeof(t_envlist));
-		if (*envlist == NULL)
-			return ;
-		(*envlist)->key = ft_strdup(key);
-		(*envlist)->value = ft_strdup(value);
-		(*envlist)->next = NULL;
+		current->key = ft_strdup(key);
+		current->value = ft_strdup(value);
+		current->next = NULL;	
 		return ;
 	}
-	current = *envlist;
 	new = (t_envlist *)malloc(sizeof(t_envlist));
 	if (new == NULL)
 		return ;
