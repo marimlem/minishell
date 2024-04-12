@@ -1,6 +1,6 @@
 
 
-valgrind --suppressions=supp.supp
+valgrind --suppressions=supp.supp --track-origins=yes
 
 
 CTRL-SHIFT-O = go to functions in file

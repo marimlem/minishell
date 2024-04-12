@@ -94,6 +94,7 @@ void	init_envlist(t_envlist **envlist)
 {
 	(*envlist)->key = NULL;
 	(*envlist)->value = NULL;
+	(*envlist)->next = NULL;
 }
 
 void	init_null(t_data *d)
@@ -120,10 +121,10 @@ int	main(int argc, char **argv, char **envp)
 	if (d == NULL)
 		return 1;
 	env = (t_envlist **)malloc(sizeof(t_envlist *));
-	if (!env)
+	if (env == NULL)
 		return 1;
 	*env = (t_envlist *)malloc(sizeof(t_envlist));
-	if (!(*env))
+	if ((*env) == NULL)
 	{
 		free(env);
 		return 1;
@@ -131,6 +132,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		init_null(d);
+		init_envlist(env);
 		ft_assign_key_and_value(env, envp);
 		inputparsing(d, *env);
 		if (d->error == -1)

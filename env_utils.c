@@ -22,6 +22,8 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 	if (envlist == NULL || *envlist == NULL)
 	{
 		*envlist = (t_envlist *)malloc(sizeof(t_envlist));
+		if (*envlist == NULL)
+			return ;
 		(*envlist)->key = ft_strdup(key);
 		(*envlist)->value = ft_strdup(value);
 		(*envlist)->next = NULL;
@@ -29,6 +31,8 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 	}
 	current = *envlist;
 	new = (t_envlist *)malloc(sizeof(t_envlist));
+	if (new == NULL)
+		return ;
 	new->key = ft_strdup(key);
 	new->value = ft_strdup(value);
 	new->next = NULL;
@@ -39,10 +43,9 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 
 void	ft_print_list(t_envlist *envlist)
 {
-	while (envlist)
+	while (envlist != NULL)
 	{
-		printf("key: %s\n", envlist->key);
-		printf("value: %s\n", envlist->value);
+		printf("%s=%s\n", envlist->key, envlist->value);
 		envlist = envlist->next;
 	}
 }
