@@ -131,6 +131,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	init_envlist(env);
 	ft_assign_key_and_value(env, envp);
+	d->env = env;
 	while (1)
 	{
 		init_null(d);
