@@ -72,11 +72,19 @@ typedef struct	s_com{
 	struct	s_com *next;
 }	t_com;
 
+typedef struct s_envlist
+{
+	char				*key;
+	char				*value;
+	struct s_envlist	*next;
+}						t_envlist;
+
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
 	t_var *var_node;
 	t_com	*com;
+	t_envlist	**env;
 	char	*tmp;
 	int	i;
 	int	q;
@@ -91,7 +99,7 @@ void	executor(t_data *d);
 void	d_execute(t_data *d);
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d);
+void	inputparsing(t_data *d, t_envlist **envlist);
 
 // lexer.c
 int	lex_is_separator(char c);
@@ -140,5 +148,19 @@ void	com_lstsqueezein(t_com **current);
 void	init_com(t_data *d);
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 
+// env_utils.c
+int	ft_contains_char(const char *s, char c);
+void	ft_add_list(t_envlist **envlist, char *key, char *value);
+void	ft_print_list(t_envlist *envlist);
+int	ft_split_first_part(char *str, char **double_array);
+void	ft_split_second_part(char *str, char **double_array, int str_index);
+char	**ft_eqsplit(char *str);
+
+//key_value_utils.c
+char	*ft_find_key_value(t_envlist *envlist, const char *key);
+int	ft_key_exists(t_envlist *envlist, char *key, char *value);
+int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
+void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
+void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 #endif
