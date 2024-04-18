@@ -28,5 +28,14 @@
 /bin/echo \$TESTNOTFOUND\$HOME
 /bin/echo \$TESTNOTFOUND\$HOME$
 cd ..\$PWD
+/bin/echo ""\$?""
+/bin/echo " "\$?" "
+/bin/echo \$?"42"
+/bin/echo ''\$?''"42"
+/bin/echo 'HELLO'\$?:''"42"
+/bin/echo "\$?"
+/bin/echo '\$?'
+/bin/echo "'\$?'"
+/bin/echo '"\$?"'
 exit
 EOF
