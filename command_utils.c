@@ -150,6 +150,12 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 					d->error = ERR_PAR_ALL;
 					return ;
 				}
+				c_cur->args[a] = ft_strdup(c_cur->file);
+				if (c_cur->args[a] == NULL)
+					d->error = ERR_PAR_ALL;
+				a++;
+				current = current->next;
+				continue;
 			}
 			c_cur->args[a] = l_to_p_trans(d, current->tok);
 			// c_cur->args[a] = ft_strdup(current->tok);
