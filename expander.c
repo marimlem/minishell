@@ -96,7 +96,7 @@ int 	expand_env(t_data *d, char *new, char *str)
 		{
 			// WIP HERE
 			printf("%s\n", node->key);
-			exp = (char *) ft_calloc(sizeof(char), ft_strlen(&d->tmp[d->i]) + i);
+			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
 			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
