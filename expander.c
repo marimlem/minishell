@@ -91,11 +91,11 @@ int 	expand_env(t_data *d, char *new, char *str)
 	(void) str;
 	while (node && node->key)
 	{
-		printf("len of %s: %ld\nindex of var: %d\n", node->key, ft_strlen(node->key), i);
+		// printf("len of %s: %ld\nindex of var: %d\n", node->key, ft_strlen(node->key), i);
 		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
 			// WIP HERE
-			printf("%s\n", node->key);
+			// printf("%s\n", node->key);
 			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
