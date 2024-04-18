@@ -109,9 +109,17 @@ int 	expand_env(t_data *d, char *new, char *str)
 	return (0);
 }
 
-int	is_env()
+void	expand_shellname(t_data *d)
 {
-	return (0);
+	char	*exp;
+
+	exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + 13);
+	ft_memmove(exp, d->tmp, d->i);
+	ft_memmove(&exp[d->i], "minishell <3", 12);
+	ft_memmove(&exp[d->i + 12], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
+	free (d->tmp);
+	d->tmp = exp;
+	d->i += 12;
 }
 
 void	expander(t_data *d, char *new, char *str)
@@ -125,7 +133,12 @@ void	expander(t_data *d, char *new, char *str)
 		d->i++;
 		return ;
 	}
-	if (new[i + 1] == '?')
+	if (new[i + 1] == '0')
+	{
+		expand_shellname(d);
+		return ;
+	}
+	if (new[i + 1] == '?' || new[i + 1] == '_') //WIP: need to make single cases of this 
 	{
 		expand_shellpid(d);
 		return ;
