@@ -67,6 +67,25 @@ void	com_lst_del(t_com *lst)
 
 }
 
+void	envlist_del(t_envlist *env)
+{
+	t_envlist *e;
+
+	e = env;
+	if (e)
+	{
+		envlist_del(e->next);
+		if (e->key)
+			free (e->key);
+		e->key = NULL;
+		if (e->value)
+			free (e->value);
+		e->value = NULL;
+		e->next = NULL;
+		free (e);
+	}
+}
+
 void	free_n_clean(t_data *d, int b)
 {
 	lex_lst_del(d->node);
@@ -85,6 +104,10 @@ void	free_n_clean(t_data *d, int b)
 	d->q = 0;
 	if (b == 0)
 		return ;
+/* 	if (d->env)
+	{
+		envlist_del(d->*(env));
+	} */
 	if (d)
 		free (d);
 	d = NULL;
