@@ -65,9 +65,57 @@ void 	expand_shellpid()
 	return ;
 }
 
-void 	expand_env()
+int	exp_varlen(char *new)
 {
-	return ;
+	int	i;
+
+	i = 1;
+	if (new[i] && ft_isdigit(new[i]))
+		return (i);
+	else
+	{
+		while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
+			i++;
+	}
+	return (i);
+}
+
+int 	expand_env(t_data *d, char *new, char *str)
+{
+	t_envlist *node;
+	int i;
+	char	*exp;
+
+	node = *(d->env);
+	i = exp_varlen(new);
+	(void) str;
+	while (node && node->key)
+	{
+		printf("len of %s: %ld\nindex of var: %d\n", node->key, ft_strlen(node->key), i);
+		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
+		{
+			// WIP HERE
+			printf("%s\n", node->key);
+			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + i);
+			ft_memmove(exp, str, d->i);
+			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
+			ft_memmove(&exp[ft_strlen(node->value) + 1], &str[d->i + i], ft_strlen(&str[d->i + i]));
+			d->i = d->i + ft_strlen(node->value);
+
+			free(str);
+			str = exp;
+
+			// ft_memmove(d->tmp, exp, ft_strlen(exp));
+			// d->tmp[ft_strlen(exp)] = 0;
+
+			// printf("\n\nexp: %s\nstrlen: %ld\ntmp: %s\nstrlen: %ld\n\n", exp, ft_strlen(exp), d->tmp, ft_strlen(d->tmp));
+			// free (str);
+			// d->tmp = exp;
+			return (1);
+		}
+		node = node->next;
+	}
+	return (0);
 }
 
 int	is_env()
@@ -75,7 +123,7 @@ int	is_env()
 	return (0);
 }
 
-void	expander(t_data *d, char *new)
+void	expander(t_data *d, char *new, char *str)
 {
 	// printf("\ntest: %s\n", d->tmp);
 	int	i;
@@ -91,8 +139,8 @@ void	expander(t_data *d, char *new)
 	// 	expand_shellpid();
 	// else if (NULL) //is_variable(d->var_node, new) == 1)
 	// 	expand_var(d, new);
-	if (is_env())
-		expand_env();
+	if (expand_env(d, new, str) == 1)
+		return ;
 	else
 		expand_empty(d, new);
 }
@@ -129,7 +177,7 @@ char	*l_to_p_trans(t_data *d, char *token)
 		{
 			d->tmp = &new[d->i];
 			// printf("\ntest: %s\n", d->tmp);
-			expander(d, &new[d->i]);
+			expander(d, &new[d->i], new);
 			d->tmp = NULL;
 			continue ; 
 		}

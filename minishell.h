@@ -128,7 +128,7 @@ int	is_variable(t_var *node, char *find);
 void	expand_var();
 void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
-void	expander(t_data *d, char *new);
+void	expander(t_data *d, char *new, char *str);
 char	*l_to_p_trans(t_data *d, char *token);
 
 // var_handling.c
