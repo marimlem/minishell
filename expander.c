@@ -44,7 +44,7 @@ void 	expand_empty(t_data *d, char *new)
 	i = 1;
 	if (new[i] && ft_isdigit(new[i]))
 	{
-		ft_memmove(&d->tmp[0], &new[i+1], ft_strlen(&new[i + 1]) + 1);
+		ft_memmove(&d->tmp[d->i], &new[i+1], ft_strlen(&new[i + 1]) + 1);
 		return ;
 	}
 	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
@@ -52,9 +52,9 @@ void 	expand_empty(t_data *d, char *new)
 		i++;
 	}
 	if (new[i])
-		ft_memmove(&d->tmp[0], &new[i], ft_strlen(&new[i]) + 1);
+		ft_memmove(&d->tmp[d->i], &new[i], ft_strlen(&new[i]) + 1);
 	else
-		d->tmp[0] = 0;
+		d->tmp[d->i] = 0;
 
 	(void) d;
 	return ;
@@ -96,14 +96,14 @@ int 	expand_env(t_data *d, char *new, char *str)
 		{
 			// WIP HERE
 			printf("%s\n", node->key);
-			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + i);
+			exp = (char *) ft_calloc(sizeof(char), ft_strlen(&d->tmp[d->i]) + i);
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
-			ft_memmove(&exp[ft_strlen(node->value) + 1], &str[d->i + i], ft_strlen(&str[d->i + i]));
+			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
 			d->i = d->i + ft_strlen(node->value);
 
-			free(str);
-			str = exp;
+			free(d->tmp);
+			d->tmp = exp;
 
 			// ft_memmove(d->tmp, exp, ft_strlen(exp));
 			// d->tmp[ft_strlen(exp)] = 0;
@@ -175,9 +175,10 @@ char	*l_to_p_trans(t_data *d, char *token)
 		}
 		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
 		{
-			d->tmp = &new[d->i];
+			d->tmp = new;
 			// printf("\ntest: %s\n", d->tmp);
 			expander(d, &new[d->i], new);
+			new = d->tmp;
 			d->tmp = NULL;
 			continue ; 
 		}
