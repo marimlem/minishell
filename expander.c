@@ -60,8 +60,10 @@ void 	expand_empty(t_data *d, char *new)
 	return ;
 }
 
-void 	expand_shellpid()
+void 	expand_shellpid(t_data *d) // not as simple unfortunately, will need to allocate space for longer numbers
 {
+	d->tmp[d->i++] = '0';
+	ft_memmove(&d->tmp[d->i], &d->tmp[d->i+1], ft_strlen(&d->tmp[d->i + 1]) + 1);
 	return ;
 }
 
@@ -91,26 +93,15 @@ int 	expand_env(t_data *d, char *new, char *str)
 	(void) str;
 	while (node && node->key)
 	{
-		// printf("len of %s: %ld\nindex of var: %d\n", node->key, ft_strlen(node->key), i);
 		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
-			// WIP HERE
-			// printf("%s\n", node->key);
 			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
 			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
 			d->i = d->i + ft_strlen(node->value);
-
 			free(d->tmp);
 			d->tmp = exp;
-
-			// ft_memmove(d->tmp, exp, ft_strlen(exp));
-			// d->tmp[ft_strlen(exp)] = 0;
-
-			// printf("\n\nexp: %s\nstrlen: %ld\ntmp: %s\nstrlen: %ld\n\n", exp, ft_strlen(exp), d->tmp, ft_strlen(d->tmp));
-			// free (str);
-			// d->tmp = exp;
 			return (1);
 		}
 		node = node->next;
@@ -129,8 +120,17 @@ void	expander(t_data *d, char *new, char *str)
 	int	i;
 
 	i = 0;
-// expanding here
-	if (!new[i + 1] || (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1]) && new[i + 1] != '_'))
+	if (!new[i + 1])
+	{
+		d->i++;
+		return ;
+	}
+	if (new[i + 1] == '?')
+	{
+		expand_shellpid(d);
+		return ;
+	}
+	else if (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1]) && new[i + 1] != '_')
 	{
 		d->i++;
 		return ;
