@@ -173,6 +173,11 @@ char	*l_to_p_trans(t_data *d, char *token)
 			new[ft_strlen(new) - 1] = 0;
 			continue ;
 		}
+		else if ((d->q == 0) && new[d->i] == '$'&& (new[d->i + 1] == '\'' || new[d->i + 1] == '\"'))
+		{
+			d->q = new[d->i + 1];
+			memmove(&new[d->i], &new[d->i + 2], ft_strlen(&new[d->i]));
+		}
 		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
 		{
 			d->tmp = new;
