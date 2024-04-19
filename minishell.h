@@ -100,6 +100,7 @@ void	d_execute(t_data *d);
 
 // lu_inputparsing.c
 void	inputparsing(t_data *d, t_envlist **envlist);
+int	is_builtin(t_data *d);
 
 // lexer.c
 int	lex_is_separator(char c);
@@ -155,6 +156,8 @@ void	ft_print_list(t_envlist *envlist);
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);
 char	**ft_eqsplit(char *str);
+void	free_2d_array(char **split_str);
+void	free_list(t_envlist **envlist);
 
 //key_value_utils.c
 char	*ft_find_key_value(t_envlist *envlist, const char *key);

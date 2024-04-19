@@ -122,10 +122,14 @@ int	main(int argc, char **argv, char **envp)
 		return 1;
 	env = (t_envlist **)malloc(sizeof(t_envlist *));
 	if (env == NULL)
+	{
+		free(d);
 		return 1;
+	}
 	*env = (t_envlist *)malloc(sizeof(t_envlist));
 	if ((*env) == NULL)
 	{
+		free(d);
 		free(env);
 		return 1;
 	}
@@ -144,7 +148,20 @@ int	main(int argc, char **argv, char **envp)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
-		
+		if (is_builtin(d) == 1)
+			printf("echo\n");
+		else if (is_builtin(d) == 2)
+			printf("cd\n");
+		else if (is_builtin(d) == 3)
+			printf("pwd\n");
+		else if (is_builtin(d) == 4)
+			printf("export\n");
+		else if (is_builtin(d) == 5)
+			printf("unset\n");
+		else if (is_builtin(d) == 6)
+			printf("env\n");
+		else if (is_builtin(d) == 7)
+			printf("exit\n");
 		free_n_clean(d, 0);
 		printf("\n");
 	}
@@ -152,6 +169,7 @@ int	main(int argc, char **argv, char **envp)
 		free (d->var_node);
 	d->var_node = NULL;
 	free_n_clean(d, 1);
+	free_list(env);
 	(void) argv;
 	// (void) command;
 	return (0);

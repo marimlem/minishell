@@ -19,13 +19,13 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 	{
 		if (envlist->key != NULL && key != NULL)
 		{ // Check for NULL pointers
-			if (strcmp(key, envlist->key) == 0)
+			if (ft_strcmp(key, envlist->key) == 0)
 			{                               // Use strcmp for string comparison
 				if (envlist->value != NULL)
 					// Check if envlist->value is initialized
 					free(envlist->value);  
 						// Free existing value if initialized
-				envlist->value = ft_strdup(value);
+				envlist->value = ft_strdup2(value);
 				if (envlist->value == NULL)
 					return (-1);
 				return (0);
@@ -60,13 +60,11 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	after_split = ft_eqsplit(envp);
 	if (choice == 1 && ft_key_exists(*envlist, after_split[0],
 			after_split[1]) == 1)
-			{
-			//printf("after_split[0]: %s + after_split[1]: %s\n", after_split[0], after_split[1]);
-			ft_add_list(envlist, after_split[0], after_split[1]);
-			}
+		ft_add_list(envlist, after_split[0], after_split[1]);
 	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
+	free_2d_array(after_split);
 }
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
