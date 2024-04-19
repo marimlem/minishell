@@ -23,15 +23,30 @@ void	rdr_handler(t_data *d)
 	{
 		if (d->com->rdr[i][0] == '>' && d->com->rdr[i][1] == 0) // redirect output to file
 		{
-			d->old_out[j] = dup(STDOUT_FILENO);
-			// close(STDOUT_FILENO);
-			d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
-			if (d->fd[j] < 0)
+			if (i == 0)
 			{
-				printf("rdr: error opening file\n");
-				return ;
+				d->old_out[j] = dup(STDOUT_FILENO);
+				// close(STDOUT_FILENO);
+				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
+				if (d->fd[j] < 0)
+				{
+					printf("rdr: error opening file\n");
+					return ;
+				}
+				dup2(d->fd[j], STDOUT_FILENO);
 			}
-			dup2(d->fd[j++], STDOUT_FILENO);
+			else
+			{
+				close(d->fd[j]);
+				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
+				if (d->fd[j] < 0)
+				{
+					printf("rdr: error opening file\n");
+					return ;
+				}
+				dup2(d->fd[j], STDOUT_FILENO);
+
+			}
 		}
 		i = i + 2;
 	}
@@ -40,7 +55,7 @@ void	rdr_handler(t_data *d)
 
 void	executor(t_data *d)
 {
-	int	i = 1;
+	int	i = 0;
 
 	if (d->com->rdr)
 	{
@@ -50,13 +65,18 @@ void	executor(t_data *d)
 		
 		//resetting rdr 
 		// printf("old out: %d\n", d->old_out);
-		while (d->old_out[i])
-		{
 
-			dup2(d->old_out[i], 1);
-			close(d->fd[i]);
-			i--;
-		}
+		dup2(d->old_out[i], 1);
+		close(d->fd[i]);
+
+
+		// while (d->old_out[i])
+		// {
+
+		// 	dup2(d->old_out[i], 1);
+		// 	close(d->fd[i]);
+		// 	i--;
+		// }
 	}
 	else
 		d_execute(d);
