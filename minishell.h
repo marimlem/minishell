@@ -23,6 +23,9 @@
 # define EVEN 0
 # define ODD 1
 
+# define IN 0
+# define OUT 1
+
 # define S 32	//space
 # define T 9	//tab
 # define N 10	//new line
@@ -84,7 +87,7 @@ typedef struct	s_data{
 	int	q;
 	int	error;
 	int	*fd;
-	int	*old_out;
+	int	*old_fd;
 }	t_data;
 
 // ft_strncmp.c
