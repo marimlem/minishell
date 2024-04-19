@@ -60,7 +60,7 @@ void 	expand_empty(t_data *d, char *new)
 	return ;
 }
 
-void 	expand_shellpid(t_data *d) // not as simple unfortunately, will need to allocate space for longer numbers
+void 	expand_exitstatus(t_data *d) // not as simple unfortunately, will need to allocate space for longer numbers
 {
 	d->tmp[d->i++] = '0';
 	ft_memmove(&d->tmp[d->i], &d->tmp[d->i+1], ft_strlen(&d->tmp[d->i + 1]) + 1);
@@ -138,9 +138,9 @@ void	expander(t_data *d, char *new, char *str)
 		expand_shellname(d);
 		return ;
 	}
-	if (new[i + 1] == '?' || new[i + 1] == '_') //WIP: need to make single cases of this 
+	if (new[i + 1] == '?')
 	{
-		expand_shellpid(d);
+		expand_exitstatus(d);
 		return ;
 	}
 	else if (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1]) && new[i + 1] != '_')
