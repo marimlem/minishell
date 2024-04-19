@@ -3,7 +3,13 @@
 	// char *file = "/usr/bin/ls";
     // char *const args[] = {"/usr/bin/ls", "-a", "-l", NULL};
     // char *const env[] = {"ENV=World", NULL};
+void	heredoc_start(t_data *d)
+{
+	(void) d;
+	printf("heredoc> ");
 
+
+}
 
 void	rdr_handler(t_data *d)
 {
@@ -53,6 +59,15 @@ void	rdr_handler(t_data *d)
 					return ;
 				}
 			dup2(d->fd[IN], STDIN_FILENO);
+		}
+		else if (d->com->rdr[i][0] == '<' && d->com->rdr[i][1] == '<') //heredoc
+		{
+			if (d->old_fd[IN] != 0)
+				close(d->fd[IN]);
+			else
+				d->old_fd[IN] = dup(STDIN_FILENO);
+			dup2(d->fd[IN], STDIN_FILENO);
+			heredoc_start(d);
 		}
 
 		i = i + 2;
