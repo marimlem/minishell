@@ -40,10 +40,13 @@ void	rdr_handler(t_data *d)
 		}
 		else if (d->com->rdr[i][0] == '<' && d->com->rdr[i][1] == 0)
 		{
+			//printf("oldfd[IN]: %d\nfd[IN]: %d\n\n", d->old_fd[IN], d->fd[IN]);
 			if (d->old_fd[IN] != 0)
 				close(d->fd[IN]);
-			d->old_fd[IN] = dup(STDIN_FILENO);
+			else
+				d->old_fd[IN] = dup(STDIN_FILENO);
 			d->fd[IN] = open(d->com->rdr[i+1], O_RDONLY);
+			//printf("oldfd[IN]: %d\nfd[IN]: %d", d->old_fd[IN], d->fd[IN]);
 			if (d->fd[IN] < 0)
 				{
 					printf("rdr: error opening file\n");
