@@ -23,36 +23,33 @@ void	rdr_handler(t_data *d)
 	{
 		if (d->com->rdr[i][0] == '>')// && d->com->rdr[i][1] == 0) // redirect output to file
 		{
-			if (i == 0)
-			{
+			if (d->old_fd[OUT] == 0)
 				d->old_fd[OUT] = dup(STDOUT_FILENO);
-				// close(STDOUT_FILENO);
-				if (d->com->rdr[i][1] == 0)
-					d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT |O_TRUNC, 0644); 
-				else
-					d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT|O_APPEND, 0644); 
-				if (d->fd[OUT] < 0)
-				{
-					printf("rdr: error opening file\n");
-					return ;
-				}
-				dup2(d->fd[OUT], STDOUT_FILENO);
-			}
 			else
-			{
 				close(d->fd[OUT]);
-				if (d->com->rdr[i][1] == 0)
-					d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT |O_TRUNC, 0644); 
-				else
-					d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT|O_APPEND, 0644); 
-				if (d->fd[OUT] < 0)
+			if (d->com->rdr[i][1] == 0)
+				d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT |O_TRUNC, 0644); 
+			else
+				d->fd[OUT] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT|O_APPEND, 0644); 
+			if (d->fd[OUT] < 0)
+			{
+				printf("rdr: error opening file\n");
+				return ;
+			}
+			dup2(d->fd[OUT], STDOUT_FILENO);
+		}
+		else if (d->com->rdr[i][0] == '<' && d->com->rdr[i][1] == 0)
+		{
+			if (d->old_fd[IN] != 0)
+				close(d->fd[IN]);
+			d->old_fd[IN] = dup(STDIN_FILENO);
+			d->fd[IN] = open(d->com->rdr[i+1], O_RDONLY);
+			if (d->fd[IN] < 0)
 				{
 					printf("rdr: error opening file\n");
 					return ;
 				}
-				dup2(d->fd[OUT], STDOUT_FILENO);
-
-			}
+			dup2(d->fd[IN], STDIN_FILENO);
 		}
 
 		i = i + 2;
@@ -73,8 +70,17 @@ void	executor(t_data *d)
 		//resetting rdr 
 		// printf("old out: %d\n", d->old_fd);
 
-		dup2(d->old_fd[OUT], 1);
-		close(d->fd[OUT]);
+		if (d->old_fd[OUT])
+		{
+			dup2(d->old_fd[OUT], 1);
+			close(d->fd[OUT]);
+		}
+		if (d->old_fd[IN])
+		{
+			dup2(d->old_fd[IN], 0);
+			close(d->fd[IN]);
+
+		}
 
 
 		// while (d->old_fd[OUT])
