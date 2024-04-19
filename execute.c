@@ -27,7 +27,7 @@ void	rdr_handler(t_data *d)
 			{
 				d->old_out[j] = dup(STDOUT_FILENO);
 				// close(STDOUT_FILENO);
-				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
+				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT |O_TRUNC, 0644); 
 				if (d->fd[j] < 0)
 				{
 					printf("rdr: error opening file\n");
@@ -38,7 +38,7 @@ void	rdr_handler(t_data *d)
 			else
 			{
 				close(d->fd[j]);
-				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT, 0644); 
+				d->fd[j] = open(d->com->rdr[i + 1], O_WRONLY |O_CREAT|O_TRUNC, 0644); 
 				if (d->fd[j] < 0)
 				{
 					printf("rdr: error opening file\n");
