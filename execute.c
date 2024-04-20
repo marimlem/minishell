@@ -5,9 +5,46 @@
     // char *const env[] = {"ENV=World", NULL};
 void	heredoc_start(t_data *d)
 {
+	char *heredoc_input;
+	// int	tmp_fd;
 	(void) d;
-	printf("heredoc> ");
 
+	if (d->old_fd[IN] != 0)
+		close(d->fd[IN]);
+	else
+		d->old_fd[IN] = dup(STDIN_FILENO);
+
+	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_WRONLY | O_CREAT | O_TRUNC , 0644);
+	if (d->fd[IN] < 0)
+		return ;
+	// dup2(d->fd[IN], STDIN_FILENO);
+
+	// heredoc_input = readline("heredoc> ");
+	// ft_putstr_fd(heredoc_input, d->fd[IN]);
+	(void) heredoc_input;
+
+	while (1)
+	{
+		// rl_on_new_line();
+		// printf("\nheredoc> ");
+		heredoc_input = readline("heredoc> ");
+		if (strcmp(heredoc_input, d->com->rdr[1]) == 0)
+			break;
+		ft_putstr_fd(heredoc_input, d->fd[IN]);
+		ft_putchar_fd('\n', d->fd[IN]);
+		// (void) heredoc_input;
+		// printf("%s\n", heredoc_input);
+	}
+	close (d->fd[IN]);
+	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_RDONLY | O_CREAT , 0644);
+	if (d->fd[IN] < 0)
+		return ;
+	
+
+	dup2(d->fd[IN], STDIN_FILENO);
+
+	// dup2(STDIN_FILENO, 2);
+	// dup2(STDOUT_FILENO, 1);
 
 }
 
@@ -62,11 +99,11 @@ void	rdr_handler(t_data *d)
 		}
 		else if (d->com->rdr[i][0] == '<' && d->com->rdr[i][1] == '<') //heredoc
 		{
-			if (d->old_fd[IN] != 0)
-				close(d->fd[IN]);
-			else
-				d->old_fd[IN] = dup(STDIN_FILENO);
-			dup2(d->fd[IN], STDIN_FILENO);
+			// if (d->old_fd[IN] != 0)
+			// 	close(d->fd[IN]);
+			// else
+			// 	d->old_fd[IN] = dup(STDIN_FILENO);
+			// dup2(d->fd[IN], STDIN_FILENO);
 			heredoc_start(d);
 		}
 
@@ -85,6 +122,12 @@ void	executor(t_data *d)
 
 		d_execute(d);
 		
+
+		// heredoc
+		// dup2(STDOUT_FILENO, 1);
+
+
+
 		//resetting rdr 
 		// printf("old out: %d\n", d->old_fd);
 
@@ -99,7 +142,6 @@ void	executor(t_data *d)
 			close(d->fd[IN]);
 
 		}
-
 
 		// while (d->old_fd[OUT])
 		// {

@@ -2,8 +2,8 @@
 
 void	parser(t_data *d)
 {
-	int	o = 0;
-	t_com	*c_cur;
+	// int	o = 0;
+	// t_com	*c_cur;
 	t_var	*varnode;
 
 	p_op_type(d);
@@ -41,7 +41,7 @@ void	parser(t_data *d)
 
 
 // prints command list
-	c_cur = d->com;
+/* 	c_cur = d->com;
 	while (c_cur && c_cur->args)
 	{
 		printf("   file:%s\n", c_cur->file);
@@ -58,7 +58,7 @@ void	parser(t_data *d)
 		}
 		c_cur = c_cur->next;
 		o= 0;
-	}
+	} */
 
 
 
