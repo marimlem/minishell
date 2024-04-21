@@ -140,6 +140,10 @@ void	executor(t_data *d)
 		{
 			dup2(d->old_fd[IN], 0);
 			close(d->fd[IN]);
+			d->fd[IN] = open(".minishell_heredoc_tmp_file", O_TRUNC , 0644);
+			if (d->fd[IN] > 0)
+				close(d->fd[IN]);
+			
 
 		}
 

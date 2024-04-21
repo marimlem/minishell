@@ -85,6 +85,10 @@ void	free_n_clean(t_data *d, int b)
 	d->q = 0;
 	if (b == 0)
 		return ;
+	if (d->fd)
+		free (d->fd);
+	if (d->old_fd)
+		free(d->old_fd);
 	if (d)
 		free (d);
 	d = NULL;
