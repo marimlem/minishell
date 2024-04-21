@@ -83,12 +83,12 @@ void	free_n_clean(t_data *d, int b)
 	d->error = 0;
 	d->i = 0;
 	d->q = 0;
-	if (b == 0)
-		return ;
 	if (d->fd)
 		free (d->fd);
 	if (d->old_fd)
 		free(d->old_fd);
+	if (b == 0)
+		return ;
 	if (d)
 		free (d);
 	d = NULL;
@@ -101,6 +101,8 @@ void	init_null(t_data *d)
 	d->com = NULL;
 	d->tmp = NULL;
 	d->var_node = NULL;
+	d->fd = NULL;
+	d->old_fd = NULL;
 	d->i = 0;
 	d->q = 0;
 	d->error = 0;

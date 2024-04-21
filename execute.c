@@ -48,7 +48,7 @@ void	heredoc_start(t_data *d)
 
 }
 
-void	rdr_handler(t_data *d)
+int	rdr_handler(t_data *d)
 {
 	int	i;
 	// int	j;
@@ -58,10 +58,10 @@ void	rdr_handler(t_data *d)
 	i=0;
 	d->old_fd = (int*) ft_calloc(sizeof(int), 3);
 	if (d->old_fd ==NULL)
-		return;
+		return (1);
 	d->fd = (int*) ft_calloc(sizeof(int), 3);
 	if (d->fd ==NULL)
-		return;
+		return (1);
 	while (d->com->rdr[i])
 	{
 		if (d->com->rdr[i][0] == '>')// && d->com->rdr[i][1] == 0) // redirect output to file
@@ -77,7 +77,8 @@ void	rdr_handler(t_data *d)
 			if (d->fd[OUT] < 0)
 			{
 				printf("rdr: error opening file\n");
-				return ;
+				dup2(d->old_fd[OUT], 1);
+				return (1);
 			}
 			dup2(d->fd[OUT], STDOUT_FILENO);
 		}
@@ -93,7 +94,8 @@ void	rdr_handler(t_data *d)
 			if (d->fd[IN] < 0)
 				{
 					printf("rdr: error opening file\n");
-					return ;
+					dup2(d->old_fd[IN], 0);
+					return (1);
 				}
 			dup2(d->fd[IN], STDIN_FILENO);
 		}
@@ -109,6 +111,7 @@ void	rdr_handler(t_data *d)
 
 		i = i + 2;
 	}
+	return (0);
 }
 
 
@@ -118,8 +121,11 @@ void	executor(t_data *d)
 
 	if (d->com->rdr)
 	{
-		rdr_handler(d);
-
+		if (rdr_handler(d) != 0)
+		{
+			// d->error = 555;
+			return ;
+		}
 		d_execute(d);
 		
 
