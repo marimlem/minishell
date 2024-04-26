@@ -112,12 +112,14 @@ void	pipe_handler(t_data *d, int pc, int i)
 //child handler
 void	playground(t_data *d, t_com *current ,int pc, int i)
 {
+
 	if (current->rdr)
 		rdr_handler(d, current);
 	pipe_handler(d, pc, i);
+
 	if (execve(current->file, current->args, NULL) == -1)
 	{
-		printf("minishell: command not found: %s\n",&current->file[9]);
+		printf("minishell: command not found: %s\n",current->args[0]); //file[9]);
 		free_n_clean(d, 1);
 		exit(-1);
 	}
@@ -125,22 +127,29 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
-		if (i != pc)
-			pipe(d->p[i]);
-		d->pid = fork();
-		if (d->pid < 0)
-			return ; // fork fail
-		else if(d->pid == 0)
-		{
-			//rdr //piping //exec
-			playground(d, current, pc, i);
-		}
-		else
-		{
-			if (i != 0)
-				close_pipes(d->p[i - 1]);
-			waitpid(d->pid, &(d->status), 0);
-		}
+	char	*file;
+
+	file = ft_strjoin(BIN, current->file);
+	if (file == NULL)
+		return ;
+	free (current->file);
+	current->file = file;
+	if (i != pc)
+		pipe(d->p[i]);
+	d->pid = fork();
+	if (d->pid < 0)
+		return ; // fork fail
+	else if(d->pid == 0)
+	{
+		//rdr //piping //exec
+		playground(d, current, pc, i);
+	}
+	else
+	{
+		if (i != 0)
+			close_pipes(d->p[i - 1]);
+		waitpid(d->pid, &(d->status), 0);
+	}
 
 }
 
