@@ -115,11 +115,13 @@ int	rdr_handler(t_data *d)
 }
 
 
+
 void	executor(t_data *d)
 {
-	// int	i = 0;
+	t_com *current;
 
-	if (d->com->rdr)
+	current = d->com;
+	if (current->rdr)
 	{
 		if (rdr_handler(d) != 0)
 		{
@@ -128,14 +130,6 @@ void	executor(t_data *d)
 		}
 		d_execute(d);
 		
-
-		// heredoc
-		// dup2(STDOUT_FILENO, 1);
-
-
-
-		//resetting rdr 
-		// printf("old out: %d\n", d->old_fd);
 
 		if (d->old_fd[OUT])
 		{
@@ -153,16 +147,34 @@ void	executor(t_data *d)
 
 		}
 
-		// while (d->old_fd[OUT])
-		// {
-
-		// 	dup2(d->old_fdold_fd[OUT], 1);
-		// 	close(d->fd[OUT]);
-		// 	i--;
-		// }
 	}
 	else
+	{
+		if (current->next)
+		{
+			printf("p[0]: %d\np[1]: %d\n", d->p[0], d->p[1]);
+			if (pipe(d->p) < 0)
+				return ;
+			printf("p[0]: %d\np[1]: %d\n", d->p[0], d->p[1]);
+
+			// if (d->old_fd[OUT] == 0)
+				// d->old_fd[OUT] = dup(STDOUT_FILENO);
+			// else
+			// 	close(d->fd[OUT]);
+
+ 			// dup2(d->p[1], STDOUT_FILENO);
+			// close(d->p[0]);
+			// dup2(STDOUT_FILENO, d->p[1]);
+		}
 		d_execute(d);
+		if (current->next)
+		{
+			current = current->next;
+			d_execute(d);
+		}
+		close (d->p[0]); //close both ends, the fds in parent process are untouched
+		close (d->p[1]);
+	}
 	
 
 }
@@ -202,7 +214,11 @@ void	d_execute(t_data *d)
 	}
 	else if (pid == 0)
 	{
+		dup2(d->p[0], STDIN_FILENO);
+		close(d->p[1]);
 
+		// dup2(STDIN_FILENO, d->p[0]);
+		// dup2(1, d->p[1]);
 		if (execve(d->com->file, d->com->args, NULL) == -1)
 		{
 			printf("minishell: command not found: %s\n",&d->com->file[9]);
@@ -211,5 +227,9 @@ void	d_execute(t_data *d)
 		}
 	}
 	else
+	{
+		// dup2(d->p[1], STDOUT_FILENO);
+		// close(d->p[0]);
 		waitpid(pid, &status, 0);
+	}
 }

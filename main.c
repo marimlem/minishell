@@ -106,6 +106,11 @@ void	init_null(t_data *d)
 	d->i = 0;
 	d->q = 0;
 	d->error = 0;
+	d->p = NULL;
+	// d->p[0] = 0;
+	// d->p[1] = 0;
+	d = NULL;
+	
 }
 
 int	main(int argc, char **argv)
@@ -130,7 +135,7 @@ int	main(int argc, char **argv)
 		if (d->error != 0)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
-		executor(d);
+		executor2(d);
 		
 		free_n_clean(d, 0);
 		printf("\n");
@@ -143,4 +148,4 @@ int	main(int argc, char **argv)
 	(void) argv;
 	// (void) command;
 	return (0);
-}
+} 

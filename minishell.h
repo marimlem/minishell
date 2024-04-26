@@ -89,14 +89,38 @@ typedef struct	s_data{
 	int	*fd;
 	int	*old_fd;
 	int	heredoc_fd;
+	int	**p;
+	__pid_t	pid;
+	__pid_t	status;
 }	t_data;
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // execute.c
-void	executor(t_data *d);
-void	d_execute(t_data *d);
+// void	executor(t_data *d);
+// void	d_execute(t_data *d);
+
+// execute2.c
+void	execute_one(t_data *d);
+int	rdr_out(t_data *d, t_com *current, int j);
+int	rdr_in(t_data *d, t_com *current, int j);
+void	heredoc_start(t_data *d, t_com *current);
+int	rdr_handler(t_data *d, t_com *current);
+void	pipe_handler(t_data *d, int pc, int i);
+void	playground(t_data *d, t_com *current ,int pc, int i);
+void	process_handler(t_data *d, t_com *current, int pc, int i);
+void	execute_loop(t_data *d, int pc);
+void	executor2(t_data *d);
+
+
+// execute_utils.c
+int	setup_fds(t_data *d);
+int	setup_pipes(t_data *d, int pipecount);
+int	d_lstsize(t_com *lst);
+void	close_pipes(int *tube);
+
+
 
 // lu_inputparsing.c
 void	inputparsing(t_data *d);
