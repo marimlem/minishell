@@ -69,6 +69,9 @@ void	com_lst_del(t_com *lst)
 
 void	free_n_clean(t_data *d, int b)
 {
+	int	i;
+
+	i = 0;
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
 	
@@ -87,6 +90,19 @@ void	free_n_clean(t_data *d, int b)
 		free (d->fd);
 	if (d->old_fd)
 		free(d->old_fd);
+
+	if (d->p)
+	{
+		while (d->p[i])
+		{
+			free (d->p[i]);
+			d->p[i++] = NULL;
+		}
+		free (d->p);
+		d->p = NULL;
+	}
+	
+
 	if (b == 0)
 		return ;
 	if (d)

@@ -24,7 +24,7 @@ int	setup_pipes(t_data *d, int pipecount)
 	int	i;
 
 	i = 0;
-	d->p = (int **) ft_calloc(sizeof(int*), pipecount);
+	d->p = (int **) ft_calloc(sizeof(int*), pipecount + 1);
 	if (d->p == NULL)
 		return (1); //alloc error
 	while (i != pipecount)
