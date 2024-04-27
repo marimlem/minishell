@@ -2,7 +2,18 @@
 
 void	inputparsing(t_data *d, t_envlist **envlist)
 {
-	d->input = readline("minishell:$ ");
+	// d->input = readline("minishell:$ ");
+	if (isatty(fileno(stdin)))
+		d->input = readline("minishell:$ ");
+	else
+	{
+		char *line;
+		line = get_next_line(fileno(stdin));
+		d->input = ft_strtrim(line, "\n");
+		free(line);
+	}
+
+
 	if (!d || !d->input)
 		return ;
 	if (even_quotes(d) == ODD)

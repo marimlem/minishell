@@ -188,7 +188,7 @@ int	main(int argc, char **argv, char **envp)
 		inputparsing(d, env);
 		if (d->error == -1)
 		{
-			ft_putstr_fd("exit minishell\n", 2);
+			// ft_putstr_fd("exit minishell\n", 2);
 			break ;
 		}
 		if (d->error != 0)
