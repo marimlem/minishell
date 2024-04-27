@@ -145,16 +145,19 @@ int	main(int argc, char **argv)
 		inputparsing(d);
 		if (d->error == -1)
 		{
-			printf("exit minishell\n");
+			ft_putstr_fd("exit minishell\n", 2);
 			break ;
 		}
 		if (d->error != 0)
-			printf("Error (%d)\n", d->error);
+		{
+			ft_putstr_fd("error: ", 2);
+			ft_putnbr_fd(d->error, 2);
+			ft_putstr_fd("\n", 2);
+		}
 		// if list is completely variable assignment type, assign variables, else go to executor
 		executor2(d);
 		
 		free_n_clean(d, 0);
-		printf("\n");
 
 	}
 	if (d->var_node)
