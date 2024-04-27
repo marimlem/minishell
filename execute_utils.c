@@ -10,6 +10,10 @@ int	setup_fds(t_data *d)
 		return (1);
 	d->fd[IN] = dup(STDIN_FILENO);
 	d->fd[OUT] = dup(STDOUT_FILENO);
+
+	d->old_fd[IN] = -1;  
+	d->old_fd[OUT] = -1;
+
 	// d->old_fd[IN] = dup(STDIN_FILENO); //need this in rdr_handler to see if it's the first 
 	// d->old_fd[OUT] = dup(STDOUT_FILENO);
 	return (0);
