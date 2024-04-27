@@ -2,7 +2,7 @@
 
 void	parser(t_data *d)
 {
-	int	o = 0;
+	// int	o = 0;
 	// t_com	*c_cur;
 	// t_var	*varnode;
 
