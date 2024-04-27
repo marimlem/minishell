@@ -102,16 +102,19 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 // void	d_execute(t_data *d);
 
 // execute2.c
-void	execute_one(t_data *d);
-int	rdr_out(t_data *d, t_com *current, int j);
-int	rdr_in(t_data *d, t_com *current, int j);
-void	heredoc_start(t_data *d, t_com *current);
-int	rdr_handler(t_data *d, t_com *current);
 void	pipe_handler(t_data *d, int pc, int i);
 void	playground(t_data *d, t_com *current ,int pc, int i);
 void	process_handler(t_data *d, t_com *current, int pc, int i);
 void	execute_loop(t_data *d, int pc);
 void	executor2(t_data *d);
+
+// execute_rdr.c
+void	close_rdr(t_data *d);
+int	rdr_out(t_data *d, t_com *current, int j);
+int	rdr_in(t_data *d, t_com *current, int j);
+void	heredoc_start(t_data *d, t_com *current);
+int	rdr_handler(t_data *d, t_com *current);
+
 
 
 // execute_utils.c
