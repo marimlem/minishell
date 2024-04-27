@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	inputparsing(t_data *d)
+void	inputparsing(t_data *d, t_envlist **envlist)
 {
 	d->input = readline("minishell:$ ");
 	if (!d || !d->input)
@@ -15,6 +15,8 @@ void	inputparsing(t_data *d)
 
 	lexer(d);
 	parser(d);
+	if (ft_strcmp(d->com->args[0], "env") == 0)
+		ft_print_list(*envlist);
 		// printf("even!");
 
 	//parser

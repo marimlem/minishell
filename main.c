@@ -67,6 +67,25 @@ void	com_lst_del(t_com *lst)
 
 }
 
+void	envlist_del(t_envlist *env)
+{
+	t_envlist *e;
+
+	e = env;
+	if (e)
+	{
+		envlist_del(e->next);
+		if (e->key)
+			free (e->key);
+		e->key = NULL;
+		if (e->value)
+			free (e->value);
+		e->value = NULL;
+		e->next = NULL;
+		free (e);
+	}
+}
+
 void	free_n_clean(t_data *d, int b)
 {
 	int	i;
@@ -105,9 +124,20 @@ void	free_n_clean(t_data *d, int b)
 
 	if (b == 0)
 		return ;
+/* 	if (d->env)
+	{
+		envlist_del(d->*(env));
+	} */
 	if (d)
 		free (d);
 	d = NULL;
+}
+
+void	init_envlist(t_envlist **envlist)
+{
+	(*envlist)->key = NULL;
+	(*envlist)->value = NULL;
+	(*envlist)->next = NULL;
 }
 
 void	init_null(t_data *d)
@@ -129,20 +159,33 @@ void	init_null(t_data *d)
 	
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	// char *command;
 	t_data	*d;
+	t_envlist	**env;
 
 	if (argc != 1)
 		return (100);
 	d = (t_data *) malloc(sizeof(t_data) * 1);
 	if (d == NULL)
 		return 1;
+	env = (t_envlist **)malloc(sizeof(t_envlist *));
+	if (env == NULL)
+		return 1;
+	*env = (t_envlist *)malloc(sizeof(t_envlist));
+	if ((*env) == NULL)
+	{
+		free(env);
+		return 1;
+	}
+	init_envlist(env);
+	ft_assign_key_and_value(env, envp);
+	d->env = env;
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d);
+		inputparsing(d, env);
 		if (d->error == -1)
 		{
 			ft_putstr_fd("exit minishell\n", 2);
@@ -158,7 +201,6 @@ int	main(int argc, char **argv)
 		executor2(d);
 		
 		free_n_clean(d, 0);
-
 	}
 	if (d->var_node)
 		free (d->var_node);
