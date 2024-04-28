@@ -26,7 +26,7 @@ void	inputparsing(t_data *d, t_envlist **envlist)
 
 	lexer(d);
 	parser(d);
-	if (ft_strcmp(d->com->args[0], "env") == 0)
+	if (d->com && d->com->args && ft_strcmp(d->com->args[0], "env") == 0)
 		ft_print_list(*envlist);
 		// printf("even!");
 
