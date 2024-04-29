@@ -52,10 +52,10 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	current->file = file;
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
-	d->pid = fork();
-	if (d->pid < 0)
+	current->pid = fork();
+	if (current->pid < 0)
 		return ; // fork fail
-	else if(d->pid == 0)
+	else if(current->pid == 0)
 	{
 		playground(d, current, pc, i);
 	}
@@ -63,7 +63,6 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	{
 		if (pc != 0 && i != 0)
 			close_pipes(d->p[i - 1]);
-		waitpid(d->pid, &(d->status), 0);
 	}
 
 }
@@ -82,10 +81,14 @@ void	execute_loop(t_data *d, int pc)
 		close_rdr(d);
 		i++;
 		current = current->next;
-		d->status = 0;
-		d->pid = 0;
-
 	}
+	current = d->com;
+	while (current)
+	{
+		waitpid(current->pid, &(current->status), 0); 
+		current = current->next;
+	}
+
 }
 
 

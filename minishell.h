@@ -74,6 +74,8 @@ typedef struct	s_com{
 	char	*file;
 	char	**args;
 	char	**rdr;
+	__pid_t		pid;
+	__pid_t		status;
 	struct	s_com *next;
 }	t_com;
 
@@ -98,8 +100,8 @@ typedef struct	s_data{
 	int	*old_fd;
 	int	heredoc_fd;
 	int	**p;
-	__pid_t	pid;
-	__pid_t	status;
+	// __pid_t	pid;
+	// __pid_t	status;
 }	t_data;
 
 // ft_strncmp.c
