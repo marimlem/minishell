@@ -4,9 +4,11 @@ t_com	*com_lstnew()
 {
 	t_com *list;
 
-	list = (t_com *) malloc(sizeof(t_tok) * 1);
+	list = (t_com *) malloc(sizeof(t_com) * 1);
 	if (list == NULL)
 		return (NULL); // set error
+	list->pid = 0;
+	list->status = 0;
 	list->file = NULL;
 	list->args = NULL;
 	list->rdr = NULL;
