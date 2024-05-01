@@ -31,7 +31,21 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 
-	if (execve(current->file, current->args, NULL) == -1)
+	if (ft_strcmp(current->args[0], "env") == 0 && current->args[1] == NULL)
+	{
+		ft_print_list(*(d->env));
+		free_n_clean(d, 1);
+		exit(0);
+	}
+	else if (ft_strcmp(current->args[0], "env") == 0 && current->args[1])
+	{
+		ft_putstr_fd("minishell: too many arguments for command: ", 2);
+		ft_putstr_fd(current->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		free_n_clean(d, 1);
+		exit(-1);
+	}
+	else if (execve(current->file, current->args, NULL) == -1)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(current->args[0], 2);
