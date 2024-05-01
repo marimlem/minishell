@@ -148,8 +148,54 @@ int	absolut_path(t_data *d, t_com *current)
 	return (0);
 }
 
+int	no_path(t_data *d, t_com *current)
+{
+	char	*tmp;
+	char	*t;
+	int	i;
+	//check if it is builtin
+	//if not continue
+	i = 0;
+	tmp = NULL;
+	// check in current directory? no i dont think so
 
+	//check inside path
+	while(d->path && d->path[i])
+	{
 
+		t = ft_strjoin(d->path[i], "/");
+		tmp = ft_strjoin(t, current->file);
+		free (t);
+		t = NULL;
+		// printf("tmp: %s\n", tmp);
+		if (access(tmp , X_OK) == 0)
+		{
+			free (current->file);
+			current->file = NULL;
+			current->file = tmp;
+			return (0);
+		}
+		free (tmp);
+		tmp = NULL;
+		i++;
+	}
+	return (0);
+}
+
+int	relative_path(t_data *d, t_com *current)
+{
+
+	free (current->args[0]);
+	current->args[0] = ft_strdup(&current->file[2]);
+	if (current->args[0] == NULL)
+		return (1); //alloc error
+	free (current->file);
+	current->file = current->args[0];
+	if (current->file == NULL)
+		return (1); //alloc error
+	(void) d;
+	return (0);
+}
 
 int	setup_cmdpath(t_data *d)
 {
@@ -165,13 +211,18 @@ int	setup_cmdpath(t_data *d)
 				return (1); // alloc error
 
 		}
-		// else if (current->file[0] == '.')
-		// {
-		// 	relative_path(d, current); // input: ./minishell ../minishell
+		else if (current->file[0] == '.' && current->file[1] == '/')
+		{
+			relative_path(d, current); // input: ./minishell ../minishell
 
-		// }
+		}
 		// ~/42/minishell
-		// no path // input: ls OR input: echo (builtin)
+		else
+		{
+			no_path(d, current); // input: ls OR input: echo (builtin)
+			// printf("file: %s\n", current->file);
+
+		}
 		current = current->next;
 
 	}
