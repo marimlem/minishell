@@ -57,13 +57,13 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
-	char	*file;
+	// char	*file;
 
-	file = ft_strjoin(BIN, current->file);
-	if (file == NULL)
-		return ;
-	free (current->file);
-	current->file = file;
+	// file = ft_strjoin(BIN, current->file);
+	// if (file == NULL)
+	// 	return ;
+	// free (current->file);
+	// current->file = file;
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
 	current->pid = fork();
@@ -79,6 +79,24 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 			close_pipes(d->p[i - 1]);
 	}
 
+}
+
+int	setup_path(t_data *d)
+{
+	t_envlist *current;
+
+	current = *(d->env);
+	while (current && ft_strcmp("PATH", current->key) != 0)
+		current = current->next;
+	if (current == NULL)
+		return (0);
+	d->path = ft_split(current->value, ':');
+	if (d->path ==NULL)
+	{
+		// set alloc error
+		return (-1);
+	}
+	return (0);
 }
 
 // pc == pipecount
@@ -104,13 +122,69 @@ void	execute_loop(t_data *d, int pc)
 	}
 
 }
+// user input: /usr/bin/ls
+// keeps current->file the same, but removes path part from current->arg
+int	absolut_path(t_data *d, t_com *current)
+{
+	char	*ptr;
+	int	i;
+
+	i = 1;
+	free (current->args[0]);
+	current->args[0] = NULL;
+	ptr = ft_strrchr(current->file, '/');
+	current->args[0] = ft_strdup(&ptr[1]);
+	if (current->args[0] == NULL)
+	{
+		while (current->args[i])
+		{
+			free (current->args[i]);
+			i++;
+		}
+		return (1);
+	}
+	// printf("file: %s args: %s\n",current->file, current->args[0]);
+	(void) d;
+	return (0);
+}
+
+
+
+
+int	setup_cmdpath(t_data *d)
+{
+	t_com	*current;
+
+	current = d->com;
+	// printf("%s\n%s\n",d->path[0], d->path[1]);
+	while (current)
+	{
+		if (current->file[0] == '/')
+		{
+			if (absolut_path(d, current) != 0) // input: /usr/bin/ls
+				return (1); // alloc error
+
+		}
+		// else if (current->file[0] == '.')
+		// {
+		// 	relative_path(d, current); // input: ./minishell ../minishell
+
+		// }
+		// ~/42/minishell
+		// no path // input: ls OR input: echo (builtin)
+		current = current->next;
+
+	}
+	return (0);
+
+}
 
 
 void	executor2(t_data *d)
 {
 	int	count;
 
-	if (setup_fds(d) != 0)
+	if (setup_fds(d) != 0 || setup_path(d) != 0 || setup_cmdpath(d) != 0)
 		return ; //alloc error
 	count = d_lstsize(d->com);
 	if (count > 0)

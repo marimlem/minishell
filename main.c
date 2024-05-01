@@ -109,6 +109,15 @@ void	free_n_clean(t_data *d, int b)
 		free (d->fd);
 	if (d->old_fd)
 		free(d->old_fd);
+	if (d->path)
+	{
+		while (d->path[i])
+		{
+			free(d->path[i]);
+			d->path[i++] = NULL;
+		}
+		free (d->path);
+	}
 
 	if (d->p)
 	{
@@ -153,6 +162,7 @@ void	init_null(t_data *d)
 	d->q = 0;
 	d->error = 0;
 	d->p = NULL;
+	d->path = NULL;
 	// d->p[0] = 0;
 	// d->p[1] = 0;
 	d = NULL;

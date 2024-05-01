@@ -92,6 +92,7 @@ typedef struct	s_data{
 	t_var *var_node;
 	t_com	*com;
 	t_envlist	**env;
+	char	**path;
 	char	*tmp;
 	int	i;
 	int	q;
