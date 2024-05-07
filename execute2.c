@@ -26,8 +26,12 @@ void	pipe_handler(t_data *d, int pc, int i)
 void	playground(t_data *d, t_com *current ,int pc, int i)
 {
 
-	if (current->rdr)
-		rdr_handler(d, current);
+	if (current->rdr && rdr_handler(d, current) != 0)
+	{
+		// ft_putstr_fd("minishell: rdr failed\n", 2);
+		free_n_clean(d, 1);
+		exit (-1); // i think this might generate errors
+	}
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 

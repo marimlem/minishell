@@ -50,8 +50,8 @@ int	rdr_in(t_data *d, t_com *current, int j)
 		d->old_fd[IN] = dup(STDIN_FILENO);
 	else
 		close(d->fd[IN]);
-	if (current->rdr[j][1] == '<')
-		heredoc_start(d, current, j);
+	if (current->rdr[j][1] == '<' && heredoc_start(d, current, j) != 0)
+		return (1);
 	else
 	{
 		d->fd[IN] = open(current->rdr[j + 1], O_RDONLY);
@@ -67,14 +67,14 @@ int	rdr_in(t_data *d, t_com *current, int j)
 	return (0);
 }
 
-void	heredoc_start(t_data *d, t_com *current, int j)
+int	heredoc_start(t_data *d, t_com *current, int j)
 {
 	char *heredoc_input;
 
 	heredoc_input = NULL;
 	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (d->fd[IN] < 0)
-		return ;
+		return (1);
 	while (1)
 	{
 		heredoc_input = readline("heredoc> ");
@@ -86,8 +86,9 @@ void	heredoc_start(t_data *d, t_com *current, int j)
 	close (d->fd[IN]);
 	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_RDONLY | O_CREAT, 0644);
 	if (d->fd[IN] < 0)
-		return ;
+		return (1);
 	dup2(d->fd[IN], STDIN_FILENO);
+	return (0);
 }
 
 
@@ -98,14 +99,16 @@ int	rdr_handler(t_data *d, t_com *current)
 	j = 0;
 	while (current->rdr[j])
 	{
-		if (current->rdr[j][0] == '>')
+		if (current->rdr[j][0] == '>' && rdr_out(d, current, j) != 0)
 		{
-			rdr_out(d, current, j);
+			return (1);
+			// rdr_out(d, current, j);
 			//what happens when rdr fails? should abort rdr or continue with next rdr
 		}
-		else if (current->rdr[j][0] == '<')
+		else if (current->rdr[j][0] == '<' && rdr_in(d, current, j) != 0)
 		{
-			rdr_in(d, current, j);
+			// rdr_in(d, current, j);
+			return (1);
 		}
 		j = j + 2;
 	}
