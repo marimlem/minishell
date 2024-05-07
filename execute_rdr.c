@@ -50,8 +50,13 @@ int	rdr_in(t_data *d, t_com *current, int j)
 		d->old_fd[IN] = dup(STDIN_FILENO);
 	else if (d->fd[IN] >= 0)
 		close(d->fd[IN]);
-	if (current->rdr[j][1] == '<' && heredoc_start(d, current, j) != 0)
-		return (j + 1);
+	if (current->rdr[j][1] == '<') //&& heredoc_start(d, current, j) != 0)
+	{
+		if (heredoc_start(d, current, j) != 0)
+			return (j + 1);
+		else
+			return (0);
+	}
 	else
 	{
 		d->fd[IN] = open(current->rdr[j + 1], O_RDONLY);
@@ -86,7 +91,7 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 	if (d->fd[IN] >= 0)
 		close (d->fd[IN]);
 	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_RDONLY | O_CREAT, 0644);
-	if (d->fd[IN] <= 0)
+	if (d->fd[IN] < 0)
 		return (j + 1);
 	dup2(d->fd[IN], STDIN_FILENO);
 	return (0);
