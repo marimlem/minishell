@@ -123,7 +123,7 @@ void	executor2(t_data *d);
 void	close_rdr(t_data *d);
 int	rdr_out(t_data *d, t_com *current, int j);
 int	rdr_in(t_data *d, t_com *current, int j);
-void	heredoc_start(t_data *d, t_com *current);
+void	heredoc_start(t_data *d, t_com *current, int j);
 int	rdr_handler(t_data *d, t_com *current);
 
 

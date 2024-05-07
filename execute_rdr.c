@@ -51,7 +51,7 @@ int	rdr_in(t_data *d, t_com *current, int j)
 	else
 		close(d->fd[IN]);
 	if (current->rdr[j][1] == '<')
-		heredoc_start(d, current);
+		heredoc_start(d, current, j);
 	else
 	{
 		d->fd[IN] = open(current->rdr[j + 1], O_RDONLY);
@@ -67,7 +67,7 @@ int	rdr_in(t_data *d, t_com *current, int j)
 	return (0);
 }
 
-void	heredoc_start(t_data *d, t_com *current)
+void	heredoc_start(t_data *d, t_com *current, int j)
 {
 	char *heredoc_input;
 
@@ -78,7 +78,7 @@ void	heredoc_start(t_data *d, t_com *current)
 	while (1)
 	{
 		heredoc_input = readline("heredoc> ");
-		if (strcmp(heredoc_input, current->rdr[1]) == 0)
+		if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
 			break ;
 		ft_putstr_fd(heredoc_input, d->fd[IN]);
 		ft_putchar_fd('\n', d->fd[IN]);
