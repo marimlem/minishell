@@ -171,7 +171,7 @@ void	expand_var();
 void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
 void	expander(t_data *d, char *new, char *str);
-char	*l_to_p_trans(t_data *d, char *token);
+char	*l_to_p_trans(t_data *d, char *token, int exp);
 
 // var_handling.c
 int	is_all_var(t_data *d);

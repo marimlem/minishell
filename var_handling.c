@@ -70,7 +70,7 @@ void	assign_var(t_data **d)
 		var_c->key[i] = 0;
 		if (tok_c->tok[i] && tok_c->tok[i + 1])
 			// var_c->val = ft_strdup(&tok_c->tok[i + 1]); // strdup not good enough, need to expand :(
-			var_c->val = l_to_p_trans(*d, &tok_c->tok[i + 1]);
+			var_c->val = l_to_p_trans(*d, &tok_c->tok[i + 1], 1);
 		else
 			var_c->val = (char *) ft_calloc(sizeof(char), 1);
 		if (var_c->val == NULL)

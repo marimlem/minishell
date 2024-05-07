@@ -158,7 +158,7 @@ void	expander(t_data *d, char *new, char *str)
 		expand_empty(d, new);
 }
 
-char	*l_to_p_trans(t_data *d, char *token)
+char	*l_to_p_trans(t_data *d, char *token, int exp)
 {
 	char	*new;
 
@@ -191,7 +191,7 @@ char	*l_to_p_trans(t_data *d, char *token)
 			d->q = new[d->i + 1];
 			memmove(&new[d->i], &new[d->i + 2], ft_strlen(&new[d->i]));
 		}
-		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$')
+		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$' && exp == 1)
 		{
 			d->tmp = new;
 			// printf("\ntest: %s\n", d->tmp);

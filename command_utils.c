@@ -39,6 +39,15 @@ void	init_com(t_data *d)
 	
 }
 
+char	*heredoc_exp(t_data *d, char *tok)
+{
+	if (!strchr(tok, '\'') && !strchr(tok, '\"'))
+	{
+		return (strdup(tok));
+	}
+	return (l_to_p_trans(d, tok, 0));
+}
+
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 {
 	t_tok	*current;
@@ -130,7 +139,10 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
-			c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok);
+			if (c_cur->rdr[r-1][0] == '<' && c_cur->rdr[r-1][1] == '<')
+				c_cur->rdr[r] = heredoc_exp(d, current->next->tok);
+			else
+				c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok, 1);
 			if (c_cur->rdr[r] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
@@ -145,7 +157,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			// append string to args matrix
 			if (a == 0)
 			{
-				c_cur->file = l_to_p_trans(d, current->tok);
+				c_cur->file = l_to_p_trans(d, current->tok, 1);
 				// c_cur->file = ft_strdup(current->tok);
 				if (c_cur->file == NULL)
 				{
@@ -159,7 +171,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 				current = current->next;
 				continue;
 			}
-			c_cur->args[a] = l_to_p_trans(d, current->tok);
+			c_cur->args[a] = l_to_p_trans(d, current->tok, 1);
 			// c_cur->args[a] = ft_strdup(current->tok);
 			if (c_cur->args[a] == NULL)
 			{
