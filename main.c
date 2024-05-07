@@ -208,7 +208,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_putstr_fd("\n", 2);
 		}
 		// if list is completely variable assignment type, assign variables, else go to executor
-		if (d->com && d->com->file[0] != 0)
+		if (d->com && d->com->file && d->com->file[0] != 0)
 			executor2(d);
 		
 		free_n_clean(d, 0);
