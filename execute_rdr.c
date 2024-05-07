@@ -126,8 +126,13 @@ int	rdr_handler(t_data *d, t_com *current)
 	if (error != 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(current->rdr[error], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		if (current->rdr[error-1][0] == '<' && current->rdr[error-1][1] == '<')
+			ft_putstr_fd("heredoc error\n", 2);
+		else
+		{
+			ft_putstr_fd(current->rdr[error], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 	}
 
 	return (error);
