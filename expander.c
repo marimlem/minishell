@@ -116,6 +116,11 @@ void	expand_shellname(t_data *d)
 	char	*exp;
 
 	exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + 13);
+	if (exp == NULL)
+	{
+		d->error = 1; //alloc error
+		return ;
+	}
 	ft_memmove(exp, d->tmp, d->i);
 	ft_memmove(&exp[d->i], "minishell <3", 12);
 	ft_memmove(&exp[d->i + 12], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
@@ -198,9 +203,10 @@ char	*l_to_p_trans(t_data *d, char *token, int exp)
 			d->tmp = new;
 			// printf("\ntest: %s\n", d->tmp);
 			expander(d, &new[d->i], new);
-			if (d->tmp == NULL)
+			if (d->tmp == NULL || d->error != 0)
 			{
-				d->error = 1; //alloc error
+				// if (d->error == 0)
+					// d->error = 1; //alloc error
 				return (NULL);
 			}
 			new = d->tmp;
