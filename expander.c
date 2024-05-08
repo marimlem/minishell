@@ -96,6 +96,8 @@ int 	expand_env(t_data *d, char *new, char *str)
 		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
 			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
+			if (exp == NULL)
+				return (-1); // alloc error
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
 			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
@@ -152,7 +154,7 @@ void	expander(t_data *d, char *new, char *str)
 	// 	expand_shellpid();
 	// else if (NULL) //is_variable(d->var_node, new) == 1)
 	// 	expand_var(d, new);
-	if (expand_env(d, new, str) == 1)
+	if (expand_env(d, new, str) != 0)
 		return ;
 	else
 		expand_empty(d, new);
@@ -196,6 +198,11 @@ char	*l_to_p_trans(t_data *d, char *token, int exp)
 			d->tmp = new;
 			// printf("\ntest: %s\n", d->tmp);
 			expander(d, &new[d->i], new);
+			if (d->tmp == NULL)
+			{
+				d->error = 1; //alloc error
+				return (NULL);
+			}
 			new = d->tmp;
 			d->tmp = NULL;
 			continue ; 
