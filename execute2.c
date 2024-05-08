@@ -122,8 +122,11 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
+		printf("status: %d\n", current->status);
+		d->exit_code = current->status;
 		current = current->next;
 	}
+
 
 }
 // user input: /usr/bin/ls

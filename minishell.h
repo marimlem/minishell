@@ -101,6 +101,7 @@ typedef struct	s_data{
 	int	*old_fd;
 	int	heredoc_fd;
 	int	**p;
+	int	exit_code;
 	// __pid_t	pid;
 	// __pid_t	status;
 }	t_data;
