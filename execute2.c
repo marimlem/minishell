@@ -69,19 +69,20 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	// 	return ;
 	// free (current->file);
 	// current->file = file;
+	ec = 0;
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
+
+	//simple command without pipes
 	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
 	{
 		if (current->args[1] != NULL)
-		{
 			ec = ft_atoi(current->args[1]);
-			free_n_clean(d, 1);
-			exit(ec);
-		}
 		free_n_clean(d, 1);
-		exit(0);
+		exit(ec);
 	}
+
+
 	current->pid = fork();
 	if (current->pid < 0)
 		return ; // fork fail
@@ -134,7 +135,6 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
-		printf("status: %d\n", current->status);
 		d->exit_code = current->status;
 		current = current->next;
 	}
