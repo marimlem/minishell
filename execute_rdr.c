@@ -93,12 +93,19 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 	
 	while (1)
 	{
-		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
+		//gnl
+		/* ft_putstr_fd("> ", STDOUT_FILENO);
 		heredoc_input = get_next_line(STDIN_FILENO);
-		if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0)
+		if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
 			break ;
 		ft_putstr_fd(heredoc_input, d->fd[IN]);
-		// ft_putchar_fd('\n', d->fd[IN]);
+ */
+		//readline
+		heredoc_input = readline("> ");
+		if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
+			break ;
+		ft_putstr_fd(heredoc_input, d->fd[IN]);
+		ft_putchar_fd('\n', d->fd[IN]);
 	}
 	if (d->fd[IN] >= 0)
 		close (d->fd[IN]);
