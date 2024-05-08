@@ -61,6 +61,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
+	int	ec;
 	// char	*file;
 
 	// file = ft_strjoin(BIN, current->file);
@@ -70,6 +71,17 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	// current->file = file;
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
+	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
+	{
+		if (current->args[1] != NULL)
+		{
+			ec = ft_atoi(current->args[1]);
+			free_n_clean(d, 1);
+			exit(ec);
+		}
+		free_n_clean(d, 1);
+		exit(0);
+	}
 	current->pid = fork();
 	if (current->pid < 0)
 		return ; // fork fail
