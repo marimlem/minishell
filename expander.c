@@ -90,7 +90,7 @@ int 	expand_env(t_data *d, char *new, char *str)
 
 	node = *(d->env);
 	i = exp_varlen(new);
-	(void) str;
+	// (void) str;
 	while (node && node->key)
 	{
 		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)

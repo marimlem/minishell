@@ -75,6 +75,26 @@ int	rdr_in(t_data *d, t_com *current, int j)
 	return (0);
 }
 
+char	*heredoc_expanding(t_data *d, char *heredoc_input)
+{
+	d->i = 0;
+	if (heredoc_input == NULL || heredoc_input[d->i] == 0)
+		return (heredoc_input);
+	while (heredoc_input[d->i])
+	{
+		if (heredoc_input[d->i] == '$')
+		{
+			d->tmp = heredoc_input;
+			expander(d, &heredoc_input[d->i], heredoc_input);
+			heredoc_input = d->tmp;
+			d->tmp = NULL;
+			continue ;
+		}
+		d->i++;
+	}
+	return (heredoc_input);
+}
+
 int	heredoc_start(t_data *d, t_com *current, int j)
 {
 	char *heredoc_input;
@@ -104,6 +124,12 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 		heredoc_input = readline("> ");
 		if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
 			break ;
+		if (current->rdr[j][2] != SGLQUOTE)
+		{
+			heredoc_input = heredoc_expanding(d, heredoc_input);
+			if (heredoc_input == NULL)
+				return (j + 1);
+		}
 		ft_putstr_fd(heredoc_input, d->fd[IN]);
 		ft_putchar_fd('\n', d->fd[IN]);
 	}

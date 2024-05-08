@@ -39,12 +39,13 @@ void	init_com(t_data *d)
 	
 }
 
-char	*heredoc_exp(t_data *d, char *tok)
+char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r)
 {
 	if (!strchr(tok, '\'') && !strchr(tok, '\"'))
 	{
 		return (strdup(tok));
 	}
+	current->rdr[r][2] = SGLQUOTE;
 	return (l_to_p_trans(d, tok, 0));
 }
 
@@ -140,7 +141,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 				return ;
 			}
 			if (c_cur->rdr[r-1][0] == '<' && c_cur->rdr[r-1][1] == '<')
-				c_cur->rdr[r] = heredoc_exp(d, current->next->tok);
+				c_cur->rdr[r] = heredoc_exp(d, current->next->tok, c_cur, r - 1);
 			else
 				c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok, 1);
 			if (c_cur->rdr[r] == NULL)
