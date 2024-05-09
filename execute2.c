@@ -179,7 +179,7 @@ int	no_path(t_data *d, t_com *current)
 	// check in current directory? no i dont think so
 
 	//check inside path
-	while(d->path && d->path[i])
+	while(current->file && d->path && d->path[i])
 	{
 
 		t = ft_strjoin(d->path[i], "/");
@@ -224,13 +224,13 @@ int	setup_cmdpath(t_data *d)
 	// printf("%s\n%s\n",d->path[0], d->path[1]);
 	while (current)
 	{
-		if (current->file[0] == '/')
+		if (current->file && current->file[0] == '/')
 		{
 			if (absolut_path(d, current) != 0) // input: /usr/bin/ls
 				return (1); // alloc error
 
 		}
-		else if (current->file[0] == '.' && current->file[1] == '/')
+		else if (current->file && current->file[0] == '.' && current->file[1] == '/')
 		{
 			relative_path(d, current); // input: ./minishell ../minishell
 
