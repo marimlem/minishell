@@ -119,6 +119,7 @@ void	free_n_clean(t_data *d, int b)
 		free (d->path);
 	}
 
+	i = 0;
 	if (d->p)
 	{
 		while (d->p[i])
