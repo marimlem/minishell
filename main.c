@@ -170,6 +170,17 @@ void	init_null(t_data *d)
 	
 }
 
+void	siginthandler(int signum)
+{
+	signal(SIGINT, siginthandler);
+	ft_putchar_fd('\n', 2);
+	rl_replace_line("", 0);
+	rl_on_new_line();	
+	rl_redisplay();
+	(void) signum;
+	return ;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	// char *command;
@@ -194,6 +205,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_assign_key_and_value(env, envp);
 	d->env = env;
 	d->exit_code = 0;
+	signal(SIGINT, siginthandler);
 	while (1)
 	{
 		init_null(d);
