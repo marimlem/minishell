@@ -12,7 +12,7 @@ void	inputparsing(t_data *d, t_envlist **envlist)
 		d->input = ft_strtrim(line, "\n");
 		free(line);
 	}
-
+	add_history(d->input);
 
 	if (!d || !d->input)
 		return ;
