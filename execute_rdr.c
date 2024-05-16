@@ -114,14 +114,17 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 	while (1)
 	{
 		//gnl
-		/* ft_putstr_fd("> ", STDOUT_FILENO);
+		ft_putstr_fd("> ", 2);
 		heredoc_input = get_next_line(STDIN_FILENO);
 		if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
 			break ;
 		ft_putstr_fd(heredoc_input, d->fd[IN]);
- */
+
 		//readline
-		heredoc_input = readline("> ");
+		// ft_putstr_fd("> ", 2);
+		// heredoc_input = readline("");
+
+
 		if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
 			break ;
 		if (current->rdr[j][2] != SGLQUOTE)
