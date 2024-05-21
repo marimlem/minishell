@@ -138,7 +138,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d, env);
+		inputparsing(d);
 		if (d->error == -1)
 		{
 			printf("exit minishell\n");
@@ -148,19 +148,27 @@ int	main(int argc, char **argv, char **envp)
 			printf("Error (%d)\n", d->error);
 		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
-		if (is_builtin(d) == 1)
+		if (is_builtin(d) == 1) //echo
 			printf("echo\n");
-		else if (is_builtin(d) == 2)
+		else if (is_builtin(d) == 2) //cd
 			printf("cd\n");
-		else if (is_builtin(d) == 3)
+		else if (is_builtin(d) == 3) //pwd
 			printf("pwd\n");
-		else if (is_builtin(d) == 4)
-			printf("export\n");
-		else if (is_builtin(d) == 5)
+		else if (is_builtin(d) == 4) //export
+		{
+			if (d->com->args[1])
+			{
+				if (ft_check_arg_for_export(*env, d->com->args[1]) == 0)
+					ft_export(env, d->com->args);
+			}
+			else
+				ft_print_list(*env);
+		}
+		else if (is_builtin(d) == 5) //unset
 			printf("unset\n");
-		else if (is_builtin(d) == 6)
-			printf("env\n");
-		else if (is_builtin(d) == 7)
+		else if (is_builtin(d) == 6) //env
+			ft_print_list(*env);
+		else if (is_builtin(d) == 7) //exit
 			printf("exit\n");
 		free_n_clean(d, 0);
 		printf("\n");

@@ -1,19 +1,19 @@
 #include "minishell.h"
 
-void	free_2d_array(char **split_str)
+void	free_2d_array(char **double_array)
 {
 	int	i;
 
 	i = 0;
-	if (!split_str)
+	if (!double_array)
 		return ;
-	while (split_str[i])
+	while (double_array[i])
 	{
-		free(split_str[i]);
+		free(double_array[i]);
 		i++;
 	}
-	free(split_str);
-	split_str = NULL;
+	free(double_array);
+	double_array = NULL;
 }
 
 void	free_list(t_envlist **envlist)
@@ -139,8 +139,20 @@ void	ft_split_second_part(char *str, char **double_array, int str_index)
 	double_array[1][new_index] = '\0';
 }
 
+void	free_double_array(char **double_array)
+{
+	if (double_array)
+	{
+		if (double_array[0])
+			free(double_array[0]);
+		if (double_array[1])
+			free(double_array[1]);
+		free(double_array);
+	}
+}
+
 // fixed invalid write of size 8
-char	**ft_eqsplit(char *str)
+/* char	**ft_eqsplit(char *str)
 {
 	int		i;
 	int		str_index;
@@ -168,5 +180,49 @@ char	**ft_eqsplit(char *str)
 		i++;
 	}
 	double_array[i] = NULL;
+	return (double_array);
+} */
+
+char	**ft_eqsplit(char *str)
+{
+	int i;
+	int str_index;
+	char **double_array;
+
+	i = 0;
+	str_index = 0;
+	double_array = (char **)malloc(sizeof(char *) * 3);
+	if (double_array == NULL)
+		return (NULL);
+
+	// Allocate space for the first part
+	double_array[0] = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (double_array[0] == NULL)
+	{
+		free_double_array(double_array);
+		return (NULL);
+	}
+
+	// Allocate space for the second part
+	double_array[1] = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (double_array[1] == NULL)
+	{
+		free_double_array(double_array);
+		return (NULL);
+	}
+
+	// Split the first part
+	str_index = ft_split_first_part(str, double_array);
+
+	// Skip the '=' character if it was found
+	if (str[str_index] == '=')
+		str_index++;
+
+	// Split the second part
+	ft_split_second_part(str, double_array, str_index);
+
+	// Null-terminate the array of strings
+	double_array[2] = NULL;
+
 	return (double_array);
 }

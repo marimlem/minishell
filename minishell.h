@@ -99,7 +99,7 @@ void	executor(t_data *d);
 void	d_execute(t_data *d);
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d, t_envlist **envlist);
+void	inputparsing(t_data *d);
 int	is_builtin(t_data *d);
 
 // lexer.c
@@ -156,8 +156,9 @@ void	ft_print_list(t_envlist *envlist);
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);
 char	**ft_eqsplit(char *str);
-void	free_2d_array(char **split_str);
+void	free_2d_array(char **double_array);
 void	free_list(t_envlist **envlist);
+void	free_double_array(char **double_array);
 
 //key_value_utils.c
 char	*ft_find_key_value(t_envlist *envlist, const char *key);
@@ -165,5 +166,12 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value);
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
+
+//export.c
+int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
+int	ft_check_arg_for_unset(const char *s);
+int	ft_check_arg_for_pwd(const char *s);
+int	ft_check_export_input(const char *s);
+void	ft_export(t_envlist **envlist, char **arg);
 
 #endif

@@ -14,6 +14,23 @@ char	*ft_find_key_value(t_envlist *envlist, const char *key)
 
 int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 {
+	while (envlist)
+	{
+		if (envlist->key != NULL && key != NULL && ft_strcmp(key, envlist->key) == 0)
+		{
+			free(envlist->value);
+			envlist->value = ft_strdup(value);
+			if (envlist->value == NULL)
+				return (-1);
+			return (0);
+		}
+		envlist = envlist->next;
+	}
+	return (1);
+}
+
+/* int	ft_key_exists(t_envlist *envlist, char *key, char *value)
+{
 	envlist = NULL;
 	while (envlist != NULL)
 	{
@@ -34,7 +51,7 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 		envlist = envlist->next;
 	}
 	return (1);
-}
+} */
 
 // TODO free
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
@@ -45,6 +62,9 @@ int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 		if (ft_strcmp(key, envlist->key) == 0)
 		{
 			valuejoined = ft_strjoin(envlist->value, value);
+			if (valuejoined == NULL)
+				return (-1);
+			free(envlist->value);
 			envlist->value = valuejoined;
 			return (0);
 		}
@@ -64,7 +84,7 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
-	free_2d_array(after_split);
+	free_double_array(after_split);
 }
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
