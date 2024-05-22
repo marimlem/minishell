@@ -65,22 +65,25 @@ int	lex_sep_words(t_data *d, t_tok **current)
 
 }
 
-int	lex_sep_special(t_data *d, t_tok **current)
+void	lex_sep_special_mid(t_data *d, t_tok **current)
 {
-	if (d->i != 0)
+	lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
+	(*current)->tok[d->i] = 0;
+	(*current) = (*current)->next;
+	d->i = 1;
+	if ((*current)->tok[0] == '|' && ((*current)->tok[1] == '<' || (*current)->tok[1] == '>'))
 	{
 		lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
 		(*current)->tok[d->i] = 0;
 		(*current) = (*current)->next;
 		d->i = 1;
-		if ((*current)->tok[0] == '|' && ((*current)->tok[1] == '<' || (*current)->tok[1] == '>'))
-		{
-			lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
-			(*current)->tok[d->i] = 0;
-			(*current) = (*current)->next;
-			d->i = 1;
-		}
 	}
+}
+
+int	lex_sep_special(t_data *d, t_tok **current)
+{
+	if (d->i != 0)
+		lex_sep_special_mid(d, current);
 	if ((*current)->tok[d->i] == '|' && ((*current)->tok[d->i+1] == '<' || (*current)->tok[d->i+1] == '>'))
 	{
 		d->i++;
@@ -90,14 +93,9 @@ int	lex_sep_special(t_data *d, t_tok **current)
 		d->i = 1;
 	}
 	while (lex_is_separator((*current)->tok[d->i]) == 2)
-	{
 		d->i++;
-	}
 	while (lex_is_separator((*current)->tok[d->i]) == 1)
-	{
-		(*current)->tok[d->i] = 0;
-		d->i++;
-	}
+		(*current)->tok[d->i++] = 0;
 	if ((*current)->tok[d->i])
 	{
 		lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
