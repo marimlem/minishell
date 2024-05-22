@@ -22,7 +22,7 @@
 					"ignoreFailures": true
 				},
 				// follow fork
-				{
+/* 				{
 					// https://sourceware.org/gdb/onlinedocs/gdb/Forks.html
 					"description": "Fork follows Child process",
 					"text": "set follow-fork-mode child",
@@ -33,7 +33,7 @@
 					"description": "Fork will keep the other process attached to debugger",
 					"text": "set detach-on-fork off",
 					"ignoreFailures": true
-				},
+				}, */
 				// follow fork end
 				{
 					"description": "Set Disassembly Flavor to Intel",
