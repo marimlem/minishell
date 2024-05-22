@@ -4,6 +4,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 
+# include <fcntl.h>
+
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -20,6 +22,9 @@
 
 # define EVEN 0
 # define ODD 1
+
+# define IN 0
+# define OUT 1
 
 # define S 32	//space
 # define T 9	//tab
@@ -69,29 +74,71 @@ typedef struct	s_com{
 	char	*file;
 	char	**args;
 	char	**rdr;
+	__pid_t		pid;
+	__pid_t		status;
 	struct	s_com *next;
 }	t_com;
+
+typedef struct s_envlist
+{
+	char				*key;
+	char				*value;
+	struct s_envlist	*next;
+}						t_envlist;
 
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
 	t_var *var_node;
 	t_com	*com;
+	t_envlist	**env;
+	char	**path;
 	char	*tmp;
 	int	i;
 	int	q;
 	int	error;
+	int	*fd;
+	int	*old_fd;
+	int	heredoc_fd;
+	int	**p;
+	int	exit_code;
+	// __pid_t	pid;
+	// __pid_t	status;
 }	t_data;
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // execute.c
-void	executor(t_data *d);
-void	d_execute(t_data *d);
+// void	executor(t_data *d);
+// void	d_execute(t_data *d);
+
+// execute2.c
+void	pipe_handler(t_data *d, int pc, int i);
+void	playground(t_data *d, t_com *current ,int pc, int i);
+void	process_handler(t_data *d, t_com *current, int pc, int i);
+void	execute_loop(t_data *d, int pc);
+void	executor2(t_data *d);
+
+// execute_rdr.c
+void	close_rdr(t_data *d);
+int	rdr_out(t_data *d, t_com *current, int j);
+int	rdr_in(t_data *d, t_com *current, int j);
+int	heredoc_start(t_data *d, t_com *current, int j);
+int	rdr_handler(t_data *d, t_com *current);
+
+
+
+// execute_utils.c
+int	setup_fds(t_data *d);
+int	setup_pipes(t_data *d, int pipecount);
+int	d_lstsize(t_com *lst);
+void	close_pipes(int *tube);
+
+
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d);
+void	inputparsing(t_data *d, t_envlist **envlist);
 
 // lexer.c
 int	lex_is_separator(char c);
@@ -112,6 +159,10 @@ void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
 
+
+// main.c
+void	free_n_clean(t_data *d, int b);
+
 // parser.c
 void	parser(t_data *d);
 
@@ -120,8 +171,8 @@ int	is_variable(t_var *node, char *find);
 void	expand_var();
 void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
-void	expander(t_data *d, char *new);
-char	*l_to_p_trans(t_data *d, char *token);
+void	expander(t_data *d, char *new, char *str);
+char	*l_to_p_trans(t_data *d, char *token, int exp);
 
 // var_handling.c
 int	is_all_var(t_data *d);
@@ -140,5 +191,19 @@ void	com_lstsqueezein(t_com **current);
 void	init_com(t_data *d);
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 
+// env_utils.c
+int	ft_contains_char(const char *s, char c);
+void	ft_add_list(t_envlist **envlist, char *key, char *value);
+void	ft_print_list(t_envlist *envlist);
+int	ft_split_first_part(char *str, char **double_array);
+void	ft_split_second_part(char *str, char **double_array, int str_index);
+char	**ft_eqsplit(char *str);
+
+//key_value_utils.c
+char	*ft_find_key_value(t_envlist *envlist, const char *key);
+int	ft_key_exists(t_envlist *envlist, char *key, char *value);
+int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
+void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
+void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 #endif

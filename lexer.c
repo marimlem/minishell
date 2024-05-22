@@ -45,7 +45,7 @@ void	lexer(t_data *d)
 			{
 				ft_memmove(current->tok, &current->tok[d->i], ft_strlen(&current->tok[d->i]) + 1);
 			}
-			d->i = 1; //not sure about this; maybe = 0?
+			d->i = 0; //not sure about this; maybe = 0? (used to be =1)
 		}
 
 		else if (d->q == 0 && lex_is_separator(current->tok[d->i]) == 1)

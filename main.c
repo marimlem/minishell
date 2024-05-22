@@ -67,8 +67,30 @@ void	com_lst_del(t_com *lst)
 
 }
 
+void	envlist_del(t_envlist *env)
+{
+	t_envlist *e;
+
+	e = env;
+	if (e)
+	{
+		envlist_del(e->next);
+		if (e->key)
+			free (e->key);
+		e->key = NULL;
+		if (e->value)
+			free (e->value);
+		e->value = NULL;
+		e->next = NULL;
+		free (e);
+	}
+}
+
 void	free_n_clean(t_data *d, int b)
 {
+	int	i;
+
+	i = 0;
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
 	
@@ -83,11 +105,49 @@ void	free_n_clean(t_data *d, int b)
 	d->error = 0;
 	d->i = 0;
 	d->q = 0;
+	if (d->fd)
+		free (d->fd);
+	if (d->old_fd)
+		free(d->old_fd);
+	if (d->path)
+	{
+		while (d->path[i])
+		{
+			free(d->path[i]);
+			d->path[i++] = NULL;
+		}
+		free (d->path);
+	}
+
+	i = 0;
+	if (d->p)
+	{
+		while (d->p[i])
+		{
+			free (d->p[i]);
+			d->p[i++] = NULL;
+		}
+		free (d->p);
+		d->p = NULL;
+	}
+	
+
 	if (b == 0)
 		return ;
+/* 	if (d->env)
+	{
+		envlist_del(d->*(env));
+	} */
 	if (d)
 		free (d);
 	d = NULL;
+}
+
+void	init_envlist(t_envlist **envlist)
+{
+	(*envlist)->key = NULL;
+	(*envlist)->value = NULL;
+	(*envlist)->next = NULL;
 }
 
 void	init_null(t_data *d)
@@ -97,38 +157,75 @@ void	init_null(t_data *d)
 	d->com = NULL;
 	d->tmp = NULL;
 	d->var_node = NULL;
+	d->fd = NULL;
+	d->old_fd = NULL;
 	d->i = 0;
 	d->q = 0;
 	d->error = 0;
+	d->p = NULL;
+	d->path = NULL;
+	// d->p[0] = 0;
+	// d->p[1] = 0;
+	d = NULL;
+	
 }
 
-int	main(int argc, char **argv)
+void	siginthandler(int signum)
+{
+	signal(SIGINT, siginthandler);
+	ft_putchar_fd('\n', 2);
+	rl_replace_line("", 0);
+	rl_on_new_line();	
+	// rl_redisplay();
+	(void) signum;
+	return ;
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	// char *command;
 	t_data	*d;
+	t_envlist	**env;
 
 	if (argc != 1)
 		return (100);
 	d = (t_data *) malloc(sizeof(t_data) * 1);
 	if (d == NULL)
 		return 1;
+	env = (t_envlist **)malloc(sizeof(t_envlist *));
+	if (env == NULL)
+		return 1;
+	*env = (t_envlist *)malloc(sizeof(t_envlist));
+	if ((*env) == NULL)
+	{
+		free(env);
+		return 1;
+	}
+	init_envlist(env);
+	ft_assign_key_and_value(env, envp);
+	d->env = env;
+	d->exit_code = 0;
+	signal(SIGINT, siginthandler);
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d);
+		inputparsing(d, env);
 		if (d->error == -1)
 		{
-			printf("exit minishell\n");
+			// ft_putstr_fd("exit minishell\n", 2);
 			break ;
 		}
 		if (d->error != 0)
-			printf("Error (%d)\n", d->error);
+		{
+			ft_putstr_fd("error: ", 2);
+			ft_putnbr_fd(d->error, 2);
+			ft_putstr_fd("\n", 2);
+		}
 		// if list is completely variable assignment type, assign variables, else go to executor
-		//executor(d);
+		if (d->com && d->com->file && d->com->file[0] != 0)
+			executor2(d);
 		
 		free_n_clean(d, 0);
-		printf("\n");
-
 	}
 	if (d->var_node)
 		free (d->var_node);
@@ -137,4 +234,4 @@ int	main(int argc, char **argv)
 	(void) argv;
 	// (void) command;
 	return (0);
-}
+} 

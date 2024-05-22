@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lknobloc <lknobloc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 15:19:22 by lknobloc          #+#    #+#             */
-/*   Updated: 2023/07/24 14:50:20 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/05/08 12:13:05 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	ft_atoi(const char *nptr)
 	int		num;
 	char	*str;
 
+	if (nptr == NULL || !nptr)
+		return (0);
 	str = (char *) nptr;
 	i = 0;
 	m = 1;

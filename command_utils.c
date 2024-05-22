@@ -4,9 +4,11 @@ t_com	*com_lstnew()
 {
 	t_com *list;
 
-	list = (t_com *) malloc(sizeof(t_tok) * 1);
+	list = (t_com *) malloc(sizeof(t_com) * 1);
 	if (list == NULL)
 		return (NULL); // set error
+	list->pid = 0;
+	list->status = 0;
 	list->file = NULL;
 	list->args = NULL;
 	list->rdr = NULL;
@@ -35,6 +37,16 @@ void	init_com(t_data *d)
 		return ;
 	}
 	
+}
+
+char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r)
+{
+	if (!strchr(tok, '\'') && !strchr(tok, '\"'))
+	{
+		return (strdup(tok));
+	}
+	current->rdr[r][2] = SGLQUOTE;
+	return (l_to_p_trans(d, tok, 0));
 }
 
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
@@ -128,7 +140,10 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 				d->error = ERR_PAR_ALL;
 				return ;
 			}
-			c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok);
+			if (c_cur->rdr[r-1][0] == '<' && c_cur->rdr[r-1][1] == '<')
+				c_cur->rdr[r] = heredoc_exp(d, current->next->tok, c_cur, r - 1);
+			else
+				c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok, 1);
 			if (c_cur->rdr[r] == NULL)
 			{
 				d->error = ERR_PAR_ALL;
@@ -143,15 +158,21 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			// append string to args matrix
 			if (a == 0)
 			{
-				c_cur->file = l_to_p_trans(d, current->tok);
+				c_cur->file = l_to_p_trans(d, current->tok, 1);
 				// c_cur->file = ft_strdup(current->tok);
 				if (c_cur->file == NULL)
 				{
 					d->error = ERR_PAR_ALL;
 					return ;
 				}
+				c_cur->args[a] = ft_strdup(c_cur->file);
+				if (c_cur->args[a] == NULL)
+					d->error = ERR_PAR_ALL;
+				a++;
+				current = current->next;
+				continue;
 			}
-			c_cur->args[a] = l_to_p_trans(d, current->tok);
+			c_cur->args[a] = l_to_p_trans(d, current->tok, 1);
 			// c_cur->args[a] = ft_strdup(current->tok);
 			if (c_cur->args[a] == NULL)
 			{
