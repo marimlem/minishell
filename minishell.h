@@ -141,9 +141,7 @@ void	close_pipes(int *tube);
 void	inputparsing(t_data *d, t_envlist **envlist);
 
 // lexer.c
-int	lex_is_separator(char c);
 void	lexer(t_data *d);
-int	even_quotes(t_data *d);
 
 
 // lex_utils.c
@@ -158,6 +156,15 @@ void	init_list2(t_data *d, char *input);
 void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
+int	lex_is_separator(char c);
+int	even_quotes(t_data *d);
+
+// lex_utils3.c
+int	lex_sep_firstword(t_data *d, t_tok **current);
+int	lex_sep_words(t_data *d, t_tok **current);
+void	lex_sep_special_mid(t_data *d, t_tok **current);
+int	lex_sep_special(t_data *d, t_tok **current);
+int	lexer_separator(t_data *d, t_tok **current);
 
 
 // main.c
