@@ -20,27 +20,34 @@ void 	expand_empty(t_data *d, char *new)
 	return ;
 }
 
+int	setup_ext(t_data *d, char **code, char **exp, int *len)
+{
+	(*code) = ft_itoa(d->exit_code);
+	if ((*code) == NULL)
+	{
+		d->error = 301;
+		return (1);
+	}
+	*len = ft_strlen((*code));
+	(*exp) = (char *) ft_calloc(*len + ft_strlen(d->tmp), sizeof(char));
+	if ((*exp) ==NULL)	
+	{
+		free ((*code));
+		*code = NULL;
+		d->error = 301;
+		return (1);
+	}
+	return (0);
+}
+
 void 	expand_exitstatus(t_data *d)
 {
 	char	*code;
 	char	*exp;
 	int		len;
 
-	code = ft_itoa(d->exit_code);
-	if (code == NULL)
-	{
-		d->error = 301;
+	if (setup_ext(d, &code, &exp, &len) != 0)
 		return ;
-	}
-	len = ft_strlen(code);
-	exp = (char *) ft_calloc(len + ft_strlen(d->tmp), sizeof(char));
-	if (exp ==NULL)	
-	{
-		free (code);
-		code = NULL;
-		d->error = 301;
-		return ;
-	}
 	ft_memmove(exp, d->tmp, d->i);
 	ft_memmove(&exp[d->i], code, len);
 	if (d->tmp[d->i + 2] != 0)
