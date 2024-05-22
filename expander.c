@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-
-// int	is_varname()
-// {
-// 	int i;
-
-// 	i = 0;
-// 	if (ft_isdigit(var[i])) 
-// 	{
-
-// 	}
-// }
-
-// finds variable in variable list
-// returns (1) on success
 int	is_variable(t_var *node, char *find)
 {
 	if (node && node->key == NULL)
@@ -28,7 +14,6 @@ int	is_variable(t_var *node, char *find)
 	}
 	
 }
-
 
 void	expand_var(t_data *d, char *new)
 {
@@ -62,9 +47,6 @@ void 	expand_empty(t_data *d, char *new)
 
 void 	expand_exitstatus(t_data *d) // not as simple unfortunately, will need to allocate space for longer numbers
 {
-	// d->tmp[d->i++] = '0';
-	// ft_memmove(&d->tmp[d->i], &d->tmp[d->i+1], ft_strlen(&d->tmp[d->i + 1]) + 1);
-
 	char	*code;
 	char	*exp;
 	int		len;
@@ -72,24 +54,22 @@ void 	expand_exitstatus(t_data *d) // not as simple unfortunately, will need to 
 	code = ft_itoa(d->exit_code);
 	if (code == NULL)
 	{
-		// alloc error
+		d->error = 301;
 		return ;
 	}
 	len = ft_strlen(code);
 	exp = (char *) ft_calloc(len + ft_strlen(d->tmp), sizeof(char));
 	if (exp ==NULL)	
 	{
-		// alloc error
+		free (code);
+		code = NULL;
+		d->error = 301;
 		return ;
 	}
-	// ft_memmove(new, d->tmp, ft_strlen(d->i));
-
 	ft_memmove(exp, d->tmp, d->i);
 	ft_memmove(&exp[d->i], code, len);
 	if (d->tmp[d->i + 2] != 0)
-	{
 		ft_memmove(&exp[ft_strlen(code) + d->i], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
-	}
 	else
 	{
 		while (d->tmp[d->i + len])
@@ -127,14 +107,16 @@ int 	expand_env(t_data *d, char *new, char *str)
 
 	node = *(d->env);
 	i = exp_varlen(new);
-	// (void) str;
 	while (node && node->key)
 	{
 		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
 			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
 			if (exp == NULL)
+			{
+				d->error = 301;
 				return (-1); // alloc error
+			}
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
 			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
@@ -155,7 +137,7 @@ void	expand_shellname(t_data *d)
 	exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + 13);
 	if (exp == NULL)
 	{
-		d->error = 1; //alloc error
+		d->error = 301; //alloc error
 		return ;
 	}
 	ft_memmove(exp, d->tmp, d->i);
@@ -168,7 +150,6 @@ void	expand_shellname(t_data *d)
 
 void	expander(t_data *d, char *new, char *str)
 {
-	// printf("\ntest: %s\n", d->tmp);
 	int	i;
 
 	i = 0;
@@ -192,14 +173,52 @@ void	expander(t_data *d, char *new, char *str)
 		d->i++;
 		return ;
 	}
-	// if (new[i + 1] == '$')
-	// 	expand_shellpid();
-	// else if (NULL) //is_variable(d->var_node, new) == 1)
-	// 	expand_var(d, new);
 	if (expand_env(d, new, str) != 0)
 		return ;
 	else
 		expand_empty(d, new);
+}
+
+// moving content to replace stripped quotes
+int		ltop_unquoter(t_data *d, char **new)
+{
+	if (d->q == 0 && ((*new)[d->i] == DBLQUOTE || (*new)[d->i] == SGLQUOTE))
+	{
+		d->q = (*new)[d->i];
+		memmove(&(*new)[d->i], &(*new)[d->i+1], ft_strlen(&(*new)[d->i+1]) + 1);
+		(*new)[ft_strlen((*new))] = 0;
+		return (1);
+	}
+	else if(d->q != 0 && d->q == (*new)[d->i]) // doubles up here
+	{
+		d->q = 0;
+		memmove(&(*new)[d->i], &(*new)[d->i+1], ft_strlen(&(*new)[d->i+1]));
+		(*new)[ft_strlen((*new)) - 1] = 0;
+		return (1);
+	}
+	return (0);
+}
+
+//strips quotes and dollar signs 
+int	ltop_dollar(t_data *d, char **new, int exp)
+{
+	if ((d->q == 0) && (*new)[d->i] == '$'&& ((*new)[d->i + 1] == SGLQUOTE || (*new)[d->i + 1] == DBLQUOTE))
+	{
+		d->q = (*new)[d->i + 1];
+		memmove(&(*new)[d->i], &(*new)[d->i + 2], ft_strlen(&(*new)[d->i]));
+		return (0);
+	}
+	else if ((d->q == 0 || d->q == DBLQUOTE) && (*new)[d->i] == '$' && exp == 1)
+	{
+		d->tmp = (*new);
+		expander(d, &(*new)[d->i], (*new));
+		if (d->tmp == NULL || d->error != 0)
+			return (1); // ERROR is set in expander
+		(*new) = d->tmp;
+		d->tmp = NULL;
+		return (1); 
+	}
+	return (0);
 }
 
 char	*l_to_p_trans(t_data *d, char *token, int exp)
@@ -216,44 +235,15 @@ char	*l_to_p_trans(t_data *d, char *token, int exp)
 	}
 	while (new && new[d->i])
 	{
-		if (d->q == 0 && (new[d->i] == DBLQUOTE || new[d->i] == SGLQUOTE))
-		{
-			d->q = new[d->i];
-			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]) + 1);
-			new[ft_strlen(new)] = 0;
+		if (ltop_unquoter(d, &new) == 1)
 			continue ;
-		}
-		else if(d->q != 0 && d->q == new[d->i]) // doubles up here
+		if (ltop_dollar(d, &new, exp) == 1)
 		{
-			d->q = 0;
-			memmove(&new[d->i], &new[d->i+1], ft_strlen(&new[d->i+1]));
-			new[ft_strlen(new) - 1] = 0;
-			continue ;
-		}
-		else if ((d->q == 0) && new[d->i] == '$'&& (new[d->i + 1] == SGLQUOTE || new[d->i + 1] == DBLQUOTE))
-		{
-			d->q = new[d->i + 1];
-			memmove(&new[d->i], &new[d->i + 2], ft_strlen(&new[d->i]));
-		}
-		else if ((d->q == 0 || d->q == DBLQUOTE) && new[d->i] == '$' && exp == 1)
-		{
-			d->tmp = new;
-			// printf("\ntest: %s\n", d->tmp);
-			expander(d, &new[d->i], new);
-			if (d->tmp == NULL || d->error != 0)
-			{
-				// if (d->error == 0)
-					// d->error = 1; //alloc error
+			if (d->error != 0)
 				return (NULL);
-			}
-			new = d->tmp;
-			d->tmp = NULL;
-			continue ; 
+			continue ;
 		}
 		d->i++;	
-		
 	}
-	
 	return (new);
-
 }
