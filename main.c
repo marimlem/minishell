@@ -139,13 +139,13 @@ int	main(int argc, char **argv, char **envp)
 	{
 		init_null(d);
 		inputparsing(d);
-		if (d->error == -1)
+		/* if (d->error == -1)
 		{
 			printf("exit minishell\n");
 			break ;
 		}
 		if (d->error != 0)
-			printf("Error (%d)\n", d->error);
+			printf("Error (%d)\n", d->error); */
 		// if list is completely variable assignment type, assign variables, else go to executor
 		//executor(d);
 		if (is_builtin(d) == 1) //echo
@@ -165,13 +165,28 @@ int	main(int argc, char **argv, char **envp)
 				ft_print_list(*env);
 		}
 		else if (is_builtin(d) == 5) //unset
-			printf("unset\n");
+		{
+			if (d->com->args[1])
+			{
+				if (ft_check_arg_for_unset(d->com->args[1]) == 0)
+					ft_unset(env, d->com->args);
+			}
+		}
 		else if (is_builtin(d) == 6) //env
 			ft_print_list(*env);
 		else if (is_builtin(d) == 7) //exit
-			printf("exit\n");
+		{
+				d->error = -1;
+				if (d->error == -1)
+				{
+					printf("exit minishell\n");
+					break ;
+				}
+		}
+		else if (is_builtin(d) == 8) //command not found
+			printf("command '%s' not found\n", d->input);
 		free_n_clean(d, 0);
-		printf("\n");
+		//printf("\n");
 	}
 	if (d->var_node)
 		free (d->var_node);

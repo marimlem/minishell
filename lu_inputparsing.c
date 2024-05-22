@@ -7,11 +7,11 @@ void	inputparsing(t_data *d)
 		return ;
 	if (even_quotes(d) == ODD)
 		return ;
-	if (ft_strncmp(d->input, "exit", 4) == 0)
+	/* if (ft_strncmp(d->input, "exit", 4) == 0)
 	{
 		d->error = -1;
 		return ;
-	}
+	} */
 
 	lexer(d);
 	parser(d);
@@ -33,5 +33,7 @@ int	is_builtin(t_data *d)
 		return 6;
 	else if (ft_strcmp(d->com->args[0], "exit") == 0)
 		return 7;
+	else
+		return 8;
 	return 0;
 }

@@ -174,4 +174,10 @@ int	ft_check_arg_for_pwd(const char *s);
 int	ft_check_export_input(const char *s);
 void	ft_export(t_envlist **envlist, char **arg);
 
+//unset.c
+int	ft_check_unset_input(const char *s);
+void	ft_rm_node_front(t_envlist **envlist);
+void	ft_rm_node(t_envlist **envlist, t_envlist *prev);
+void	ft_unset(t_envlist **envlist, char **arg);
+
 #endif
