@@ -4,7 +4,6 @@ char	*ft_find_key_value(t_envlist *envlist, const char *key)
 {
 	while (envlist)
 	{
-		// TODO change
 		if (ft_strcmp(envlist->key, key) == 0)
 			return (envlist->value);
 		envlist = envlist->next;
@@ -29,31 +28,6 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 	return (1);
 }
 
-/* int	ft_key_exists(t_envlist *envlist, char *key, char *value)
-{
-	envlist = NULL;
-	while (envlist != NULL)
-	{
-		if (envlist->key != NULL && key != NULL)
-		{ // Check for NULL pointers
-			if (ft_strcmp(key, envlist->key) == 0)
-			{                               // Use strcmp for string comparison
-				if (envlist->value != NULL)
-					// Check if envlist->value is initialized
-					free(envlist->value);  
-						// Free existing value if initialized
-				envlist->value = ft_strdup2(value);
-				if (envlist->value == NULL)
-					return (-1);
-				return (0);
-			}
-		}
-		envlist = envlist->next;
-	}
-	return (1);
-} */
-
-// TODO free
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 {
 	char	*valuejoined;
