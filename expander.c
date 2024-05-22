@@ -1,27 +1,5 @@
 #include "minishell.h"
 
-int	is_variable(t_var *node, char *find)
-{
-	if (node && node->key == NULL)
-		return (0);
-	if (is_variable(node->next, find) == 1)
-		return (1);
-	else
-	{
-		if (ft_strncmp(node->key, find, ft_strlen(node->key) + ft_strlen(find)) == 0)
-			return (1);
-		return (0);
-	}
-	
-}
-
-void	expand_var(t_data *d, char *new)
-{
-	(void) d;
-	(void) new;
-	return ;
-}
-
 void 	expand_empty(t_data *d, char *new)
 {
 	int	i;
@@ -33,19 +11,16 @@ void 	expand_empty(t_data *d, char *new)
 		return ;
 	}
 	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
-	{
 		i++;
-	}
 	if (new[i])
 		ft_memmove(&d->tmp[d->i], &new[i], ft_strlen(&new[i]) + 1);
 	else
 		d->tmp[d->i] = 0;
 
-	(void) d;
 	return ;
 }
 
-void 	expand_exitstatus(t_data *d) // not as simple unfortunately, will need to allocate space for longer numbers
+void 	expand_exitstatus(t_data *d)
 {
 	char	*code;
 	char	*exp;
