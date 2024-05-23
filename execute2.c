@@ -37,7 +37,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 	if (ft_strcmp(current->args[0], "env") == 0 && current->args[1] == NULL)
 	{
-		ft_print_list(*(d->env));
+		ft_print_list(*(d->env));	
 		free_n_clean(d, 1);
 		exit(0);
 	}
@@ -62,25 +62,68 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
 	int	ec;
-	// char	*file;
-
-	// file = ft_strjoin(BIN, current->file);
-	// if (file == NULL)
-	// 	return ;
-	// free (current->file);
-	// current->file = file;
+	/* char	*fil
+	file = ft_strjoin(BIN, current->file);
+	if (file == NULL)
+		return ;
+	free (current->file);
+	current->file = file; */
 	ec = 0;
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
+	if (pc == 0 && ((is_builtin(d)) >= 1 && (is_builtin(d)) <= 8))
+	{
+		if (is_builtin(d) == 1) //echo
+			printf("echo\n");
+		else if (is_builtin(d) == 2) //cd
+			ft_cd(d);
+		else if (is_builtin(d) == 3) //pwd
+			ft_pwd(d->input);
+		else if (is_builtin(d) == 4) //export
+		{
+			if (d->com->args[1])
+				if (ft_check_arg_for_export(*d->env, d->com->args[1]) == 0)
+					ft_export(d->env, d->com->args);
+		}
+		else if (is_builtin(d) == 5) //unset
+		{
+			if (d->com->args[1])
+				if (ft_check_arg_for_unset(d->com->args[1]) == 0)
+					ft_unset(d->env, d->com->args);
+		}
+		else if (is_builtin(d) == 6) //env
+			ft_print_list(*d->env);
+		else if (is_builtin(d) == 7) //exit
+		{
+				d->error = -1;
+				if (d->error == -1)
+				{
+					printf("exit minishell\n");
+					if (current->args[1] != NULL)
+						ec = ft_atoi(current->args[1]);
+					free_list(d->env);
+					free_n_clean(d, 1);
+					exit(ec) ;
+				}
+		}
+		else if (is_builtin(d) == 8) //command not found
+			printf("command '%s' not found\n", d->input);
+		/* if (current->args[1] != NULL)
+			ec = ft_atoi(current->args[1]);
+		free_n_clean(d, 1);
+		exit(ec); */
+		return ;
+	}
+
 
 	//simple command without pipes
-	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
+	/* if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
 	{
 		if (current->args[1] != NULL)
 			ec = ft_atoi(current->args[1]);
 		free_n_clean(d, 1);
 		exit(ec);
-	}
+	} */
 
 
 	current->pid = fork();
