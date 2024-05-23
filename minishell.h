@@ -6,9 +6,6 @@
 
 # include <fcntl.h>
 
-#include <dirent.h>
-#include <errno.h>
-
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -141,7 +138,7 @@ void	close_pipes(int *tube);
 
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d);
+void	inputparsing(t_data *d, t_envlist **envlist);
 
 // lexer.c
 int	lex_is_separator(char c);
@@ -198,8 +195,6 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 int	ft_contains_char(const char *s, char c);
 void	ft_add_list(t_envlist **envlist, char *key, char *value);
 void	ft_print_list(t_envlist *envlist);
-void	free_list(t_envlist **envlist);
-void	free_double_array(char **double_array);
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);
 char	**ft_eqsplit(char *str);
@@ -210,28 +205,5 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value);
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
-
-//export.c
-int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
-int	ft_check_arg_for_unset(const char *s);
-int	ft_check_arg_for_pwd(const char *s);
-int	ft_check_export_input(const char *s);
-void	ft_export(t_envlist **envlist, char **arg);
-
-//unset.c
-int	ft_check_unset_input(const char *s);
-void	ft_rm_node_front(t_envlist **envlist);
-void	ft_rm_node(t_envlist **envlist, t_envlist *prev);
-void	ft_unset(t_envlist **envlist, char **arg);
-
-//is_builtin.c
-int	is_builtin(t_data *d);
-
-//cd.c
-int	ft_check_driectory(const char *path);
-void	ft_cd(t_data *d);
-
-//pwd.c
-void	ft_pwd(char *input);
 
 #endif

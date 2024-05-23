@@ -194,14 +194,10 @@ int	main(int argc, char **argv, char **envp)
 		return 1;
 	env = (t_envlist **)malloc(sizeof(t_envlist *));
 	if (env == NULL)
-	{
-		free(d);
 		return 1;
-	}
 	*env = (t_envlist *)malloc(sizeof(t_envlist));
 	if ((*env) == NULL)
 	{
-		free(d);
 		free(env);
 		return 1;
 	}
@@ -213,7 +209,12 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d);
+		inputparsing(d, env);
+		if (d->error == -1)
+		{
+			// ft_putstr_fd("exit minishell\n", 2);
+			break ;
+		}
 		if (d->error != 0)
 		{
 			ft_putstr_fd("error: ", 2);
@@ -223,15 +224,13 @@ int	main(int argc, char **argv, char **envp)
 		// if list is completely variable assignment type, assign variables, else go to executor
 		if (d->com && d->com->file && d->com->file[0] != 0)
 			executor2(d);
-		//write(1,"bin nach executor\n", 18);
+		
 		free_n_clean(d, 0);
 	}
-	write(1,"test2\n", 10);
 	if (d->var_node)
 		free (d->var_node);
 	d->var_node = NULL;
 	free_n_clean(d, 1);
-	free_list(env);
 	(void) argv;
 	// (void) command;
 	return (0);
