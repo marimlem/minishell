@@ -74,6 +74,7 @@ typedef struct	s_com{
 	char	*file;
 	char	**args;
 	char	**rdr;
+	int	builtin;
 	__pid_t		pid;
 	__pid_t		status;
 	struct	s_com *next;

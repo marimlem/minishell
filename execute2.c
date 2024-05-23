@@ -59,6 +59,15 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	}
 }
 
+void	execute_builtin(t_data *d, t_com *current, int ec)
+{
+		if (current->args[1] != NULL)
+			ec = ft_atoi(current->args[1]);
+		free_n_clean(d, 1);
+		exit(ec);
+}
+
+
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
 	int	ec;
@@ -74,12 +83,9 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 		pipe(d->p[i]);
 
 	//simple command without pipes
-	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
+	if (pc == 0 && current->builtin == 1)
 	{
-		if (current->args[1] != NULL)
-			ec = ft_atoi(current->args[1]);
-		free_n_clean(d, 1);
-		exit(ec);
+		execute_builtin(d, current, ec);
 	}
 
 
@@ -224,6 +230,7 @@ int	setup_cmdpath(t_data *d)
 	// printf("%s\n%s\n",d->path[0], d->path[1]);
 	while (current)
 	{
+		current->builtin = 0;
 		if (current->file && current->file[0] == '/')
 		{
 			if (absolut_path(d, current) != 0) // input: /usr/bin/ls
@@ -236,6 +243,10 @@ int	setup_cmdpath(t_data *d)
 
 		}
 		// ~/42/minishell
+		else if (is_builtin())
+		{
+			current->builtin = 1;
+		}
 		else
 		{
 			no_path(d, current); // input: ls OR input: echo (builtin)
