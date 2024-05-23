@@ -173,12 +173,10 @@ void	init_null(t_data *d)
 void	siginthandler(int signum)
 {
 	signal(SIGINT, siginthandler);
-	signal(SIGINT, siginthandler);
-	rl_on_new_line();	
 	ft_putchar_fd('\n', 2);
-	// rl_replace_line("", 0);
-	rl_redisplay();
-	
+	rl_replace_line("", 0);
+	rl_on_new_line();	
+	// rl_redisplay();
 	(void) signum;
 	return ;
 }
