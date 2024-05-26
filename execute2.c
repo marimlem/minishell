@@ -124,7 +124,7 @@ void	early_heredoc(t_data *d, t_com *current)
 					// ft_putchar_fd('\n', 2);
 					break;
 				}
-				if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
+				if (ft_strcmp(heredoc_input, current->rdr[j + 1]) == 0)
 					break ;
 				if (current->rdr[j][2] != SGLQUOTE)
 				{
