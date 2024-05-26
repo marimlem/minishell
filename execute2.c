@@ -68,7 +68,7 @@ char	*heredoc_path(t_data *d)
 	{
 		if (ft_strcmp(node->key, "PWD") == 0)
 		{
-			return (ft_strjoin(node->value, "/.minishell_heredoc_tmp_file"));
+			return (ft_strjoin(node->value, "/minishell_heredoc_tmp"));
 		}
 		node = node->next;
 	}

@@ -11,16 +11,18 @@ void	close_rdr(t_data *d)
 		{
 			dup2(d->old_fd[IN], 0);
 			close(d->fd[IN]);
-			d->fd[IN] = open(d->hd_path, O_WRONLY| O_CREAT | O_TRUNC , 0744);
-			if (d->fd[IN] >= 0)
-				close(d->fd[IN]);
+			// unlink(d->hd_path);
+			// d->fd[IN] = open(d->hd_path, O_WRONLY| O_CREAT | O_TRUNC , 0744);
+			// if (d->fd[IN] >= 0)
+			// 	close(d->fd[IN]);
 		}
-		else
-		{	
-			d->fd[IN] = open(d->hd_path, O_TRUNC , 0744);
-			if (d->fd[IN] >= 0)
-				close(d->fd[IN]);
-		}
+		// else
+		// {	
+			// unlink(d->hd_path);
+		// 	d->fd[IN] = open(d->hd_path, O_TRUNC , 0744);
+		// 	if (d->fd[IN] >= 0)
+		// 		close(d->fd[IN]);
+		// }
 }
 
 int	rdr_out(t_data *d, t_com *current, int j)
