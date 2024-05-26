@@ -69,7 +69,6 @@ void	early_heredoc(t_data *d, t_com *current)
 	if (!current->rdr)
 		return ;
 	heredoc_input = NULL;
-	g_signal_int = 2;
 		// return (j + 1);
 
 	j = 0;
@@ -80,6 +79,7 @@ void	early_heredoc(t_data *d, t_com *current)
 			fd = open("/home/lknobloc/Documents/minishell/minishell_heredoc_tmp_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd < 0)
 				return ;
+			g_signal_int = 2;
 			d->heredoc_fd = j;
 			while (g_signal_int == 2)
 			{
