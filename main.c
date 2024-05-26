@@ -195,7 +195,7 @@ void	siginthandler(int signum)
 			g_signal_int = 3;
 			rl_replace_line("", 0);
 			rl_on_new_line();	
-			rl_redisplay();
+			// rl_redisplay();
 			return ;
 			// exit(0) ;
 		}

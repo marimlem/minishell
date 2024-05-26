@@ -86,8 +86,12 @@ void	early_heredoc(t_data *d, t_com *current)
 				//gnl
 				ft_putstr_fd("> ", 2);
 				heredoc_input = get_next_line(STDIN_FILENO);
-				if (g_signal_int != 2)
-					break ;
+				if (g_signal_int == 3)
+				{
+					if (fd >= 0)
+						close (fd);
+					return ;
+				} 
 				if (!heredoc_input)
 				{
 					ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
@@ -139,6 +143,8 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 
 	d->heredoc_fd = 0;
 	early_heredoc(d, current);
+	if (g_signal_int == 3)
+		return ;
 
 	current->pid = fork();
 	if (current->pid < 0)
@@ -184,6 +190,8 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		process_handler(d, current, pc, i);
+		if (g_signal_int == 3)
+			return ;
 		close_rdr(d);
 		i++;
 		current = current->next;
