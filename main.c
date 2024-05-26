@@ -211,7 +211,7 @@ void	siginthandler(int signum)
 	if (signum == SIGINT)
 	{
 
-		// signal(SIGINT, siginthandler);
+		signal(SIGINT, siginthandler);
 		if (g_signal_int == 2)
 		{
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
@@ -235,6 +235,18 @@ void	siginthandler(int signum)
 			rl_redisplay();
 		}
 	}
+	else if (signum == SIGQUIT)
+	{
+		signal(SIGQUIT, siginthandler);
+
+		// ft_putstr_fd("wannadiefucker\n", 2);
+		// rl_replace_lineatu("minishell:$ ", 0);
+		rl_on_new_line();	
+
+		rl_redisplay();
+
+		return ;
+	}
 	// if (signum == SIGINT)
 	// {
 		
@@ -253,6 +265,7 @@ void	signal_setup(t_data *d)
 	// sa.sa_flags = SA_SIGINFO;
 	g_signal_int = 0;
 	signal(SIGINT, siginthandler);
+	signal(SIGQUIT, siginthandler);
 	// signal(999, (void) d);
 
 
