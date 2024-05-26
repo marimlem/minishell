@@ -59,6 +59,22 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	}
 }
 
+char	*heredoc_path(t_data *d)
+{
+	t_envlist *node;
+
+	node = (*d->env);
+	while (node)
+	{
+		if (ft_strcmp(node->key, "PWD") == 0)
+		{
+			return (ft_strjoin(node->value, "/.minishell_heredoc_tmp_file"));
+		}
+		node = node->next;
+	}
+	return (NULL);
+}
+
 void	early_heredoc(t_data *d, t_com *current)
 {
 	int	j;
@@ -70,13 +86,19 @@ void	early_heredoc(t_data *d, t_com *current)
 		return ;
 	heredoc_input = NULL;
 		// return (j + 1);
-
+	d->hd_path = heredoc_path(d);
+	if (d->hd_path == NULL)
+	{
+		d->error = 1; // alloc error
+		return ;
+	}
+	// ft_putstr_fd(d->hd_path, 2);
 	j = 0;
 	while (current->rdr[j])
 	{
 		if (current->rdr[j][0] == '<' && current->rdr[j][1] == '<')
 		{
-			fd = open("/home/lknobloc/Documents/minishell/minishell_heredoc_tmp_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			fd = open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0744);
 			if (fd < 0)
 				return ;
 			g_signal_int = 2;

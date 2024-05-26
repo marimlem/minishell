@@ -100,6 +100,7 @@ typedef struct	s_data{
 	int	*fd;
 	int	*old_fd;
 	int	heredoc_fd;
+	char	*hd_path;
 	int	**p;
 	int	exit_code;
 	
