@@ -130,6 +130,7 @@ int	rdr_out(t_data *d, t_com *current, int j);
 int	rdr_in(t_data *d, t_com *current, int j);
 int	heredoc_start(t_data *d, t_com *current, int j);
 int	rdr_handler(t_data *d, t_com *current);
+char	*heredoc_expanding(t_data *d, char *heredoc_input);
 
 
 

@@ -83,8 +83,8 @@ void	early_heredoc(t_data *d, t_com *current)
 			d->heredoc_fd = j;
 			while (g_signal_int == 2)
 			{
-				//gnl
-				ft_putstr_fd("> ", 2);
+			//gnl
+				/* ft_putstr_fd("> ", 2);
 				heredoc_input = get_next_line(STDIN_FILENO);
 				if (g_signal_int == 3)
 				{
@@ -106,7 +106,40 @@ void	early_heredoc(t_data *d, t_com *current)
 				}
 				if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
 					break ;
+				ft_putstr_fd(heredoc_input, fd); */
+			//gnl end
+
+			//readline
+				// ft_putstr_fd("> ", 2);
+				heredoc_input = readline(">");
+				if (g_signal_int == 3)
+				{
+					if (fd >= 0)
+						close (fd);
+					return ;
+				} 
+				if (!heredoc_input)
+				{
+					ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
+					// ft_putchar_fd('\n', 2);
+					break;
+				}
+				if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
+					break ;
+				if (current->rdr[j][2] != SGLQUOTE)
+				{
+					heredoc_input = heredoc_expanding(d, heredoc_input);
+					if (heredoc_input == NULL)
+					{
+						g_signal_int = 1;
+						if (fd >= 0)
+							close (fd);
+						return ;
+					}
+				}
 				ft_putstr_fd(heredoc_input, fd);
+				ft_putchar_fd('\n', fd);
+			// readline end
 			}
 			g_signal_int = 1;
 			if (fd >= 0)
