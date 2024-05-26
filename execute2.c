@@ -250,6 +250,7 @@ void	execute_loop(t_data *d, int pc)
 		close_rdr(d);
 		i++;
 		current = current->next;
+		usleep(10);
 	}
 	current = d->com;
 	while (current)
