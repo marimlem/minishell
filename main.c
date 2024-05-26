@@ -87,6 +87,26 @@ void	envlist_del(t_envlist *env)
 		free (e);
 	}
 }
+void    free_list(t_envlist *envlist)
+{
+    t_envlist    *temp;
+    t_envlist    *temp2;
+
+	if (!envlist)
+		return ;
+	temp = envlist;
+    while (temp)
+    {
+        free(temp->key);
+        free(temp->value);
+        temp2 = temp->next;
+        free(temp);
+		temp = NULL;
+		temp = temp2;
+		temp2 = NULL;
+    }
+    // free(envlist);
+}
 
 void	free_n_clean(t_data *d, int b)
 {
@@ -132,18 +152,19 @@ void	free_n_clean(t_data *d, int b)
 		free (d->p);
 		d->p = NULL;
 	}
-	
-	if (access(d->hd_path, X_OK) == 0)
+	if (d->hd_path)
 	{
 		unlink(d->hd_path);
+		free (d->hd_path);
 	}
 
 	if (b == 0)
 		return ;
-/* 	if (d->env)
+	if (d->env)
 	{
-		envlist_del(d->*(env));
-	} */
+		free_list	(*(d->env));
+		// free (d->env);
+	}
 	if (d)
 		free (d);
 	d = NULL;
@@ -172,6 +193,7 @@ void	init_null(t_data *d)
 	d->error = 0;
 	d->p = NULL;
 	d->path = NULL;
+	d->hd_path = NULL;
 	// d->p[0] = 0;
 	// d->p[1] = 0;
 	d = NULL;

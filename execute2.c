@@ -98,7 +98,7 @@ void	early_heredoc(t_data *d, t_com *current)
 	{
 		if (current->rdr[j][0] == '<' && current->rdr[j][1] == '<')
 		{
-			fd = open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0744);
+			fd = open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			if (fd < 0)
 				return ;
 			g_signal_int = 2;

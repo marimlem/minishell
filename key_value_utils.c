@@ -56,6 +56,7 @@ int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 {
 	char	**after_split;
+	int	i;
 
 	after_split = ft_eqsplit(envp);
 	if (choice == 1 && ft_key_exists(*envlist, after_split[0],
@@ -67,6 +68,14 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
+	i = 0;
+	while (after_split && after_split[i])
+	{
+		free(after_split[i]);
+		i++;
+	}
+	if (after_split)
+		free (after_split);
 }
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
