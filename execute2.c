@@ -111,7 +111,7 @@ void	early_heredoc(t_data *d, t_com *current)
 
 			//readline
 				// ft_putstr_fd("> ", 2);
-				heredoc_input = readline(">");
+				heredoc_input = readline("> ");
 				if (g_signal_int == 3)
 				{
 					if (fd >= 0)
@@ -120,7 +120,7 @@ void	early_heredoc(t_data *d, t_com *current)
 				} 
 				if (!heredoc_input)
 				{
-					ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
+					ft_putstr_fd("minishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
 					// ft_putchar_fd('\n', 2);
 					break;
 				}
