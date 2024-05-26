@@ -49,13 +49,67 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 		free_n_clean(d, 1);
 		exit(-1);
 	}
-	else if (execve(current->file, current->args, NULL) == -1)
+   	else if (execve(current->file, current->args, NULL) == -1)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
 		free_n_clean(d, 1);
 		exit(-1);
+	}
+}
+
+void	early_heredoc(t_data *d, t_com *current)
+{
+	int	j;
+	char *heredoc_input;
+	int	fd;
+
+	// (void) d;
+	if (!current->rdr)
+		return ;
+	heredoc_input = NULL;
+	g_signal_int = 2;
+		// return (j + 1);
+
+	j = 0;
+	while (current->rdr[j])
+	{
+		if (current->rdr[j][0] == '<' && current->rdr[j][1] == '<')
+		{
+			fd = open("/home/lknobloc/Documents/minishell/minishell_heredoc_tmp_file", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd < 0)
+				return ;
+			d->heredoc_fd = j;
+			while (g_signal_int == 2)
+			{
+				//gnl
+				ft_putstr_fd("> ", 2);
+				heredoc_input = get_next_line(STDIN_FILENO);
+				if (g_signal_int != 2)
+					break ;
+				if (!heredoc_input)
+				{
+					ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
+					// ft_putchar_fd('\n', 2);
+					break;
+					// close (fd);
+					// 
+					// ft_putstr_fd("\nexit\n", 2);
+					// free_n_clean(d, 1);
+					// exit (-2);
+					// break ; // control D should exit everything
+				}
+				if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
+					break ;
+				ft_putstr_fd(heredoc_input, fd);
+			}
+			g_signal_int = 1;
+			if (fd >= 0)
+				close (fd);
+		}
+		j++;
+		j++;
 	}
 }
 
@@ -82,6 +136,9 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 		exit(ec);
 	}
 
+
+	d->heredoc_fd = 0;
+	early_heredoc(d, current);
 
 	current->pid = fork();
 	if (current->pid < 0)
@@ -135,6 +192,12 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
+		if (current->status == -2) // heredoc Control D experiment
+		{
+			ft_putstr_fd("exit\n", 1);
+			free_n_clean(d, 1);
+			exit (0);
+		}
 		d->exit_code = current->status;
 		current = current->next;
 	}

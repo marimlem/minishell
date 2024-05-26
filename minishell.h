@@ -13,8 +13,8 @@
 # include <stddef.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-
+# include <sys/ioctl.h>
+# include <termios.h> 
 
 # include "libft/libft.h"
 # include "get_next_line.h"
@@ -102,9 +102,13 @@ typedef struct	s_data{
 	int	heredoc_fd;
 	int	**p;
 	int	exit_code;
+	
 	// __pid_t	pid;
 	// __pid_t	status;
 }	t_data;
+
+
+extern int	g_signal_int;
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);

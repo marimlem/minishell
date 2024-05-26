@@ -4,7 +4,16 @@ void	inputparsing(t_data *d, t_envlist **envlist)
 {
 	// d->input = readline("minishell:$ ");
 	if (isatty(fileno(stdin)))
+	{
+
 		d->input = readline("minishell:$ ");
+		if (!d->input)
+		{
+			ft_putstr_fd("exit\n", 1);
+			free_n_clean(d, 1);
+			exit(0);
+		}
+	}
 	else
 	{
 		char *line;
