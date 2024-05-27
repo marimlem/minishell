@@ -55,6 +55,11 @@
 # define ERR_PAR_SYN 202
 # define ERR_EXP_ALL 301
 
+# define MODE_IN 1
+# define MODE_IG 2
+# define MODE_DF 3
+
+
 
 typedef struct	s_tok{
 	char	*tok;
@@ -167,6 +172,7 @@ char	*lex_strjoin(char const *s1, char const *s2, char deli);
 
 
 // main.c
+void	signal_setup(t_data *d, int modus);
 void	free_n_clean(t_data *d, int b);
 
 // parser.c

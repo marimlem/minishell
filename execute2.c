@@ -133,13 +133,19 @@ void	early_heredoc(t_data *d, t_com *current)
 
 			//readline
 				// ft_putstr_fd("> ", 2);
+				signal_setup(d, MODE_IN);
+
 				heredoc_input = readline("> ");
 				if (g_signal_int == 3)
 				{
+					signal_setup(d, MODE_IG);
+
 					if (fd >= 0)
 						close (fd);
 					return ;
 				} 
+				signal_setup(d, MODE_IG);
+
 				if (!heredoc_input)
 				{
 					ft_putstr_fd("minishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
@@ -182,11 +188,15 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	// 	return ;
 	// free (current->file);
 	// current->file = file;
-	ec = 0;
-	if (pc != 0 && i != pc)
-		pipe(d->p[i]);
 
+	ec = 0;
 	//simple command without pipes
+	d->heredoc_fd = 0;
+	early_heredoc(d, current);
+	if (g_signal_int == 3)
+		return ;
+
+		
 	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
 	{
 		if (current->args[1] != NULL)
@@ -196,20 +206,20 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	}
 
 
-	d->heredoc_fd = 0;
-	early_heredoc(d, current);
-	if (g_signal_int == 3)
-		return ;
+	if (pc != 0 && i != pc)
+		pipe(d->p[i]);
 
 	current->pid = fork();
 	if (current->pid < 0)
 		return ; // fork fail
 	else if(current->pid == 0)
 	{
+		signal_setup(d, MODE_DF);
 		playground(d, current, pc, i);
 	}
 	else
 	{
+		
 		if (pc != 0 && i != 0)
 			close_pipes(d->p[i - 1]);
 	}
@@ -265,6 +275,7 @@ void	execute_loop(t_data *d, int pc)
 		d->exit_code = current->status;
 		current = current->next;
 	}
+
 
 
 }

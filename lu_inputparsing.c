@@ -2,8 +2,18 @@
 
 void	inputparsing(t_data *d, t_envlist **envlist)
 {
-	// d->input = readline("minishell:$ ");
-	if (isatty(fileno(stdin)))
+	signal_setup(d, MODE_IN);
+	d->input = readline("minishell:$ ");
+	if (!d->input)
+	{
+		ft_putstr_fd("exit\n", 1);
+		free_n_clean(d, 1);
+		exit(0);
+	}
+	signal_setup(d, MODE_IG);
+
+
+/* 	if (isatty(fileno(stdin)))
 	{
 
 		d->input = readline("minishell:$ ");
@@ -20,7 +30,7 @@ void	inputparsing(t_data *d, t_envlist **envlist)
 		line = get_next_line(fileno(stdin));
 		d->input = ft_strtrim(line, "\n");
 		free(line);
-	}
+	} */
 	add_history(d->input);
 
 	if (!d || !d->input)

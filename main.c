@@ -113,6 +113,7 @@ void	free_n_clean(t_data *d, int b)
 	int	i;
 
 	i = 0;
+	
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
 	
@@ -169,7 +170,7 @@ void	free_n_clean(t_data *d, int b)
 		free (d);
 	d = NULL;
 	
- 	 //tcsetattr(0,TCSANOW,&old_termios);
+
 }
 
 void	init_envlist(t_envlist **envlist)
@@ -202,33 +203,23 @@ void	init_null(t_data *d)
 
 void	siginthandler(int signum)
 {
-	// static t_data *d;
-
-	// if (!d)
-	// 	d = ptr;
-	// if (signum == 999)
-	// 	return ;
 	if (signum == SIGINT)
 	{
-
 		signal(SIGINT, siginthandler);
 		if (g_signal_int == 2)
 		{
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
-			// ft_putstr_fd("\n\0", 0);
-			// ft_putchar_fd(0, STDOUT_FILENO);
-			// ft_putchar_fd('\n', STDIN_FILENO);
 			g_signal_int = 3;
 			rl_replace_line("", 0);
 			rl_on_new_line();	
-			// rl_redisplay();
 			return ;
-			// exit(0) ;
 		}
 		else
 		{
 
 			ft_putchar_fd('\n', 2);
+			// ioctl(STDIN_FILENO, TIOCSTI, "\n");
+
 			g_signal_int = 1;
 			rl_replace_line("", 0);
 			rl_on_new_line();	
@@ -238,35 +229,39 @@ void	siginthandler(int signum)
 	else if (signum == SIGQUIT)
 	{
 		signal(SIGQUIT, siginthandler);
-
-		// ft_putstr_fd("wannadiefucker\n", 2);
-		// rl_replace_lineatu("minishell:$ ", 0);
 		rl_on_new_line();	
-
 		rl_redisplay();
-
 		return ;
 	}
-	// if (signum == SIGINT)
-	// {
-		
-	// }
 	(void) signum;
 	return ;
 }
 
 void sig_hnd(int sig){ (void)sig; exit (0); }
 
-void	signal_setup(t_data *d)
+void	signal_setup(t_data *d, int modus)
 {
 	(void) d;
-	// struct sigaction sa;
-	// sa.sa_sigaction = siginthandler;
-	// sa.sa_flags = SA_SIGINFO;
-	g_signal_int = 0;
-	signal(SIGINT, siginthandler);
-	signal(SIGQUIT, siginthandler);
-	// signal(999, (void) d);
+	
+	if (modus == MODE_IN)
+	{
+		signal(SIGINT, siginthandler);
+		signal(SIGQUIT, siginthandler);
+	}
+	else if (modus == MODE_IG)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (modus == MODE_DF)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
+	// else if (modus == MODE_HEDOC)
+	// {
+
+	// }
 
 
 
@@ -285,12 +280,12 @@ void	signal_setup(t_data *d)
 	tcsetattr(0,TCSANOW,&new_termios);
 	tcsetattr(0,TCSANOW,&old_termios);
 
+ 	 //tcsetattr(0,TCSANOW,&old_termios);
  */
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	// char *command;
 	t_data	*d;
 	t_envlist	**env;
 
@@ -312,7 +307,9 @@ int	main(int argc, char **argv, char **envp)
 	ft_assign_key_and_value(env, envp);
 	d->env = env;
 	d->exit_code = 0;
-	signal_setup(d);
+	g_signal_int = 0;
+
+	signal_setup(d, MODE_IG);
 	while (1)
 	{
 		init_null(d);
