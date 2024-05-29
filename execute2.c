@@ -35,19 +35,11 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 
-	if (ft_strcmp(current->args[0], "env") == 0 && current->args[1] == NULL)
+	if (current->builtin == 1)
 	{
-		ft_print_list(*(d->env));
+		execute_builtin(d, current, 0);
 		free_n_clean(d, 1);
-		exit(0);
-	}
-	else if (ft_strcmp(current->args[0], "env") == 0 && current->args[1])
-	{
-		ft_putstr_fd("minishell: too many arguments for command: ", 2);
-		ft_putstr_fd(current->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		free_n_clean(d, 1);
-		exit(-1);
+		exit(0) ;
 	}
 	else if (execve(current->file, current->args, NULL) == -1)
 	{
@@ -63,10 +55,39 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 {
 		if (current->args[1] != NULL)
 			ec = ft_atoi(current->args[1]);
-		free_n_clean(d, 1);
-		exit(ec);
+		if (is_builtin(d) == 1) //echo
+			ft_echo(d);
+		else if (is_builtin(d) == 2) //cd
+			ft_cd(d);
+		else if (is_builtin(d) == 3) //pwd
+			ft_pwd(d->input);
+		else if (is_builtin(d) == 4) //export
+		{
+			if (d->com->args[1])
+				if (ft_check_arg_for_export(*d->env, d->com->args[1]) == 0)
+					ft_export(d->env, d->com->args);
+		}
+		else if (is_builtin(d) == 5) //unset
+		{
+			if (d->com->args[1])
+				if (ft_check_arg_for_unset(d->com->args[1]) == 0)
+					ft_unset(d->env, d->com->args);
+		}
+		else if (is_builtin(d) == 6) //env
+			ft_print_list(*d->env);
+		else if (is_builtin(d) == 7) //exit
+		{
+				d->error = -1;
+				if (d->error == -1)
+				{
+					printf("exit minishell\n");
+					if (current->args[1] != NULL)
+						ec = ft_atoi(current->args[1]);
+					free_n_clean(d, 1);
+					exit(ec) ;
+				}
+		}
 }
-
 
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
@@ -86,6 +107,7 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	if (pc == 0 && current->builtin == 1)
 	{
 		execute_builtin(d, current, ec);
+		return ;
 	}
 
 
@@ -243,7 +265,7 @@ int	setup_cmdpath(t_data *d)
 
 		}
 		// ~/42/minishell
-		else if (is_builtin())
+		else if (((is_builtin(d)) >= 1 && (is_builtin(d)) <= 8))
 		{
 			current->builtin = 1;
 		}

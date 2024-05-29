@@ -134,10 +134,7 @@ void	free_n_clean(t_data *d, int b)
 
 	if (b == 0)
 		return ;
-/* 	if (d->env)
-	{
-		envlist_del(d->*(env));
-	} */
+	free_list(d->env);
 	if (d)
 		free (d);
 	d = NULL;
@@ -211,7 +208,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d, env);
+		inputparsing(d);
 		if (d->error == -1)
 		{
 			// ft_putstr_fd("exit minishell\n", 2);
