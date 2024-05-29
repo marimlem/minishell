@@ -76,7 +76,10 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 		if (is_builtin(d) == 1) //echo
 			printf("echo\n");
 		else if (is_builtin(d) == 2) //cd
+		{
 			ft_cd(d);
+
+		}
 		else if (is_builtin(d) == 3) //pwd
 			ft_pwd(d->input);
 		else if (is_builtin(d) == 4) //export
