@@ -306,6 +306,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	init_envlist(env);
 	ft_assign_key_and_value(env, envp);
+	d->envp = envp;
 	d->env = env;
 	d->exit_code = 0;
 	g_signal_int = 0;
