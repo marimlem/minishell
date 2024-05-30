@@ -49,6 +49,36 @@ char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r)
 	return (l_to_p_trans(d, tok, 0));
 }
 
+// count rdr and args until pipe
+// < 0 means rdr // bigger than zero means arg
+// dec == 1 means count rdr // dec != 1 means count args
+int	count_type(t_data *d, t_tok *t_node, int dec)
+{
+	t_tok * current;
+	int		count;
+
+	current = t_node;
+	count = 0;
+	while (current && current->typ != '|' * (-1))
+	{
+		if (dec == 1 && current->typ < 0)
+		{
+			count++;
+			if (current->next)
+				current = current->next;
+			else
+			{
+				d->error = 21; // nothing following a rdr
+				return (-1);
+			}
+		}
+		else
+			count ++;
+		current = current->next;
+	}
+	return (count);
+}
+
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 {
 	t_tok	*current;
@@ -61,37 +91,12 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	current = t_node;
 	c_cur = c_node;
 	
-	rdr_c = 0;
-	arg_c = 0;
+	rdr_c = count_type(d, t_node, 1);
+	arg_c = count_type(d, t_node, 2);
+	if (rdr_c == -1)
+		return ;
 	a = 0;
 	r = 0;
-
-	// count the args and rdrs until pipe
-	while (current && current->typ != '|' * (-1))
-	{
-		if (current->typ == VAR)
-		{
-			arg_c++;
-			current = current->next;
-		}
-		else if (current->typ < 0) // this also affects variable assignments
-		{
-			rdr_c++;
-			if (current->next)
-				current = current->next->next;
-			else
-			{
-				d->error = 21; // nothing following a rdr
-				return ;
-			}
-		}
-		else
-		{
-			arg_c++;
-			current = current->next;
-		}
-	}
-	current = t_node;
 
 	// alloc space in com_current
 	if (rdr_c != 0)
