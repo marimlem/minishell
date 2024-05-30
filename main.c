@@ -285,6 +285,37 @@ void	signal_setup(t_data *d, int modus)
  */
 }
 
+int	raise_shlvl(char **envp)
+{
+	int	i;
+	int	lvl;
+
+	i = 0;
+	lvl = -1;
+	while(envp && envp[i])
+	{
+		if (ft_strncmp(envp[i], "SHLVL", 5) == 0)
+		{
+			lvl = ft_atoi(&envp[i][6]);
+			// printf("lvl: %s\n", d->envp[i]);
+			if (lvl >= 9)
+			{
+				ft_putstr_fd("minishell error: shell-level too high: ", 2);
+				ft_putnbr_fd(lvl, 2);
+				ft_putstr_fd("\n", 2);
+				return (lvl);
+			}
+			else
+			{
+				envp[i][6] = envp[i][6] + 1;
+			}
+			break ;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
@@ -292,6 +323,10 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1)
 		return (100);
+	if (raise_shlvl(envp) != 0)
+	{
+		return (1);
+	}
 	d = (t_data *) malloc(sizeof(t_data) * 1);
 	if (d == NULL)
 		return 1;
@@ -305,8 +340,8 @@ int	main(int argc, char **argv, char **envp)
 		return 1;
 	}
 	init_envlist(env);
-	ft_assign_key_and_value(env, envp);
 	d->envp = envp;
+	ft_assign_key_and_value(env, envp);
 	d->env = env;
 	d->exit_code = 0;
 	g_signal_int = 0;
