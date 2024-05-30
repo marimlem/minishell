@@ -10,7 +10,7 @@ void	inputparsing(t_data *d, t_envlist **envlist)
 		free_n_clean(d, 1);
 		exit(0);
 	}
-	signal_setup(d, MODE_IG);
+	signal_setup(d, MODE_DF);
 
 
 /* 	if (isatty(fileno(stdin)))

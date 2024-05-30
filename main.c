@@ -201,11 +201,11 @@ void	init_null(t_data *d)
 	
 }
 
-void	siginthandler(int signum)
+void	sighandler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		signal(SIGINT, siginthandler);
+		signal(SIGINT, sighandler);
 		if (g_signal_int == 2)
 		{
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
@@ -226,18 +226,19 @@ void	siginthandler(int signum)
 			rl_redisplay();
 		}
 	}
-	else if (signum == SIGQUIT)
-	{
-		signal(SIGQUIT, siginthandler);
-		rl_on_new_line();	
-		rl_redisplay();
-		return ;
-	}
+	// else if (signum == SIGQUIT)
+	// {
+	// 	signal(SIGQUIT, sighandler);
+
+	// 	rl_on_new_line();	
+	// 	rl_redisplay();
+	// 	rl_replace_line("", 0);
+	// 	return ;
+	// }
 	(void) signum;
 	return ;
 }
 
-void sig_hnd(int sig){ (void)sig; exit (0); }
 
 void	signal_setup(t_data *d, int modus)
 {
@@ -245,8 +246,8 @@ void	signal_setup(t_data *d, int modus)
 	
 	if (modus == MODE_IN)
 	{
-		signal(SIGINT, siginthandler);
-		signal(SIGQUIT, siginthandler);
+		signal(SIGINT, sighandler);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (modus == MODE_IG)
 	{
@@ -309,7 +310,7 @@ int	main(int argc, char **argv, char **envp)
 	d->exit_code = 0;
 	g_signal_int = 0;
 
-	signal_setup(d, MODE_IG);
+	signal_setup(d, MODE_DF);
 	while (1)
 	{
 		init_null(d);

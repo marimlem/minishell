@@ -138,13 +138,13 @@ void	early_heredoc(t_data *d, t_com *current)
 				heredoc_input = readline("> ");
 				if (g_signal_int == 3)
 				{
-					signal_setup(d, MODE_IG);
+					signal_setup(d, MODE_DF);
 
 					if (fd >= 0)
 						close (fd);
 					return ;
 				} 
-				signal_setup(d, MODE_IG);
+				signal_setup(d, MODE_DF);
 
 				if (!heredoc_input)
 				{
@@ -208,7 +208,7 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
-
+	
 	current->pid = fork();
 	if (current->pid < 0)
 		return ; // fork fail
@@ -219,6 +219,7 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	}
 	else
 	{
+		signal_setup(d, MODE_IG);
 		
 		if (pc != 0 && i != 0)
 			close_pipes(d->p[i - 1]);
@@ -260,7 +261,7 @@ void	execute_loop(t_data *d, int pc)
 		close_rdr(d);
 		i++;
 		current = current->next;
-		usleep(10);
+		usleep(5);
 	}
 	current = d->com;
 	while (current)
@@ -275,6 +276,7 @@ void	execute_loop(t_data *d, int pc)
 		d->exit_code = current->status;
 		current = current->next;
 	}
+	signal_setup(d, MODE_DF);
 
 
 
