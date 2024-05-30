@@ -79,46 +79,46 @@ int	count_type(t_data *d, t_tok *t_node, int dec)
 	return (count);
 }
 
-void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
+void	alloc_coms(t_com *c_cur, int rdr_c, int arg_c)
 {
-	t_tok	*current;
-	t_com	*c_cur;
-	int		rdr_c;
-	int		r;
-	int		arg_c;
-	int		a;
-
-	current = t_node;
-	c_cur = c_node;
-	
-	rdr_c = count_type(d, t_node, 1);
-	arg_c = count_type(d, t_node, 2);
-	if (rdr_c == -1)
-		return ;
-	a = 0;
-	r = 0;
-
 	// alloc space in com_current
 	if (rdr_c != 0)
 	{
 		c_cur->rdr = (char **) ft_calloc((rdr_c * 2) + 1, sizeof(char *));
-		if (c_cur->rdr == NULL)
-		{
-			d->error = ERR_PAR_ALL;
-			return ;
-		}
 	}
 	c_cur->args = (char **) ft_calloc(arg_c + 1, sizeof(char *));
-	if (c_cur->args == NULL)
+}
+
+void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node)
+{
+	int		rdr_c;
+	int		arg_c;
+
+	rdr_c = count_type(d, t_node, 1);
+	arg_c = count_type(d, t_node, 2);
+	if (rdr_c == -1)
+		return ;
+	alloc_coms(c_node, rdr_c, arg_c);
+
+}
+
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
+{
+	t_tok	*current;
+	t_com	*c_cur;
+	int		r;
+	int		a;
+
+	current = t_node;
+	c_cur = c_node;
+	setup_coms(d, t_node, c_node);	
+	if (c_cur->rdr == NULL || c_cur->args == NULL)
 	{
 		d->error = ERR_PAR_ALL;
 		return ;
 	}
-
-
-	// ignore variable assignments before other types
-	while (current && current->tok && current->typ == VAR)
-		current = current->next;
+	a = 0;
+	r = 0;
 
 	// fill in
 	while (current && current->tok)
@@ -131,7 +131,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			fill_com(d, current->next, c_cur->next);
 			return ;
 		}
-		else if (current->typ < 0 && current->typ != VAR)
+		else if (current->typ < 0)
 		{
 			// alloc and append to rdr matrix
 			c_cur->rdr[r] = ft_strdup(current->tok);
@@ -152,7 +152,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 			r++;
 			current = current->next->next;
 		}
-		else if (current->typ > 0 || current->typ == VAR) 
+		else if (current->typ > 0) 
 		{
 			// if file is NULL then strdup to it
 			// append string to args matrix
