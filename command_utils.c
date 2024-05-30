@@ -93,11 +93,6 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 	}
 	current = t_node;
 
-/* 	if (arg_c == 0) // actually not needed :(
-	{
-		d->error = 1; // set some useful error for not enough arguments / no command found
-		return ;
-	} */
 	// alloc space in com_current
 	if (rdr_c != 0)
 	{
