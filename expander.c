@@ -54,9 +54,9 @@ void 	expand_exitstatus(t_data *d)
 		ft_memmove(&exp[ft_strlen(code) + d->i], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
 	else
 	{
-		while (d->tmp[d->i + len])
+		while (d->tmp[d->i + len -1])
 		{
-			d->tmp[d->i + len] = 0 ;
+			d->tmp[d->i + len -1] = 0 ;
 			len ++;
 		}
 	}
