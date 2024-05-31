@@ -26,7 +26,9 @@ int	ltop_dollar(t_data *d, char **new, int exp)
 	if ((d->q == 0) && (*new)[d->i] == '$'&& ((*new)[d->i + 1] == SGLQUOTE || (*new)[d->i + 1] == DBLQUOTE))
 	{
 		d->q = (*new)[d->i + 1];
-		memmove(&(*new)[d->i], &(*new)[d->i + 2], ft_strlen(&(*new)[d->i]));
+		memmove(&(*new)[d->i], &(*new)[d->i + 2], ft_strlen(&(*new)[d->i])-1);
+		if (d->q != (*new)[d->i])
+			d->i++;
 		return (0);
 	}
 	else if ((d->q == 0 || d->q == DBLQUOTE) && (*new)[d->i] == '$' && exp == 1)
@@ -39,6 +41,7 @@ int	ltop_dollar(t_data *d, char **new, int exp)
 		d->tmp = NULL;
 		return (1); 
 	}
+	d->i++;
 	return (0);
 }
 
@@ -64,6 +67,8 @@ char	*l_to_p_trans(t_data *d, char *token, int exp)
 				return (NULL);
 			continue ;
 		}
+		else
+			continue ;
 		d->i++;	
 	}
 	return (new);
