@@ -3,7 +3,7 @@
 void	ft_print_echo(t_data *d, t_com *current, int i)
 {
 	(void) d;
-	while (current->args[i] && ft_strcmp(current->args[i], "-n") != 0)
+	while (current && current->args && current->args[i])
 	{
 		ft_putstr_fd(current->args[i],STDOUT_FILENO);
 		i++;
@@ -13,6 +13,21 @@ void	ft_print_echo(t_data *d, t_com *current, int i)
 	return ;
 }
 
+int	is_minusn(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[i] != '-')
+		return (1);
+	i++;
+	while (arg[i] == 'n')
+		i++;
+	if (arg[i] == 0)
+		return (0);
+	return (1);
+}
+
 void	ft_echo(t_data *d, t_com *current)
 {
 	int	i;
@@ -20,12 +35,12 @@ void	ft_echo(t_data *d, t_com *current)
 	{
 		write(1, "\n", STDOUT_FILENO);
 	}
-	else if (ft_strcmp(current->args[1], "-n") == 0 && current->args[2])
+	else if (is_minusn(current->args[1]) == 0 && current->args[2])
 	{
 		i = 2;
 		ft_print_echo(d, current, i);
 	}
-	else if (ft_strcmp(current->args[1], "-n") == 0)
+	else if (is_minusn(current->args[1]) == 0)
 		return ;
 	else
 	{
