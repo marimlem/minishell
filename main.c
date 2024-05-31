@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int	g_signal_int;
+
 void	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
@@ -86,11 +88,13 @@ void	envlist_del(t_envlist *env)
 	}
 }
 
+
 void	free_n_clean(t_data *d, int b)
 {
 	int	i;
 
 	i = 0;
+	
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
 	
@@ -130,7 +134,11 @@ void	free_n_clean(t_data *d, int b)
 		free (d->p);
 		d->p = NULL;
 	}
-	
+	if (d->hd_path)
+	{
+		unlink(d->hd_path);
+		free (d->hd_path);
+	}
 
 	if (b == 0)
 		return ;
@@ -138,6 +146,8 @@ void	free_n_clean(t_data *d, int b)
 	if (d)
 		free (d);
 	d = NULL;
+	
+
 }
 
 void	init_envlist(t_envlist **envlist)
@@ -161,26 +171,62 @@ void	init_null(t_data *d)
 	d->error = 0;
 	d->p = NULL;
 	d->path = NULL;
-	// d->p[0] = 0;
-	// d->p[1] = 0;
+	d->hd_path = NULL;
 	d = NULL;
 	
 }
 
-void	siginthandler(int signum)
+void	sighandler(int signum)
 {
-	signal(SIGINT, siginthandler);
-	ft_putchar_fd('\n', 2);
-	rl_replace_line("", 0);
-	rl_on_new_line();	
-	// rl_redisplay();
+	if (signum == SIGINT)
+	{
+		signal(SIGINT, sighandler);
+		if (g_signal_int == 2)
+		{
+			ioctl(STDIN_FILENO, TIOCSTI, "\n");
+			g_signal_int = 3;
+			rl_replace_line("", 0);
+			rl_on_new_line();	
+			return ;
+		}
+		else
+		{
+			ft_putchar_fd('\n', 2);
+			g_signal_int = 1;
+			rl_replace_line("", 0);
+			rl_on_new_line();	
+			rl_redisplay();
+		}
+	}
 	(void) signum;
 	return ;
 }
 
+
+void	signal_setup(t_data *d, int modus)
+{
+	(void) d;
+	
+	if (modus == MODE_IN)
+	{
+		signal(SIGINT, sighandler);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (modus == MODE_IG)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (modus == MODE_DF)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
+
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	// char *command;
 	t_data	*d;
 	t_envlist	**env;
 
@@ -202,7 +248,9 @@ int	main(int argc, char **argv, char **envp)
 	ft_assign_key_and_value(env, envp);
 	d->env = env;
 	d->exit_code = 0;
-	signal(SIGINT, siginthandler);
+	g_signal_int = 0;
+
+	signal_setup(d, MODE_DF);
 	while (1)
 	{
 		init_null(d);

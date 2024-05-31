@@ -18,8 +18,8 @@
 # include <stddef.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-
+# include <sys/ioctl.h>
+# include <termios.h> 
 
 # include "libft/libft.h"
 # include "get_next_line.h"
@@ -59,6 +59,11 @@
 # define ERR_PAR_ALL 201
 # define ERR_PAR_SYN 202
 # define ERR_EXP_ALL 301
+
+# define MODE_IN 1
+# define MODE_IG 2
+# define MODE_DF 3
+
 
 
 typedef struct	s_tok{
@@ -106,11 +111,16 @@ typedef struct	s_data{
 	int	*fd;
 	int	*old_fd;
 	int	heredoc_fd;
+	char	*hd_path;
 	int	**p;
 	int	exit_code;
+	
 	// __pid_t	pid;
 	// __pid_t	status;
 }	t_data;
+
+
+extern int	g_signal_int;
 
 // ft_strncmp.c
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -133,6 +143,7 @@ int	rdr_out(t_data *d, t_com *current, int j);
 int	rdr_in(t_data *d, t_com *current, int j);
 int	heredoc_start(t_data *d, t_com *current, int j);
 int	rdr_handler(t_data *d, t_com *current);
+char	*heredoc_expanding(t_data *d, char *heredoc_input);
 
 
 
@@ -168,6 +179,7 @@ char	*lex_strjoin(char const *s1, char const *s2, char deli);
 
 
 // main.c
+void	signal_setup(t_data *d, int modus);
 void	free_n_clean(t_data *d, int b);
 
 // parser.c
