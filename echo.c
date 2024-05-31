@@ -27,6 +27,6 @@ void	ft_echo(t_data *d, t_com *current)
 		i = 1;
 		ft_print_echo(d, current, i);
 		// if (ft_strcmp(current->args[1], "-n") != 0)
-		write(1, "\n", 2);
+		write(1, "\n", STDOUT_FILENO);
 	}
 }
