@@ -89,10 +89,10 @@ void	ft_print_list(t_envlist *envlist)
 {
 	while (envlist != NULL)
 	{
-		ft_putstr_fd((char *)envlist->key, 2);
-		ft_putstr_fd("=", 2);
-		ft_putstr_fd((char *)envlist->value, 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
+		ft_putstr_fd("=", STDOUT_FILENO);
+		ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		//printf("%s=%s\n", envlist->key, envlist->value);
 		envlist = envlist->next;
 	}

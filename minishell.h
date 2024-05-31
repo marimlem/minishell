@@ -6,8 +6,10 @@
 
 # include <fcntl.h>
 
-#include <dirent.h>
-#include <errno.h>
+# include <limits.h>
+
+# include <dirent.h>
+# include <errno.h>
 
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -216,6 +218,7 @@ void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 //export.c
 int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
 int	ft_check_export_input(const char *s);
+void	ft_print_export(t_envlist *envlist);
 void	ft_export(t_envlist **envlist, char **arg);
 
 //unset.c
@@ -229,14 +232,14 @@ int	is_builtin(t_data *d);
 
 //cd.c
 int	ft_check_driectory(const char *path);
-void	ft_cd(t_data *d);
+void	ft_cd(t_data *d, t_com *current);
 
 //pwd.c
 int	ft_check_arg_for_pwd(const char *s);
-void	ft_pwd(char *input);
+void	ft_pwd(void);
 
 //echo.c
-void	ft_print_echo(t_data *d, int i);
-void	ft_echo(t_data *d);
+void	ft_print_echo(t_com *current, int i);
+void	ft_echo(t_com *current);
 
 #endif

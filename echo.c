@@ -1,31 +1,31 @@
 #include "minishell.h"
 
-void	ft_print_echo(t_data *d, int i)
+void	ft_print_echo(t_com *current, int i)
 {
-	while (d->com->args[i] && ft_strcmp(d->com->args[i], "-n") != 0)
+	while (current->args[i] && ft_strcmp(current->args[i], "-n") != 0)
 	{
-		ft_putstr_fd(d->com->args[i], 2);
+		ft_putstr_fd(current->args[i], STDOUT_FILENO);
 		i++;
-		if (d->com->args[i])
+		if (current->args[i])
 			write(1, " ", 1);
 	}
 	return ;
 }
 
-void	ft_echo(t_data *d)
+void	ft_echo(t_com *current)
 {
 	int	i;
 
-	if (ft_strcmp(d->com->args[1], "-n") == 0 && d->com->args[2])
+	if (ft_strcmp(current->args[1], "-n") == 0 && current->args[2])
 	{
 		i = 2;
-		ft_print_echo(d, i);
+		ft_print_echo(current, i);
 	}
 	else
 	{
 		i = 1;
-		ft_print_echo(d, i);
-		if (ft_strcmp(d->com->args[1], "-n") != 0)
+		ft_print_echo(current, i);
+		if (ft_strcmp(current->args[1], "-n") != 0)
 			write(1, "\n", 1);
 	}
 }

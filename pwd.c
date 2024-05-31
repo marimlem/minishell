@@ -52,7 +52,32 @@ int	ft_check_arg_for_pwd(const char *s)
 	return (0);
 }
 
-void	ft_pwd(char *input)
+void	ft_pwd(void)
+{
+	char	*pwd;
+
+	// Allocate memory for pwd based on PATH_MAX
+	pwd = (char *)malloc(PATH_MAX);
+	if (pwd == NULL) {
+		return;
+	}
+
+	// Get the current working directory
+	if (getcwd(pwd, PATH_MAX) == NULL) {
+		ft_putstr_fd("getcwd() error!", 2);
+		free(pwd);  // Free the allocated memory in case of error
+		return;
+	}
+
+	// Print the current working directory
+	ft_putstr_fd(pwd, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
+
+	// Free the allocated memory
+	free(pwd);
+}
+
+/* void	ft_pwd(char *input)
 {
 	char	pwd[255];
 
@@ -64,4 +89,4 @@ void	ft_pwd(char *input)
 		ft_putstr_fd(pwd, 2);
 		ft_putstr_fd("\n", 2);
 	}
-}
+} */

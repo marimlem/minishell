@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 void	pipe_handler(t_data *d, int pc, int i)
 {
 	if (i != pc)
@@ -56,36 +54,62 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 		if (current->args[1] != NULL)
 			ec = ft_atoi(current->args[1]);
 		if (is_builtin(d) == 1) //echo
-			ft_echo(d);
+			ft_echo(current);
 		else if (is_builtin(d) == 2) //cd
-			ft_cd(d);
+			ft_cd(d, current);
 		else if (is_builtin(d) == 3) //pwd
-			ft_pwd(d->input);
+		{
+			if (!current->args[1])
+				ft_pwd();
+			else
+			{
+				if (ft_check_arg_for_pwd(current->args[1]) == 0)
+					ft_pwd();
+			}
+		}
 		else if (is_builtin(d) == 4) //export
 		{
-			if (d->com->args[1])
-				if (ft_check_arg_for_export(*d->env, d->com->args[1]) == 0)
-					ft_export(d->env, d->com->args);
+			if (current->args[1])
+			{
+				if (ft_check_arg_for_export(*d->env, current->args[1]) == 0)
+					ft_export(d->env, current->args);
+			}
+			else
+				ft_print_export(*d->env);
 		}
 		else if (is_builtin(d) == 5) //unset
 		{
-			if (d->com->args[1])
-				if (ft_check_arg_for_unset(d->com->args[1]) == 0)
-					ft_unset(d->env, d->com->args);
+			if (current->args[1])
+				if (ft_check_arg_for_unset(current->args[1]) == 0)
+					ft_unset(d->env, current->args);
 		}
 		else if (is_builtin(d) == 6) //env
 			ft_print_list(*d->env);
 		else if (is_builtin(d) == 7) //exit
 		{
-				d->error = -1;
-				if (d->error == -1)
+			ft_putstr_fd("exit minishell\n", STDOUT_FILENO);
+			if (current->args[1] == NULL)
+				ec = ft_atoi(current->args[1]);
+			else if (current->args[1] != NULL && current->args[2] != NULL)
+			{
+				ft_putstr_fd("exit: too many arguments\n", 2);
+				return ;
+			}
+			else
+			{
+				if (ft_isdigit(current->args[1][0]) == 0) 
 				{
-					printf("exit minishell\n");
-					if (current->args[1] != NULL)
-						ec = ft_atoi(current->args[1]);
-					free_n_clean(d, 1);
-					exit(ec) ;
+					ft_putstr_fd("exit: ", 2);
+					ft_putstr_fd((char *)current->args[1], 2);
+					ft_putstr_fd(": numeric argument required\n", 2);
+					return ;
 				}
+				else
+					ec = ft_atoi(current->args[1]);
+
+			}
+			free_n_clean(d, 1);
+			exit(ec) ;
 		}
 }
 

@@ -62,6 +62,20 @@ int	ft_check_export_input(const char *s)
 	return (0);
 }
 
+void	ft_print_export(t_envlist *envlist)
+{
+	while (envlist != NULL)
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
+		ft_putstr_fd("=\"", STDOUT_FILENO);
+		ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);
+		ft_putstr_fd("\"\n", STDOUT_FILENO);
+		//printf("%s=%s\n", envlist->key, envlist->value);
+		envlist = envlist->next;
+	}
+}
+
 void	ft_export(t_envlist **envlist, char **arg)
 {
 	int i;
