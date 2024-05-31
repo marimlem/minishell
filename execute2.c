@@ -28,7 +28,6 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 	if (current->rdr && rdr_handler(d, current) != 0)
 	{
-		// ft_putstr_fd("minishell: rdr failed\n", 2);
 		free_n_clean(d, 1);
 		exit (-1); // i think this might generate errors
 	}
@@ -81,18 +80,16 @@ void	early_heredoc(t_data *d, t_com *current)
 	char *heredoc_input;
 	int	fd;
 
-	// (void) d;
+
 	if (!current->rdr)
 		return ;
 	heredoc_input = NULL;
-		// return (j + 1);
 	d->hd_path = heredoc_path(d);
 	if (d->hd_path == NULL)
 	{
 		d->error = 1; // alloc error
 		return ;
 	}
-	// ft_putstr_fd(d->hd_path, 2);
 	j = 0;
 	while (current->rdr[j])
 	{
@@ -105,36 +102,7 @@ void	early_heredoc(t_data *d, t_com *current)
 			d->heredoc_fd = j;
 			while (g_signal_int == 2)
 			{
-			//gnl
-				/* ft_putstr_fd("> ", 2);
-				heredoc_input = get_next_line(STDIN_FILENO);
-				if (g_signal_int == 3)
-				{
-					if (fd >= 0)
-						close (fd);
-					return ;
-				} 
-				if (!heredoc_input)
-				{
-					ft_putstr_fd("\nminishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
-					// ft_putchar_fd('\n', 2);
-					break;
-					// close (fd);
-					// 
-					// ft_putstr_fd("\nexit\n", 2);
-					// free_n_clean(d, 1);
-					// exit (-2);
-					// break ; // control D should exit everything
-				}
-				if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
-					break ;
-				ft_putstr_fd(heredoc_input, fd); */
-			//gnl end
-
-			//readline
-				// ft_putstr_fd("> ", 2);
 				signal_setup(d, MODE_IN);
-
 				heredoc_input = readline("> ");
 				if (g_signal_int == 3)
 				{
@@ -145,11 +113,9 @@ void	early_heredoc(t_data *d, t_com *current)
 					return ;
 				} 
 				signal_setup(d, MODE_DF);
-
 				if (!heredoc_input)
 				{
 					ft_putstr_fd("minishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
-					// ft_putchar_fd('\n', 2);
 					break;
 				}
 				if (ft_strcmp(heredoc_input, current->rdr[j + 1]) == 0)
@@ -167,7 +133,6 @@ void	early_heredoc(t_data *d, t_com *current)
 				}
 				ft_putstr_fd(heredoc_input, fd);
 				ft_putchar_fd('\n', fd);
-			// readline end
 			}
 			g_signal_int = 1;
 			if (fd >= 0)
@@ -181,13 +146,7 @@ void	early_heredoc(t_data *d, t_com *current)
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
 	int	ec;
-	// char	*file;
 
-	// file = ft_strjoin(BIN, current->file);
-	// if (file == NULL)
-	// 	return ;
-	// free (current->file);
-	// current->file = file;
 
 	ec = 0;
 	//simple command without pipes
