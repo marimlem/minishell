@@ -6,6 +6,11 @@
 
 # include <fcntl.h>
 
+# include <limits.h>
+
+# include <dirent.h>
+# include <errno.h>
+
 # include <sys/types.h>
 # include <sys/wait.h>
 
@@ -79,6 +84,7 @@ typedef struct	s_com{
 	char	*file;
 	char	**args;
 	char	**rdr;
+	int		builtin;
 	__pid_t		pid;
 	__pid_t		status;
 	struct	s_com *next;
@@ -130,6 +136,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i);
 void	process_handler(t_data *d, t_com *current, int pc, int i);
 void	execute_loop(t_data *d, int pc);
 void	executor2(t_data *d);
+void	execute_builtin(t_data *d, t_com *current, int ec);
 
 // execute_rdr.c
 void	close_rdr(t_data *d);
@@ -150,7 +157,7 @@ void	close_pipes(int *tube);
 
 
 // lu_inputparsing.c
-void	inputparsing(t_data *d, t_envlist **envlist);
+void	inputparsing(t_data *d);
 
 // lexer.c
 int	lex_is_separator(char c);
@@ -208,6 +215,8 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 int	ft_contains_char(const char *s, char c);
 void	ft_add_list(t_envlist **envlist, char *key, char *value);
 void	ft_print_list(t_envlist *envlist);
+void	free_list(t_envlist **envlist);
+void	free_double_array(char **double_array);
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);
 char	**ft_eqsplit(char *str);
@@ -218,5 +227,32 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value);
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
+
+//export.c
+int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
+int	ft_check_export_input(const char *s);
+void	ft_print_export(t_envlist *envlist);
+void	ft_export(t_envlist **envlist, char **arg);
+
+//unset.c
+int	ft_check_arg_for_unset(const char *s);
+void	ft_rm_node_front(t_envlist **envlist);
+void	ft_rm_node(t_envlist **envlist, t_envlist *prev);
+void	ft_unset(t_envlist **envlist, char **arg);
+
+//is_builtin.c
+int	is_builtin(t_com *current);
+
+//cd.c
+int	ft_check_driectory(const char *path);
+void	ft_cd(t_data *d, t_com *current);
+
+//pwd.c
+int	ft_check_arg_for_pwd(const char *s);
+void	ft_pwd(void);
+
+//echo.c
+void	ft_print_echo(t_data *d, t_com *current, int i);
+void	ft_echo(t_data *d, t_com *current);
 
 #endif

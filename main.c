@@ -87,26 +87,7 @@ void	envlist_del(t_envlist *env)
 		free (e);
 	}
 }
-void    free_list(t_envlist *envlist)
-{
-    t_envlist    *temp;
-    t_envlist    *temp2;
 
-	if (!envlist)
-		return ;
-	temp = envlist;
-    while (temp)
-    {
-        free(temp->key);
-        free(temp->value);
-        temp2 = temp->next;
-        free(temp);
-		temp = NULL;
-		temp = temp2;
-		temp2 = NULL;
-    }
-    // free(envlist);
-}
 
 void	free_n_clean(t_data *d, int b)
 {
@@ -161,11 +142,7 @@ void	free_n_clean(t_data *d, int b)
 
 	if (b == 0)
 		return ;
-	if (d->env)
-	{
-		free_list	(*(d->env));
-		// free (d->env);
-	}
+	free_list(d->env);
 	if (d)
 		free (d);
 	d = NULL;
@@ -195,8 +172,6 @@ void	init_null(t_data *d)
 	d->p = NULL;
 	d->path = NULL;
 	d->hd_path = NULL;
-	// d->p[0] = 0;
-	// d->p[1] = 0;
 	d = NULL;
 	
 }
@@ -216,25 +191,13 @@ void	sighandler(int signum)
 		}
 		else
 		{
-
 			ft_putchar_fd('\n', 2);
-			// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-
 			g_signal_int = 1;
 			rl_replace_line("", 0);
 			rl_on_new_line();	
 			rl_redisplay();
 		}
 	}
-	// else if (signum == SIGQUIT)
-	// {
-	// 	signal(SIGQUIT, sighandler);
-
-	// 	rl_on_new_line();	
-	// 	rl_redisplay();
-	// 	rl_replace_line("", 0);
-	// 	return ;
-	// }
 	(void) signum;
 	return ;
 }
@@ -259,30 +222,7 @@ void	signal_setup(t_data *d, int modus)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 	}
-	// else if (modus == MODE_HEDOC)
-	// {
 
-	// }
-
-
-
-
-
-	// setvbuf(stdout,NULL,_IONBF,0);
-
-/* 	struct termios old_termios, new_termios;
-	tcgetattr(0,&old_termios);
-
-	signal( SIGINT, sig_hnd );
-
-	new_termios             = old_termios;
-	new_termios.c_cc[VEOF]  = 3; // ^C
-	new_termios.c_cc[VINTR] = 4; // ^D
-	tcsetattr(0,TCSANOW,&new_termios);
-	tcsetattr(0,TCSANOW,&old_termios);
-
- 	 //tcsetattr(0,TCSANOW,&old_termios);
- */
 }
 
 int	raise_shlvl(char **envp)
@@ -323,17 +263,20 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1)
 		return (100);
+
 	if (raise_shlvl(envp) != 0)
 	{
 		return (1);
 	}
-	d = (t_data *) malloc(sizeof(t_data) * 1);
+
+	d = (t_data *) ft_calloc(1, sizeof(t_data));
+
 	if (d == NULL)
 		return 1;
-	env = (t_envlist **)malloc(sizeof(t_envlist *));
+	env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if (env == NULL)
 		return 1;
-	*env = (t_envlist *)malloc(sizeof(t_envlist));
+	*env = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
 	if ((*env) == NULL)
 	{
 		free(env);
@@ -350,7 +293,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		init_null(d);
-		inputparsing(d, env);
+		inputparsing(d);
 		if (d->error == -1)
 		{
 			// ft_putstr_fd("exit minishell\n", 2);
