@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+int	is_all_white(char *input)
+{
+	int	i;
+
+	i = 0;
+	while(input && input[i])
+	{
+		if (input[i] == ' ' || input[i] == '\t' || input[i] == '\r' || input[i] == '\n' || input[i] == '\v' || input[i] == '\f')
+			i++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
 void	inputparsing(t_data *d)
 {
 	signal_setup(d, MODE_IN);
@@ -11,7 +26,7 @@ void	inputparsing(t_data *d)
 		exit(0);
 	}
 	signal_setup(d, MODE_DF);
-	if (ft_strcmp(d->input, "") == 0)
+	if (ft_strcmp(d->input, "") == 0 || is_all_white(d->input) == 0)
 		return ;
 	add_history(d->input);
 	if (!d || !d->input)
