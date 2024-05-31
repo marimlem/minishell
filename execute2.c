@@ -38,7 +38,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 		free_n_clean(d, 1);
 		exit(0) ;
 	}
-   	else if (execve(current->file, current->args, NULL) == -1)
+   	else if (execve(current->file, current->args, d->envp) == -1)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(current->args[0], 2);
@@ -385,7 +385,6 @@ int	setup_cmdpath(t_data *d)
 		else if (current->file && current->file[0] == '.' && current->file[1] == '/')
 		{
 			relative_path(d, current); // input: ./minishell ../minishell
-
 		}
 		// ~/42/minishell
 		else if (((is_builtin(current)) >= 1 && (is_builtin(current)) <= 8))
