@@ -228,7 +228,7 @@ void	ft_rm_node(t_envlist **envlist, t_envlist *prev);
 void	ft_unset(t_envlist **envlist, char **arg);
 
 //is_builtin.c
-int	is_builtin(t_data *d);
+int	is_builtin(t_data *d, t_com *current);
 
 //cd.c
 int	ft_check_driectory(const char *path);
@@ -239,7 +239,7 @@ int	ft_check_arg_for_pwd(const char *s);
 void	ft_pwd(void);
 
 //echo.c
-void	ft_print_echo(t_com *current, int i);
-void	ft_echo(t_com *current);
+void	ft_print_echo(t_data *d, t_com *current, int i);
+void	ft_echo(t_data *d, t_com *current);
 
 #endif
