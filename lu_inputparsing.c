@@ -11,6 +11,8 @@ void	inputparsing(t_data *d)
 		exit(0);
 	}
 	signal_setup(d, MODE_DF);
+	if (ft_strcmp(d->input, "") == 0)
+		return ;
 	add_history(d->input);
 	if (!d || !d->input)
 		return ;
