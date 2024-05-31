@@ -67,7 +67,7 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 		current->next = NULL;
 		return ;
 	}
-	new = (t_envlist *)malloc(sizeof(t_envlist));
+	new = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
 	if (new == NULL)
 		return ;
 	new->key = ft_strdup(key);
@@ -195,12 +195,12 @@ char	**ft_eqsplit(char *str)
 
 	i = 0;
 	str_index = 0;
-	double_array = (char **)malloc(sizeof(char *) * 3);
+	double_array = (char **)ft_calloc(3, sizeof(char *));
 	if (double_array == NULL)
 		return (NULL);
 
 	// Allocate space for the first part
-	double_array[0] = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	double_array[0] = (char *)ft_calloc((ft_strlen(str) + 1), sizeof(char));
 	if (double_array[0] == NULL)
 	{
 		free_double_array(double_array);
@@ -208,7 +208,7 @@ char	**ft_eqsplit(char *str)
 	}
 
 	// Allocate space for the second part
-	double_array[1] = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	double_array[1] = (char *)ft_calloc((ft_strlen(str) + 1), sizeof(char));
 	if (double_array[1] == NULL)
 	{
 		free_double_array(double_array);

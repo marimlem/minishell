@@ -48,6 +48,8 @@ int	ft_check_export_input(const char *s)
 	int	i;
 
 	i = 0;
+	if (s == NULL)
+		return -1;
 	if (s[i] && ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		while (s[i] && ft_isalnum(s[i]) == 1)
@@ -81,7 +83,7 @@ void	ft_export(t_envlist **envlist, char **arg)
 	int i;
 
 	i = 1;
-	while (arg[i])
+	while (arg && arg[i])
 	{
 		if (ft_check_export_input(arg[i]) == 1)
 			ft_add_key_and_value(envlist, arg[i], 1);

@@ -51,13 +51,11 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 
 void	execute_builtin(t_data *d, t_com *current, int ec)
 {
-		if (current->args[1] != NULL)
-			ec = ft_atoi(current->args[1]);
-		if (is_builtin(d, current) == 1) //echo
+		if (is_builtin(current) == 1) //echo
 			ft_echo(d, current);
-		else if (is_builtin(d, current) == 2) //cd
+		else if (is_builtin(current) == 2) //cd
 			ft_cd(d, current);
-		else if (is_builtin(d, current) == 3) //pwd
+		else if (is_builtin(current) == 3) //pwd
 		{
 			if (!current->args[1])
 				ft_pwd();
@@ -67,7 +65,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 					ft_pwd();
 			}
 		}
-		else if (is_builtin(d, current) == 4) //export
+		else if (is_builtin(current) == 4) //export
 		{
 			if (current->args[1])
 			{
@@ -77,15 +75,15 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 			else
 				ft_print_export(*d->env);
 		}
-		else if (is_builtin(d, current) == 5) //unset
+		else if (is_builtin(current) == 5) //unset
 		{
 			if (current->args[1])
 				if (ft_check_arg_for_unset(current->args[1]) == 0)
 					ft_unset(d->env, current->args);
 		}
-		else if (is_builtin(d, current) == 6) //env
+		else if (is_builtin(current) == 6) //env
 			ft_print_list(*d->env);
-		else if (is_builtin(d, current) == 7) //exit
+		else if (is_builtin(current) == 7) //exit
 		{
 			ft_putstr_fd("exit minishell\n", STDOUT_FILENO);
 			if (current->args[1] == NULL)
@@ -289,7 +287,7 @@ int	setup_cmdpath(t_data *d)
 
 		}
 		// ~/42/minishell
-		else if (((is_builtin(d, current)) >= 1 && (is_builtin(d, current)) <= 8))
+		else if (((is_builtin(current)) >= 1 && (is_builtin(current)) <= 8))
 		{
 			current->builtin = 1;
 		}

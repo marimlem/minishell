@@ -33,11 +33,9 @@ int	ft_check_driectory(const char *path)
 {
 	const char	*home;
 	const char	*path;
-	char	**cd_input;
 
 	home = ft_find_key_value(*d->env, "HOME");
-	cd_input = current->args;
-	path = cd_input[1];
+	path = current->args[0];
 	if (!current->args[1])
 	{
 		if (ft_strcmp(current->args[0], "cd") == 0)

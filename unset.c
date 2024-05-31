@@ -32,6 +32,8 @@ void	ft_rm_node_front(t_envlist **envlist)
 {
 	t_envlist	*temp;
 
+	if (envlist == NULL)
+		return ;
 	temp = (*envlist)->next;
 	if ((*envlist)->key)
 		free((*envlist)->key);
@@ -45,6 +47,8 @@ void	ft_rm_node(t_envlist **envlist, t_envlist *prev)
 {
 	t_envlist	*temp;
 
+	if (envlist == NULL)
+		return ;
 	temp = (*envlist)->next;
 	if ((*envlist)->key)
 		free((*envlist)->key);

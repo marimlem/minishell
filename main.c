@@ -188,13 +188,13 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1)
 		return (100);
-	d = (t_data *) malloc(sizeof(t_data) * 1);
+	d = (t_data *) ft_calloc(1, sizeof(t_data));
 	if (d == NULL)
 		return 1;
-	env = (t_envlist **)malloc(sizeof(t_envlist *));
+	env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if (env == NULL)
 		return 1;
-	*env = (t_envlist *)malloc(sizeof(t_envlist));
+	*env = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
 	if ((*env) == NULL)
 	{
 		free(env);

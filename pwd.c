@@ -5,6 +5,8 @@ int	ft_check_arg_for_pwd(const char *s)
 	int	i;
 
 	i = 0;
+	if (s == NULL)
+		return -1;
 	if (s[i] && !(s[i] >= 'a' && s[i] <= 'z') && !(s[i] >= 'A' && s[i] <= 'Z'))
 	{
 		if (s[i] == '-')
@@ -57,7 +59,7 @@ void	ft_pwd(void)
 	char	*pwd;
 
 	// Allocate memory for pwd based on PATH_MAX
-	pwd = (char *)malloc(PATH_MAX);
+	pwd = (char *)ft_calloc(1, PATH_MAX);
 	if (pwd == NULL) {
 		return;
 	}

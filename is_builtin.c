@@ -1,8 +1,9 @@
 #include "minishell.h"
 
-int	is_builtin(t_data *d, t_com *current)
+int	is_builtin(t_com *current)
 {
-	(void) d;
+	if (!(current && current->args && current->args[0]))
+		return -1;
 	if (ft_strcmp(current->args[0], "echo") == 0)
 		return 1;
 	else if (ft_strcmp(current->args[0], "cd") == 0)
