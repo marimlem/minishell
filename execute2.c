@@ -41,7 +41,8 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
    	else if (execve(current->file, current->args, d->envp) == -1)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
-		ft_putstr_fd(current->args[0], 2);
+		if (current->args && current->args[0])
+			ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
 		free_n_clean(d, 1);
 		exit(-1);

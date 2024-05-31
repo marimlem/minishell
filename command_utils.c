@@ -176,7 +176,22 @@ void	fill_com_loop(t_data *d, t_tok *current, t_com *c_cur)
 			current = current->next;
 		}
 	}
+}
 
+int	fill_file_ifnecessary(t_data *d)
+{
+	t_com *current;
+
+	current = d->com;
+	while (current)
+	{
+		if (current->file == NULL)
+			current->file = ft_strdup("");
+		if (current->file == NULL)
+			return (1);
+		current = current->next;
+	}
+	return (0);
 }
 
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
@@ -193,4 +208,8 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 		return ;
 	}
 	fill_com_loop(d, current, c_cur);
+	if (d->error != 0)
+		return ;
+	if (fill_file_ifnecessary(d) != 0)
+		d->error = 1; //alloc error
 }
