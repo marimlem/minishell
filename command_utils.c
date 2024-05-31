@@ -49,138 +49,148 @@ char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r)
 	return (l_to_p_trans(d, tok, 0));
 }
 
-void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
+// count rdr and args until pipe
+// < 0 means rdr // bigger than zero means arg
+// dec == 1 means count rdr // dec != 1 means count args
+int	count_type(t_data *d, t_tok *t_node, int dec)
 {
-	t_tok	*current;
-	t_com	*c_cur;
-	int		rdr_c;
-	int		r;
-	int		arg_c;
-	int		a;
+	t_tok * current;
+	int		count;
 
 	current = t_node;
-	c_cur = c_node;
-	
-	rdr_c = 0;
-	arg_c = 0;
-	a = 0;
-	r = 0;
-
-	// count the args and rdrs until pipe
+	count = 0;
 	while (current && current->typ != '|' * (-1))
 	{
-		if (current->typ == VAR)
+		if (dec == 1 && current->typ < 0)
 		{
-			arg_c++;
-			current = current->next;
-		}
-		else if (current->typ < 0) // this also affects variable assignments
-		{
-			rdr_c++;
+			count++;
 			if (current->next)
-				current = current->next->next;
+				current = current->next;
 			else
 			{
 				d->error = 21; // nothing following a rdr
-				return ;
+				return (-1);
 			}
 		}
 		else
-		{
-			arg_c++;
-			current = current->next;
-		}
+			count ++;
+		current = current->next;
 	}
-	current = t_node;
+	return (count);
+}
 
-/* 	if (arg_c == 0) // actually not needed :(
-	{
-		d->error = 1; // set some useful error for not enough arguments / no command found
-		return ;
-	} */
+void	alloc_coms(t_com *c_cur, int rdr_c, int arg_c)
+{
 	// alloc space in com_current
 	if (rdr_c != 0)
 	{
 		c_cur->rdr = (char **) ft_calloc((rdr_c * 2) + 1, sizeof(char *));
-		if (c_cur->rdr == NULL)
-		{
-			d->error = ERR_PAR_ALL;
-			return ;
-		}
 	}
 	c_cur->args = (char **) ft_calloc(arg_c + 1, sizeof(char *));
-	if (c_cur->args == NULL)
+}
+
+void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node)
+{
+	int		rdr_c;
+	int		arg_c;
+
+	rdr_c = count_type(d, t_node, 1);
+	arg_c = count_type(d, t_node, 2);
+	if (rdr_c == -1)
+		return ;
+	alloc_coms(c_node, rdr_c, arg_c);
+
+}
+
+int	rdr_append(t_data *d, t_tok *current, t_com *c_cur, int r)
+{
+	c_cur->rdr[r] = ft_strdup(current->tok);
+	if (c_cur->rdr[r++] == NULL)
 	{
 		d->error = ERR_PAR_ALL;
-		return ;
+		return (r);
 	}
+	if (c_cur->rdr[r-1][0] == '<' && c_cur->rdr[r-1][1] == '<')
+		c_cur->rdr[r] = heredoc_exp(d, current->next->tok, c_cur, r - 1);
+	else
+		c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok, 1);
+	if (c_cur->rdr[r] == NULL)
+	{
+		d->error = ERR_PAR_ALL;
+		return (r);
+	}
+	r++;
+	return (r);
+}
 
+int	arg_append(t_data *d, t_tok *current, t_com *c_cur, int a)
+{
+	if (a == 0)
+	{
+		c_cur->file = l_to_p_trans(d, current->tok, 1);
+		if (c_cur->file == NULL)
+		{
+			d->error = ERR_PAR_ALL;
+			return (a);
+		}
+		c_cur->args[a] = ft_strdup(c_cur->file);
+		if (c_cur->args[a] == NULL)
+			d->error = ERR_PAR_ALL;
+	}
+	else
+	{
+		c_cur->args[a] = l_to_p_trans(d, current->tok, 1);
+		if (c_cur->args[a] == NULL)
+		{
+			d->error = ERR_PAR_ALL;
+			return (a);
+		}
+	}
+	a++;
+	return (a);
+}
 
-	// ignore variable assignments before other types
-	while (current && current->tok && current->typ == VAR)
-		current = current->next;
+void	fill_com_loop(t_data *d, t_tok *current, t_com *c_cur)
+{
+	int		r;
+	int		a;
 
-	// fill in
-	while (current && current->tok)
+	a = 0;
+	r = 0;
+	while (current && current->tok && d->error == 0)
 	{
 		if (current->typ == PIPE * (-1))
 		{
-			// connect new node to command
-			// and call this function again? and then return
 			com_lstsqueezein(&c_cur);
 			fill_com(d, current->next, c_cur->next);
 			return ;
 		}
-		else if (current->typ < 0 && current->typ != VAR)
+		else if (current->typ < 0)
 		{
-			// alloc and append to rdr matrix
-			c_cur->rdr[r] = ft_strdup(current->tok);
-			if (c_cur->rdr[r++] == NULL)
-			{
-				d->error = ERR_PAR_ALL;
-				return ;
-			}
-			if (c_cur->rdr[r-1][0] == '<' && c_cur->rdr[r-1][1] == '<')
-				c_cur->rdr[r] = heredoc_exp(d, current->next->tok, c_cur, r - 1);
-			else
-				c_cur->rdr[r] =  l_to_p_trans(d, current->next->tok, 1);
-			if (c_cur->rdr[r] == NULL)
-			{
-				d->error = ERR_PAR_ALL;
-				return ;
-			}
-			r++;
+			r = rdr_append(d, current, c_cur, r);
 			current = current->next->next;
 		}
-		else if (current->typ > 0 || current->typ == VAR) 
+		else if (current->typ > 0) 
 		{
-			// if file is NULL then strdup to it
-			// append string to args matrix
-			if (a == 0)
-			{
-				c_cur->file = l_to_p_trans(d, current->tok, 1);
-				// c_cur->file = ft_strdup(current->tok);
-				if (c_cur->file == NULL)
-				{
-					d->error = ERR_PAR_ALL;
-					return ;
-				}
-				c_cur->args[a] = ft_strdup(c_cur->file);
-				if (c_cur->args[a] == NULL)
-					d->error = ERR_PAR_ALL;
-				a++;
-				current = current->next;
-				continue;
-			}
-			c_cur->args[a] = l_to_p_trans(d, current->tok, 1);
-			// c_cur->args[a] = ft_strdup(current->tok);
-			if (c_cur->args[a] == NULL)
-			{
-				d->error = ERR_PAR_ALL;
-				return ;
-			}
-			a++;
+			a = arg_append(d, current, c_cur, a);
 			current = current->next;
 		}
 	}
+
+}
+
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
+{
+	t_tok	*current;
+	t_com	*c_cur;
+
+	current = t_node;
+	c_cur = c_node;
+	setup_coms(d, t_node, c_node);	
+	if (c_cur->rdr == NULL || c_cur->args == NULL)
+	{
+		d->error = ERR_PAR_ALL;
+		return ;
+	}
+	fill_com_loop(d, current, c_cur);
 }
