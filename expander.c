@@ -63,6 +63,8 @@ void 	expand_exitstatus(t_data *d)
 	d->i = d->i + ft_strlen(code);
 	free(d->tmp);
 	d->tmp = exp;
+	if (code)
+		free (code);
 	return ;
 }
 
