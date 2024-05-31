@@ -87,26 +87,7 @@ void	envlist_del(t_envlist *env)
 		free (e);
 	}
 }
-void    free_list(t_envlist *envlist)
-{
-    t_envlist    *temp;
-    t_envlist    *temp2;
 
-	if (!envlist)
-		return ;
-	temp = envlist;
-    while (temp)
-    {
-        free(temp->key);
-        free(temp->value);
-        temp2 = temp->next;
-        free(temp);
-		temp = NULL;
-		temp = temp2;
-		temp2 = NULL;
-    }
-    // free(envlist);
-}
 
 void	free_n_clean(t_data *d, int b)
 {
@@ -161,11 +142,7 @@ void	free_n_clean(t_data *d, int b)
 
 	if (b == 0)
 		return ;
-	if (d->env)
-	{
-		free_list	(*(d->env));
-		// free (d->env);
-	}
+
 	if (d)
 		free (d);
 	d = NULL;
