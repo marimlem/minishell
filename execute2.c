@@ -362,11 +362,12 @@ int	relative_path(t_data *d, t_com *current)
 {
 
 	free (current->args[0]);
+	current->args[0] = NULL;
 	current->args[0] = ft_strdup(&current->file[2]);
 	if (current->args[0] == NULL)
 		return (1); //alloc error
 	free (current->file);
-	current->file = current->args[0];
+	current->file = ft_strdup(current->args[0]);
 	if (current->file == NULL)
 		return (1); //alloc error
 	(void) d;
