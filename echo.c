@@ -25,6 +25,8 @@ void	ft_echo(t_data *d, t_com *current)
 		i = 2;
 		ft_print_echo(d, current, i);
 	}
+	else if (ft_strcmp(current->args[1], "-n") == 0)
+		return ;
 	else
 	{
 		i = 1;
