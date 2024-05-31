@@ -51,3 +51,40 @@ char	*lex_strjoin(char const *s1, char const *s2, char deli)
 	new[k] = 0;
 	return (new);
 }
+
+
+int	lex_is_separator(char c)
+{
+	if (c == S || c == T || c == N)
+		return (1);
+	if (c == '|' || c == '<' || c == '>')
+		return (2);
+	return (0);
+}
+
+// check for unclosed quotes, error if odd number
+// doesn't consider quotes of other type after opened quote
+int even_quotes(t_data *d)
+{
+	int	i;
+	char	quote;
+
+	i=0;
+	quote = 0;
+	while (d && d->input && d->input[i])
+	{
+		if (quote == 0 && (d->input[i] == SGLQUOTE || d->input[i] == DBLQUOTE))
+		{
+			quote = d->input[i];
+		}
+		else if (d->input[i] == quote)
+		{
+			quote = 0;
+		}
+		i++;
+	}
+	if (quote == 0)
+		return (EVEN);
+	else
+		return (ODD);
+}
