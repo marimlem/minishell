@@ -76,17 +76,20 @@ void	early_heredoc(t_data *d, t_com *current)
 	if (!current->rdr)
 		return ;
 	heredoc_input = NULL;
-	d->hd_path = heredoc_path(d);
-	if (d->hd_path == NULL)
-	{
-		d->error = 1; // alloc error
-		return ;
-	}
 	j = 0;
 	while (current->rdr[j])
 	{
 		if (current->rdr[j][0] == '<' && current->rdr[j][1] == '<')
 		{
+			if (d->hd_path == NULL)
+			{
+				d->hd_path = heredoc_path(d);
+				if (d->hd_path == NULL)
+				{
+					d->error = 1; // alloc error
+					return ;
+				}
+			}
 			fd = open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 			if (fd < 0)
 				return ;

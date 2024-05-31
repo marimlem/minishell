@@ -138,6 +138,7 @@ void	free_n_clean(t_data *d, int b)
 	{
 		unlink(d->hd_path);
 		free (d->hd_path);
+		d->hd_path = NULL;
 	}
 
 	if (b == 0)
