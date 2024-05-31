@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 void	pipe_handler(t_data *d, int pc, int i)
 {
 	if (i != pc)
@@ -34,19 +32,11 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 
-	if (ft_strcmp(current->args[0], "env") == 0 && current->args[1] == NULL)
+	if (current->builtin == 1)
 	{
-		ft_print_list(*(d->env));
+		execute_builtin(d, current, 0);
 		free_n_clean(d, 1);
-		exit(0);
-	}
-	else if (ft_strcmp(current->args[0], "env") == 0 && current->args[1])
-	{
-		ft_putstr_fd("minishell: too many arguments for command: ", 2);
-		ft_putstr_fd(current->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		free_n_clean(d, 1);
-		exit(-1);
+		exit(0) ;
 	}
    	else if (execve(current->file, current->args, NULL) == -1)
 	{
@@ -57,6 +47,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 		exit(-1);
 	}
 }
+
 
 char	*heredoc_path(t_data *d)
 {
@@ -143,25 +134,86 @@ void	early_heredoc(t_data *d, t_com *current)
 	}
 }
 
+
+void	execute_builtin(t_data *d, t_com *current, int ec)
+{
+		if (is_builtin(current) == 1) //echo
+			ft_echo(d, current);
+		else if (is_builtin(current) == 2) //cd
+			ft_cd(d, current);
+		else if (is_builtin(current) == 3) //pwd
+		{
+			if (!current->args[1])
+				ft_pwd();
+			else
+			{
+				if (ft_check_arg_for_pwd(current->args[1]) == 0)
+					ft_pwd();
+			}
+		}
+		else if (is_builtin(current) == 4) //export
+		{
+			if (current->args[1])
+			{
+				if (ft_check_arg_for_export(*d->env, current->args[1]) == 0)
+					ft_export(d->env, current->args);
+			}
+			else
+				ft_print_export(*d->env);
+		}
+		else if (is_builtin(current) == 5) //unset
+		{
+			if (current->args[1])
+				if (ft_check_arg_for_unset(current->args[1]) == 0)
+					ft_unset(d->env, current->args);
+		}
+		else if (is_builtin(current) == 6) //env
+			ft_print_list(*d->env);
+		else if (is_builtin(current) == 7) //exit
+		{
+			ft_putstr_fd("exit minishell\n", STDOUT_FILENO);
+			if (current->args[1] == NULL)
+				ec = ft_atoi(current->args[1]);
+			else if (current->args[1] != NULL && current->args[2] != NULL)
+			{
+				ft_putstr_fd("exit: too many arguments\n", 2);
+				return ;
+			}
+			else
+			{
+				if (ft_isdigit(current->args[1][0]) == 0) 
+				{
+					ft_putstr_fd("exit: ", 2);
+					ft_putstr_fd((char *)current->args[1], 2);
+					ft_putstr_fd(": numeric argument required\n", 2);
+					return ;
+				}
+				else
+					ec = ft_atoi(current->args[1]);
+
+			}
+			free_n_clean(d, 1);
+			exit(ec) ;
+		}
+}
+
 void	process_handler(t_data *d, t_com *current, int pc, int i)
 {
 	int	ec;
 
 
 	ec = 0;
-	//simple command without pipes
+
 	d->heredoc_fd = 0;
 	early_heredoc(d, current);
 	if (g_signal_int == 3)
 		return ;
-
-		
-	if (pc == 0 && ft_strcmp(current->args[0], "exit") == 0)
+  
+	//simple command without pipes
+	if (pc == 0 && current->builtin == 1)
 	{
-		if (current->args[1] != NULL)
-			ec = ft_atoi(current->args[1]);
-		free_n_clean(d, 1);
-		exit(ec);
+		execute_builtin(d, current, ec);
+		return ;
 	}
 
 
@@ -323,6 +375,7 @@ int	setup_cmdpath(t_data *d)
 	// printf("%s\n%s\n",d->path[0], d->path[1]);
 	while (current)
 	{
+		current->builtin = 0;
 		if (current->file && current->file[0] == '/')
 		{
 			if (absolut_path(d, current) != 0) // input: /usr/bin/ls
@@ -335,6 +388,10 @@ int	setup_cmdpath(t_data *d)
 
 		}
 		// ~/42/minishell
+		else if (((is_builtin(current)) >= 1 && (is_builtin(current)) <= 8))
+		{
+			current->builtin = 1;
+		}
 		else
 		{
 			no_path(d, current); // input: ls OR input: echo (builtin)

@@ -4,7 +4,6 @@ char	*ft_find_key_value(t_envlist *envlist, const char *key)
 {
 	while (envlist)
 	{
-		// TODO change
 		if (ft_strcmp(envlist->key, key) == 0)
 			return (envlist->value);
 		envlist = envlist->next;
@@ -14,29 +13,21 @@ char	*ft_find_key_value(t_envlist *envlist, const char *key)
 
 int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 {
-	envlist = NULL;
-	while (envlist != NULL)
+	while (envlist)
 	{
-		if (envlist->key != NULL && key != NULL)
-		{ // Check for NULL pointers
-			if (strcmp(key, envlist->key) == 0)
-			{                               // Use strcmp for string comparison
-				if (envlist->value != NULL)
-					// Check if envlist->value is initialized
-					free(envlist->value);  
-						// Free existing value if initialized
-				envlist->value = ft_strdup(value);
-				if (envlist->value == NULL)
-					return (-1);
-				return (0);
-			}
+		if (envlist->key != NULL && key != NULL && ft_strcmp(key, envlist->key) == 0)
+		{
+			free(envlist->value);
+			envlist->value = ft_strdup(value);
+			if (envlist->value == NULL)
+				return (-1);
+			return (0);
 		}
 		envlist = envlist->next;
 	}
 	return (1);
 }
 
-// TODO free
 int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 {
 	char	*valuejoined;
@@ -45,6 +36,9 @@ int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 		if (ft_strcmp(key, envlist->key) == 0)
 		{
 			valuejoined = ft_strjoin(envlist->value, value);
+			if (valuejoined == NULL)
+				return (-1);
+			free(envlist->value);
 			envlist->value = valuejoined;
 			return (0);
 		}
@@ -61,21 +55,11 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	after_split = ft_eqsplit(envp);
 	if (choice == 1 && ft_key_exists(*envlist, after_split[0],
 			after_split[1]) == 1)
-			{
-			//printf("after_split[0]: %s + after_split[1]: %s\n", after_split[0], after_split[1]);
-			ft_add_list(envlist, after_split[0], after_split[1]);
-			}
+		ft_add_list(envlist, after_split[0], after_split[1]);
 	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
-	i = 0;
-	while (after_split && after_split[i])
-	{
-		free(after_split[i]);
-		i++;
-	}
-	if (after_split)
-		free (after_split);
+	free_double_array(after_split);
 }
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
