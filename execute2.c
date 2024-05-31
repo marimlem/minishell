@@ -216,6 +216,8 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	//simple command without pipes
 	if (pc == 0 && current->builtin == 1)
 	{
+		if (rdr_handler(d, current) != 0)
+			return ;
 		execute_builtin(d, current, ec);
 		return ;
 	}

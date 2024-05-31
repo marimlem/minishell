@@ -8,7 +8,7 @@ void	ft_print_echo(t_data *d, t_com *current, int i)
 		ft_putstr_fd(current->args[i],STDOUT_FILENO);
 		i++;
 		if (current->args[i])
-			write(1, " ", 1);
+			write(1, " ", STDOUT_FILENO);
 	}
 	return ;
 }
