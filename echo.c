@@ -16,8 +16,11 @@ void	ft_print_echo(t_data *d, t_com *current, int i)
 void	ft_echo(t_data *d, t_com *current)
 {
 	int	i;
-
-	if (ft_strcmp(current->args[1], "-n") == 0 && current->args[2])
+	if (!(current && current->args && current->args[0] && current->args[1]))
+	{
+		write(1, "\n", STDOUT_FILENO);
+	}
+	else if (ft_strcmp(current->args[1], "-n") == 0 && current->args[2])
 	{
 		i = 2;
 		ft_print_echo(d, current, i);
@@ -26,7 +29,6 @@ void	ft_echo(t_data *d, t_com *current)
 	{
 		i = 1;
 		ft_print_echo(d, current, i);
-		// if (ft_strcmp(current->args[1], "-n") != 0)
 		write(1, "\n", STDOUT_FILENO);
 	}
 }
