@@ -177,7 +177,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 		{
 			ft_putstr_fd("exit minishell\n", STDOUT_FILENO);
 			if (current->args[1] == NULL)
-				ec = ft_atoi(current->args[1]);
+				ec = d->exit_code;
 			else if (current->args[1] != NULL && current->args[2] != NULL)
 			{
 				ft_putstr_fd("exit: too many arguments\n", 2);
@@ -197,7 +197,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 
 			}
 			free_n_clean(d, 1);
-			exit(ec) ;
+			exit(ec%256) ;
 		}
 }
 
