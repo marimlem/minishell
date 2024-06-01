@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+// int	g_signal_int;
+
 //child handler
 void	playground(t_data *d, t_com *current ,int pc, int i)
 {
@@ -106,6 +108,8 @@ void	execute_loop(t_data *d, int pc)
 		d->exit_code = current->status;
 		current = current->next;
 	}
+	if (d->exit_code == 131)
+		ft_putstr_fd("Quit (core dumped)\n", 2);
 	signal_setup(d, MODE_DF);
 
 

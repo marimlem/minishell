@@ -26,6 +26,13 @@ void	sighandler(int signum)
 	return ;
 }
 
+void	sigquithandler(int signum)
+{
+	(void) signum;
+	exit (131);
+}
+
+
 
 void	signal_setup(t_data *d, int modus)
 {
@@ -44,7 +51,9 @@ void	signal_setup(t_data *d, int modus)
 	else if (modus == MODE_DF)
 	{
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		// signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, sigquithandler);
+
 	}
 
 }
