@@ -34,10 +34,15 @@ int	ft_check_driectory(const char *path)
 	const char	*home;
 	const char	*path;
 
-	home = ft_find_key_value(*d->env, "HOME");
 	path = current->args[1];
 	if (!current->args[1])
 	{
+		home = ft_find_key_value(*d->env, "HOME");
+		if (home == NULL)
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			return ;
+		}
 		chdir(home);
 	}
 	else if (current->args[1] && current->args[2])
