@@ -267,7 +267,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 	{
-		printf("lol nope\n");
+		ft_putstr_fd("lol nope\n", 2);
 		return (1);
 	}
 
