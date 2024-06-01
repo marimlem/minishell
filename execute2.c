@@ -5,11 +5,13 @@
 //child handler
 void	playground(t_data *d, t_com *current ,int pc, int i)
 {
+	int	ec;
 
+	ec = 0;
 	if (current->rdr && rdr_handler(d, current) != 0)
 	{
 		free_n_clean(d, 1);
-		exit (-1); // i think this might generate errors
+		exit (1); // i think this might generate errors (originally -1)
 	}
 	if (pc != 0)
 		pipe_handler(d, pc, i);
@@ -17,8 +19,10 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	if (current->builtin == 1)
 	{
 		execute_builtin(d, current, 0);
+		if (d->exit_code != 0)
+			ec = d->exit_code;
 		free_n_clean(d, 1);
-		exit(0) ;
+		exit (ec);
 	}
    	else if (execve(current->file, current->args, d->envp) == -1)
 	{
@@ -27,7 +31,7 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 			ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
 		free_n_clean(d, 1);
-		exit(-1);
+		exit(127);
 	}
 }
 
@@ -91,7 +95,7 @@ void	execute_loop(t_data *d, int pc)
 	{
 		process_handler(d, current, pc, i);
 		if (g_signal_int == 130)
-			return ;
+			return ; // won't this create zombie children? if cat cat ls, the forks won't be collected with waitpid?
 		close_rdr(d);
 		i++;
 		current = current->next;
@@ -103,7 +107,10 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
-		d->exit_code = current->status;
+		ft_putnbr_fd(current->status, 2);
+		ft_putstr_fd("...", 2);
+		d->exit_code = current->status %255;
+		ft_putnbr_fd(d->exit_code, 2);
 		current = current->next;
 	}
 	if (d->exit_code == 131)
