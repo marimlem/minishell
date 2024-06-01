@@ -18,6 +18,7 @@ int	is_all_white(char *input)
 void	inputparsing(t_data *d)
 {
 	signal_setup(d, MODE_IN);
+	// ft_putnbr_fd(d->exit_code, 2);
 	d->input = readline("minishell:$ ");
 	if (!d->input)
 	{

@@ -14,7 +14,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 	{
-		ft_putstr_fd("lol nope\n", 2);
+		ft_putstr_fd("minishell: lol nope\n", 2);
 		return (1);
 	}
 
@@ -59,6 +59,8 @@ int	main(int argc, char **argv, char **envp)
 			executor2(d);
 		
 		free_n_clean(d, 0);
+		g_signal_int = 0;
+
 	}
 	if (d->var_node)
 		free (d->var_node);

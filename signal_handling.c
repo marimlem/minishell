@@ -8,7 +8,7 @@ void	sighandler(int signum)
 		if (g_signal_int == 2)
 		{
 			ioctl(STDIN_FILENO, TIOCSTI, "\n");
-			g_signal_int = 3;
+			g_signal_int = 130;
 			rl_replace_line("", 0);
 			rl_on_new_line();	
 			return ;
@@ -30,6 +30,7 @@ void	sigquithandler(int signum)
 {
 	(void) signum;
 	exit (131);
+
 }
 
 

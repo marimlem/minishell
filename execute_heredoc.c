@@ -49,10 +49,10 @@ void	early_heredoc(t_data *d, t_com *current)
 			{
 				signal_setup(d, MODE_IN);
 				heredoc_input = readline("> ");
-				if (g_signal_int == 3)
+				if (g_signal_int == 130)
 				{
 					signal_setup(d, MODE_DF);
-
+					d->exit_code = 130;
 					if (fd >= 0)
 						close (fd);
 					return ;

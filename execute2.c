@@ -42,8 +42,10 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 
 	d->heredoc_fd = 0;
 	early_heredoc(d, current);
-	if (g_signal_int == 3)
+	if (g_signal_int == 130)
+	{
 		return ;
+	}
   
 	//simple command without pipes
 	if (pc == 0 && current->builtin == 1)
@@ -88,7 +90,7 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		process_handler(d, current, pc, i);
-		if (g_signal_int == 3)
+		if (g_signal_int == 130)
 			return ;
 		close_rdr(d);
 		i++;
@@ -99,12 +101,6 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
-		if (current->status == -2) // heredoc Control D experiment
-		{
-			ft_putstr_fd("exit\n", 1);
-			free_n_clean(d, 1);
-			exit (0);
-		}
 		d->exit_code = current->status;
 		current = current->next;
 	}
