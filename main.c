@@ -265,8 +265,9 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		return (100);
 
-	if (raise_shlvl(envp) != 0)
+	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 	{
+		printf("lol nope\n");
 		return (1);
 	}
 
