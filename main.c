@@ -43,26 +43,18 @@ int	main(int argc, char **argv, char **envp)
 	{
 		init_null(d);
 		inputparsing(d);
-		if (d->error == -1)
-		{
-			// ft_putstr_fd("exit minishell\n", 2);
-			break ;
-		}
 		if (d->error != 0)
 		{
 			ft_putstr_fd("error: ", 2);
 			ft_putnbr_fd(d->error, 2);
 			ft_putstr_fd("\n", 2);
 		}
-		// if list is completely variable assignment type, assign variables, else go to executor
 		if (d->com)
 			executor2(d);
-		
 		if (g_signal_int == 130)
 			d->exit_code = 130;
 		g_signal_int = 0;
 		free_n_clean(d, 0);
-
 	}
 	if (d->var_node)
 		free (d->var_node);

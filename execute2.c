@@ -107,10 +107,10 @@ void	execute_loop(t_data *d, int pc)
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
-		ft_putnbr_fd(current->status, 2);
-		ft_putstr_fd("...", 2);
+		// ft_putnbr_fd(current->status, 2);
+		// ft_putstr_fd("...", 2);
 		d->exit_code = current->status %255;
-		ft_putnbr_fd(d->exit_code, 2);
+		// ft_putnbr_fd(d->exit_code, 2);
 		current = current->next;
 	}
 	if (d->exit_code == 131)

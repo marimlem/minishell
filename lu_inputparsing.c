@@ -24,15 +24,17 @@ void	inputparsing(t_data *d)
 	{
 		ft_putstr_fd("exit\n", 1);
 		free_n_clean(d, 1);
-		exit(0);
+		exit(d->exit_code);
 	}
+	// g_signal_int = 130;
 	if (g_signal_int == 130)
 	{
 		// ft_putnbr_fd(g_signal_int, 2);
 		// ft_putstr_fd("... :)\n", 2);
 
 		d->exit_code = 130;
-		ft_putnbr_fd(d->exit_code, 2);
+		g_signal_int = 0;
+		// ft_putnbr_fd(d->exit_code, 2);
 
 	}
 	signal_setup(d, MODE_DF);

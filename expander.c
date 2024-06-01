@@ -22,10 +22,10 @@ void 	expand_empty(t_data *d, char *new)
 
 int	setup_ext(t_data *d, char **code, char **exp, int *len)
 {
-	(*code) = ft_itoa(d->exit_code % 256);
+	(*code) = ft_itoa(d->exit_code % 255);
 	if ((*code) == NULL)
 	{
-		d->error = 301;
+		d->error = 231;
 		return (1);
 	}
 	*len = ft_strlen((*code));
@@ -34,7 +34,7 @@ int	setup_ext(t_data *d, char **code, char **exp, int *len)
 	{
 		free ((*code));
 		*code = NULL;
-		d->error = 301;
+		d->error = 231;
 		return (1);
 	}
 	return (0);
@@ -46,6 +46,9 @@ void 	expand_exitstatus(t_data *d)
 	char	*exp;
 	int		len;
 
+	// ft_putstr_fd("{...", 2);
+	// ft_putnbr_fd(d->exit_code, 2);
+	// ft_putstr_fd("... expander}\n", 2);
 	if (setup_ext(d, &code, &exp, &len) != 0)
 		return ;
 	ft_memmove(exp, d->tmp, d->i);
