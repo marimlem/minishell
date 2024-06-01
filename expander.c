@@ -22,7 +22,7 @@ void 	expand_empty(t_data *d, char *new)
 
 int	setup_ext(t_data *d, char **code, char **exp, int *len)
 {
-	(*code) = ft_itoa(d->exit_code);
+	(*code) = ft_itoa(d->exit_code % 256);
 	if ((*code) == NULL)
 	{
 		d->error = 301;

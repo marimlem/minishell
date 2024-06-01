@@ -37,6 +37,26 @@ int	setup_pipes(t_data *d, int pipecount)
 	return (0);
 }
 
+void	pipe_handler(t_data *d, int pc, int i)
+{
+	if (i != pc)
+	{
+		if (d->old_fd[OUT] < 0)
+			dup2(d->p[i][1], STDOUT_FILENO);
+		else
+			dup2(d->p[i][1], d->old_fd[OUT]);
+		close_pipes(d->p[i]);
+	}
+	if ( i != 0)
+	{
+		if (d->old_fd[IN] < 0)
+			dup2(d->p[i-1][0], STDIN_FILENO);
+		else
+			dup2(d->p[i-1][0], d->old_fd[IN]);
+		close_pipes(d->p[i-1]);
+	}
+}
+
 int	d_lstsize(t_com *lst)
 {
 	int		i;

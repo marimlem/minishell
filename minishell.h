@@ -130,8 +130,25 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 // void	executor(t_data *d);
 // void	d_execute(t_data *d);
 
+// execute_builtin.c
+void	execute_builtin(t_data *d, t_com *current, int ec);
+
+// execute_heredoc.c
+char	*heredoc_path(t_data *d);
+void	early_heredoc(t_data *d, t_com *current);
+
+// execute_path.c
+int	setup_path(t_data *d);
+int	absolut_path(t_data *d, t_com *current);
+int	no_path(t_data *d, t_com *current);
+int	relative_path(t_data *d, t_com *current);
+int	setup_cmdpath(t_data *d);
+
+
+
+
+
 // execute2.c
-void	pipe_handler(t_data *d, int pc, int i);
 void	playground(t_data *d, t_com *current ,int pc, int i);
 void	process_handler(t_data *d, t_com *current, int pc, int i);
 void	execute_loop(t_data *d, int pc);
@@ -153,8 +170,26 @@ int	setup_fds(t_data *d);
 int	setup_pipes(t_data *d, int pipecount);
 int	d_lstsize(t_com *lst);
 void	close_pipes(int *tube);
+void	pipe_handler(t_data *d, int pc, int i);
 
 
+// init_utils.c
+void	init_envlist(t_envlist **envlist);
+void	init_null(t_data *d);
+int	raise_shlvl(char **envp);
+
+//list_utils.c
+void	lex_lst_del(t_tok *lst);
+void	com_lst_del(t_com *lst);
+void	envlist_del(t_envlist *env);
+
+// free_utils.c
+void	free_n_clean(t_data *d, int b);
+
+
+// signal_handling.c
+void	sighandler(int signum);
+void	signal_setup(t_data *d, int modus);
 
 // lu_inputparsing.c
 void	inputparsing(t_data *d);
@@ -184,11 +219,6 @@ int	lex_sep_words(t_data *d, t_tok **current);
 void	lex_sep_special_mid(t_data *d, t_tok **current);
 int	lex_sep_special(t_data *d, t_tok **current);
 int	lexer_separator(t_data *d, t_tok **current);
-
-
-// main.c
-void	signal_setup(t_data *d, int modus);
-void	free_n_clean(t_data *d, int b);
 
 // parser.c
 void	parser(t_data *d);

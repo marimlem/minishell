@@ -5,8 +5,9 @@ LIBFT = $(LIB_D)libft.a
 
 SRC = main.c \
 	expander.c exp_ltop.c var_handling.c tok_types.c command_utils.c parser.c lexer.c lex_utils.c lex_utils2.c lex_utils3.c \
+	init_utils.c signal_handling.c list_utils.c free_utils.c\
 	lu_inputparsing.c ft_strncmp.c get_next_line.c get_next_line_utils.c \
-	execute2.c execute_utils.c execute_rdr.c \
+	execute2.c execute_utils.c execute_rdr.c execute_builtin.c execute_heredoc.c execute_path.c\
 	env_utils.c key_value_utils.c export.c unset.c is_builtin.c \
 	cd.c pwd.c echo.c
 OBJ = $(SRC:%.c=%.o)
