@@ -268,10 +268,10 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 //export.c
-int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
+int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s);
 int	ft_check_export_input(const char *s);
 void	ft_print_export(t_envlist *envlist);
-void	ft_export(t_envlist **envlist, char **arg);
+void	ft_export(t_data *d, t_envlist **envlist, char **arg);
 
 //unset.c
 int	ft_check_arg_for_unset(const char *s);
@@ -287,8 +287,8 @@ int	ft_check_driectory(t_data *d,const char *path);
 void	ft_cd(t_data *d, t_com *current);
 
 //pwd.c
-int	ft_check_arg_for_pwd(const char *s);
-void	ft_pwd(void);
+int	ft_check_arg_for_pwd(t_data *d, const char *s);
+void	ft_pwd(t_data *d);
 
 //echo.c
 void	ft_print_echo(t_data *d, t_com *current, int i);

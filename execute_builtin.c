@@ -10,19 +10,19 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 	else if (is_builtin(current) == 3) //pwd
 	{
 		if (!current->args[1])
-			ft_pwd();
+			ft_pwd(d);
 		else
 		{
-			if (ft_check_arg_for_pwd(current->args[1]) == 0)
-				ft_pwd();
+			if (ft_check_arg_for_pwd(d, current->args[1]) == 0)
+				ft_pwd(d);
 		}
 	}
 	else if (is_builtin(current) == 4) //export
 	{
 		if (current->args[1])
 		{
-			if (ft_check_arg_for_export(*d->env, current->args[1]) == 0)
-				ft_export(d->env, current->args);
+			if (ft_check_arg_for_export(d, *d->env, current->args[1]) == 0)
+				ft_export(d, d->env, current->args);
 		}
 		else
 			ft_print_export(*d->env);
@@ -42,6 +42,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 			ec = d->exit_code;
 		else if (current->args[1] != NULL && current->args[2] != NULL)
 		{
+			d->exit_code = 1;
 			ft_putstr_fd("exit: too many arguments\n", 2);
 			return ;
 		}
@@ -49,6 +50,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 		{
 			if (ft_isdigit(current->args[1][0]) == 0) 
 			{
+				d->exit_code = 2;
 				ft_putstr_fd("exit: ", 2);
 				ft_putstr_fd((char *)current->args[1], 2);
 				ft_putstr_fd(": numeric argument required\n", 2);
@@ -59,6 +61,6 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 
 		}
 		free_n_clean(d, 1);
-		exit(ec%256) ;
+		exit(ec) ;
 	}
 }
