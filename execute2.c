@@ -98,6 +98,8 @@ void	execute_loop(t_data *d, int pc)
 		usleep(5);
 	}
 	current = d->com;
+	if (pc == 0 && current->builtin == 1)
+		return ;
 	while (current)
 	{
 		waitpid(current->pid, &(current->status), 0); 
