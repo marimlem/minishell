@@ -283,7 +283,7 @@ void	ft_unset(t_envlist **envlist, char **arg);
 int	is_builtin(t_com *current);
 
 //cd.c
-int	ft_check_driectory(const char *path);
+int	ft_check_driectory(t_data *d,const char *path);
 void	ft_cd(t_data *d, t_com *current);
 
 //pwd.c
