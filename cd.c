@@ -35,19 +35,20 @@ int	ft_check_driectory(const char *path)
 	const char	*path;
 
 	home = ft_find_key_value(*d->env, "HOME");
-	path = current->args[0];
+	path = current->args[1];
 	if (!current->args[1])
 	{
-		if (ft_strcmp(current->args[0], "cd") == 0)
-			chdir(home);
+		chdir(home);
 	}
-	else if (current->args[2])
+	else if (current->args[1] && current->args[2])
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		return ;
 	}
 	else if (ft_strcmp(current->args[1], "..") == 0)
 		chdir("..");
+	else if (ft_strcmp(current->args[1], ".") == 0)
+		return ;
 	else if (ft_check_driectory(path) == 0)
 		chdir(path);
 	//free_double_array(cd_input);
