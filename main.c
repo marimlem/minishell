@@ -58,8 +58,10 @@ int	main(int argc, char **argv, char **envp)
 		if (d->com)
 			executor2(d);
 		
-		free_n_clean(d, 0);
+		if (g_signal_int == 130)
+			d->exit_code = 130;
 		g_signal_int = 0;
+		free_n_clean(d, 0);
 
 	}
 	if (d->var_node)

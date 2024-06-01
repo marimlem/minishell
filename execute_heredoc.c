@@ -70,7 +70,7 @@ void	early_heredoc(t_data *d, t_com *current)
 					heredoc_input = heredoc_expanding(d, heredoc_input);
 					if (heredoc_input == NULL)
 					{
-						g_signal_int = 1;
+						g_signal_int = 0;
 						if (fd >= 0)
 							close (fd);
 						return ;
@@ -79,7 +79,7 @@ void	early_heredoc(t_data *d, t_com *current)
 				ft_putstr_fd(heredoc_input, fd);
 				ft_putchar_fd('\n', fd);
 			}
-			g_signal_int = 1;
+			g_signal_int = 0;
 			if (fd >= 0)
 				close (fd);
 		}

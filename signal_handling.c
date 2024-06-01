@@ -16,7 +16,9 @@ void	sighandler(int signum)
 		else
 		{
 			ft_putchar_fd('\n', 2);
-			g_signal_int = 1;
+			// g_signal_int = 1;
+			g_signal_int = 130;
+
 			rl_replace_line("", 0);
 			rl_on_new_line();	
 			rl_redisplay();

@@ -26,6 +26,15 @@ void	inputparsing(t_data *d)
 		free_n_clean(d, 1);
 		exit(0);
 	}
+	if (g_signal_int == 130)
+	{
+		// ft_putnbr_fd(g_signal_int, 2);
+		// ft_putstr_fd("... :)\n", 2);
+
+		d->exit_code = 130;
+		ft_putnbr_fd(d->exit_code, 2);
+
+	}
 	signal_setup(d, MODE_DF);
 	if (ft_strcmp(d->input, "") == 0 || is_all_white(d->input) == 0)
 		return ;
