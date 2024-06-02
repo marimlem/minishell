@@ -201,7 +201,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node)
 
 	current = t_node;
 	c_cur = c_node;
-	setup_coms(d, t_node, c_node);	
+	setup_coms(d, t_node, c_node);
 	if (c_cur->rdr == NULL || c_cur->args == NULL)
 	{
 		d->error = ERR_PAR_ALL;

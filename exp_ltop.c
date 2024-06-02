@@ -45,6 +45,7 @@ int	ltop_dollar(t_data *d, char **new, int exp)
 	return (0);
 }
 
+// heredoc expansion: if heredoc delimiter exp == 0
 char	*l_to_p_trans(t_data *d, char *token, int exp)
 {
 	char	*new;
