@@ -96,10 +96,10 @@ int	setup_cmdpath(t_data *d)
 				return (1); // alloc error
 
 		}
-		else if (current->file && current->file[0] == '.' && current->file[1] == '/')
-		{
-			relative_path(d, current); // input: ./minishell ../minishell
-		}
+		// else if (current->file && current->file[0] == '.' && current->file[1] == '/')
+		// {
+		// 	relative_path(d, current); // input: ./minishell ../minishell
+		// }
 		// ~/42/minishell
 		else if (((is_builtin(current)) >= 1 && (is_builtin(current)) <= 8))
 		{

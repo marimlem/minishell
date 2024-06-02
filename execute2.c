@@ -26,7 +26,16 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 	}
    	else if (execve(current->file, current->args, d->envp) == -1)
 	{
-		if (access(current->file , F_OK) != 0)
+		if (current->file && (current->file[0] == '/' || (current->file[0] == '.' && current->file[1] == '/') || (current->file[0] == '.' && current->file[1] == '.' && current->file[2] == '/')) && access(current->file , F_OK) != 0)
+		{
+			ft_putstr_fd("minishell: No such file or directory: ", 2);
+			if (current->file)
+				ft_putstr_fd(current->file, 2);
+			ft_putstr_fd("\n", 2);
+			free_n_clean(d, 1);
+			exit(127);
+		}
+		else if (access(current->file , F_OK) != 0)
 		{
 			ft_putstr_fd("minishell: command not found: ", 2);
 			if (current->args && current->args[0])
