@@ -17,14 +17,18 @@ int	is_all_white(char *input)
 
 void	inputparsing(t_data *d)
 {
+	int	ec;
+
+	ec = 0;
 	signal_setup(d, MODE_IN);
 	// ft_putnbr_fd(d->exit_code, 2);
 	d->input = readline("minishell:$ ");
 	if (!d->input)
 	{
 		ft_putstr_fd("exit\n", 1);
+		ec = d->exit_code;
 		free_n_clean(d, 1);
-		exit(d->exit_code);
+		exit(ec);
 	}
 	// g_signal_int = 130;
 	if (g_signal_int == 130)
