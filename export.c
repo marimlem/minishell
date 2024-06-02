@@ -16,7 +16,7 @@ int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s)
 			}
 			else if (s[i] == '-' && s[i + 1] == '-' && !s[i + 2])
 			{
-				ft_print_list(envlist);
+				ft_print_list(d, envlist);
 				return (2);
 			}
 			else

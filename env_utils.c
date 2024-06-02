@@ -85,8 +85,9 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 	current->next = new;
 }
 
-void	ft_print_list(t_envlist *envlist)
+void	ft_print_list(t_data *d, t_envlist *envlist)
 {
+	d->exit_code = 0;
 	while (envlist != NULL)
 	{
 		ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);

@@ -253,7 +253,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 // env_utils.c
 int	ft_contains_char(const char *s, char c);
 void	ft_add_list(t_envlist **envlist, char *key, char *value);
-void	ft_print_list(t_envlist *envlist);
+void	ft_print_list(t_data *d, t_envlist *envlist);
 void	free_list(t_envlist **envlist);
 void	free_double_array(char **double_array);
 int	ft_split_first_part(char *str, char **double_array);

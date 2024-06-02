@@ -31,6 +31,8 @@ int	is_minusn(char *arg)
 void	ft_echo(t_data *d, t_com *current)
 {
 	int	i;
+
+	d->exit_code = 0;
 	if (!(current && current->args && current->args[0] && current->args[1]))
 	{
 		write(1, "\n", STDOUT_FILENO);

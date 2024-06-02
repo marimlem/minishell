@@ -36,6 +36,7 @@ int	ft_check_driectory(t_data *d,const char *path)
 	const char	*home;
 	const char	*path;
 
+	d->exit_code = 0;
 	path = current->args[1];
 	if (!current->args[1])
 	{
