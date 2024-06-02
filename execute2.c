@@ -24,6 +24,11 @@ void	playground(t_data *d, t_com *current ,int pc, int i)
 		free_n_clean(d, 1);
 		exit (ec);
 	}
+	if (!current->args || !current->args[0])
+	{
+		free_n_clean(d, 1);
+		exit(0);
+	}
    	else if (execve(current->file, current->args, d->envp) == -1)
 	{
 		if (current->file && (current->file[0] == '/' || (current->file[0] == '.' && current->file[1] == '/') || (current->file[0] == '.' && current->file[1] == '.' && current->file[2] == '/')) && access(current->file , F_OK) != 0)
