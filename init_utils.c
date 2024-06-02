@@ -53,5 +53,7 @@ int	raise_shlvl(char **envp)
 		}
 		i++;
 	}
+	if (!envp || !envp[i])
+		return (1);
 	return (0);
 }

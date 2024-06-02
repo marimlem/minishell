@@ -10,12 +10,12 @@ int	main(int argc, char **argv, char **envp)
 	t_envlist	**env;
 
 	if (argc != 1)
-		return (100);
+		return (1);
 
 	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 	{
 		ft_putstr_fd("minishell: lol nope\n", 2);
-		return (1);
+		exit (42);
 	}
 
 	d = (t_data *) ft_calloc(1, sizeof(t_data));
