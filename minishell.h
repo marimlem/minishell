@@ -63,6 +63,7 @@
 # define MODE_IN 1
 # define MODE_IG 2
 # define MODE_DF 3
+# define MODE_HD 4
 
 
 
@@ -188,6 +189,7 @@ void	free_n_clean(t_data *d, int b);
 
 
 // signal_handling.c
+void	sighdhandler(int signum);
 void	sighandler(int signum);
 void	signal_setup(t_data *d, int modus);
 
