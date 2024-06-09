@@ -5,12 +5,14 @@ void	close_rdr(t_data *d)
 		if (d->old_fd[OUT] >= 0)
 		{
 			dup2(d->old_fd[OUT], 1);
-			close(d->fd[OUT]);
+			if (d->fd[OUT] >= 0)
+				close(d->fd[OUT]);
 		}
 		if (d->old_fd[IN] >= 0)
 		{
 			dup2(d->old_fd[IN], 0);
-			close(d->fd[IN]);
+			if (d->fd[IN] >= 0)
+				close(d->fd[IN]);
 			// unlink(d->hd_path);
 			// d->fd[IN] = open(d->hd_path, O_WRONLY| O_CREAT | O_TRUNC , 0744);
 			// if (d->fd[IN] >= 0)
