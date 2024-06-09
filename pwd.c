@@ -69,7 +69,7 @@ void	ft_pwd(t_data *d)
 	if (getcwd(pwd, PATH_MAX) == NULL) 
 	{
 		d->exit_code = 1;
-		ft_putstr_fd("getcwd() error!", 2);
+		ft_putstr_fd("getcwd() error!\n", 2);
 		free(pwd);
 		return;
 	}
