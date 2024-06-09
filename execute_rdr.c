@@ -150,8 +150,17 @@ int	rdr_handler(t_data *d, t_com *current)
 			ft_putstr_fd("heredoc error\n", 2);
 		else
 		{
-			ft_putstr_fd(current->rdr[error], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
+			if (access(current->rdr[error] , F_OK) == 0 && access(current->rdr[error] , X_OK) != 0)
+			{
+				ft_putstr_fd(current->rdr[error], 2);
+				ft_putstr_fd(": Permission denied\n", 2);
+			}
+			else
+			{
+
+				ft_putstr_fd(current->rdr[error], 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+			}
 		}
 	}
 
