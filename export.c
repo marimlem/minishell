@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_check_arg_for_export(t_envlist *envlist, const char *s)
+int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s)
 {
 	int	i;
 
@@ -10,14 +10,18 @@ int	ft_check_arg_for_export(t_envlist *envlist, const char *s)
 		if (s[i] == '-')
 		{
 			if (!s[i + 1])
+			{
+				d->exit_code = 1;
 				ft_putstr_fd("export: `-': not a valid identifier\n", 2);
+			}
 			else if (s[i] == '-' && s[i + 1] == '-' && !s[i + 2])
 			{
-				ft_print_list(envlist);
+				ft_print_list(d, envlist);
 				return (2);
 			}
 			else
 			{
+				d->exit_code = 2;
 				ft_putstr_fd("export: -", 2);
 				ft_putchar_fd(((char)s[i + 1]), 2);
 				ft_putstr_fd(": invalid option\n", 2);
@@ -26,6 +30,7 @@ int	ft_check_arg_for_export(t_envlist *envlist, const char *s)
 		}
 		else if (s[i] == '!' && s[i + 1])
 		{
+			d->exit_code = 1;
 			ft_putstr_fd("export: ", 2);
 			ft_putstr_fd((char *)s, 2);
 			ft_putstr_fd(": event not found\n", 2);
@@ -33,6 +38,7 @@ int	ft_check_arg_for_export(t_envlist *envlist, const char *s)
 		}
 		else
 		{
+			d->exit_code = 1;
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd((char *)s, 2);
 			ft_putstr_fd(": not a valid indentifier\n", 2);
@@ -48,8 +54,6 @@ int	ft_check_export_input(const char *s)
 	int	i;
 
 	i = 0;
-	if (s == NULL)
-		return -1;
 	if (s[i] && ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		while (s[i] && ft_isalnum(s[i]) == 1)
@@ -66,19 +70,22 @@ int	ft_check_export_input(const char *s)
 
 void	ft_print_export(t_envlist *envlist)
 {
-	while (envlist != NULL)
+	t_envlist *current;
+
+	current = envlist;
+	while (current != NULL)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
+		ft_putstr_fd((char *)current->key, STDOUT_FILENO);
 		ft_putstr_fd("=\"", STDOUT_FILENO);
-		ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);
+		ft_putstr_fd((char *)current->value, STDOUT_FILENO);
 		ft_putstr_fd("\"\n", STDOUT_FILENO);
-		//printf("%s=%s\n", envlist->key, envlist->value);
-		envlist = envlist->next;
+		//printf("%s=%s\n", current->key, current->value);
+		current = current->next;
 	}
 }
 
-void	ft_export(t_envlist **envlist, char **arg)
+void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 {
 	int i;
 
@@ -91,9 +98,10 @@ void	ft_export(t_envlist **envlist, char **arg)
 			ft_add_key_and_value(envlist, arg[i], 2);
 		else if (ft_check_export_input(arg[i]) == 0)
 		{
+			d->exit_code = 1;
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd((char *)arg[i], 2);
-			ft_putstr_fd(": not a valid indentifier\n", 2);
+			ft_putstr_fd(": not a valid identifier\n", 2);
 			//printf("export: `%s': not a valid identifier\n", arg[i]);
 		}
 		i++;

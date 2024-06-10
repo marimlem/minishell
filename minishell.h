@@ -63,6 +63,7 @@
 # define MODE_IN 1
 # define MODE_IG 2
 # define MODE_DF 3
+# define MODE_HD 4
 
 
 
@@ -130,8 +131,25 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 // void	executor(t_data *d);
 // void	d_execute(t_data *d);
 
+// execute_builtin.c
+void	execute_builtin(t_data *d, t_com *current, int ec);
+
+// execute_heredoc.c
+char	*heredoc_path(t_data *d);
+void	early_heredoc(t_data *d, t_com *current);
+
+// execute_path.c
+int	setup_path(t_data *d);
+int	absolut_path(t_data *d, t_com *current);
+int	no_path(t_data *d, t_com *current);
+int	relative_path(t_data *d, t_com *current);
+int	setup_cmdpath(t_data *d);
+
+
+
+
+
 // execute2.c
-void	pipe_handler(t_data *d, int pc, int i);
 void	playground(t_data *d, t_com *current ,int pc, int i);
 void	process_handler(t_data *d, t_com *current, int pc, int i);
 void	execute_loop(t_data *d, int pc);
@@ -153,16 +171,33 @@ int	setup_fds(t_data *d);
 int	setup_pipes(t_data *d, int pipecount);
 int	d_lstsize(t_com *lst);
 void	close_pipes(int *tube);
+void	pipe_handler(t_data *d, int pc, int i);
 
 
+// init_utils.c
+void	init_envlist(t_envlist **envlist);
+void	init_null(t_data *d);
+int	raise_shlvl(char **envp);
+
+//list_utils.c
+void	lex_lst_del(t_tok *lst);
+void	com_lst_del(t_com *lst);
+void	envlist_del(t_envlist *env);
+
+// free_utils.c
+void	free_n_clean(t_data *d, int b);
+
+
+// signal_handling.c
+void	sighdhandler(int signum);
+void	sighandler(int signum);
+void	signal_setup(t_data *d, int modus);
 
 // lu_inputparsing.c
 void	inputparsing(t_data *d);
 
 // lexer.c
-int	lex_is_separator(char c);
 void	lexer(t_data *d);
-int	even_quotes(t_data *d);
 
 
 // lex_utils.c
@@ -177,21 +212,27 @@ void	init_list2(t_data *d, char *input);
 void	lex_lstsqueezein(t_tok **current, char *str);
 void	lex_lst_rmone(t_tok *current);
 char	*lex_strjoin(char const *s1, char const *s2, char deli);
+int	lex_is_separator(char c);
+int	even_quotes(t_data *d);
 
-
-// main.c
-void	signal_setup(t_data *d, int modus);
-void	free_n_clean(t_data *d, int b);
+// lex_utils3.c
+int	lex_sep_firstword(t_data *d, t_tok **current);
+int	lex_sep_words(t_data *d, t_tok **current);
+void	lex_sep_special_mid(t_data *d, t_tok **current);
+int	lex_sep_special(t_data *d, t_tok **current);
+int	lexer_separator(t_data *d, t_tok **current);
 
 // parser.c
 void	parser(t_data *d);
 
 // expander.c
-int	is_variable(t_var *node, char *find);
-void	expand_var();
 void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
 void	expander(t_data *d, char *new, char *str);
+
+// exp_ltop.c
+int		ltop_unquoter(t_data *d, char **new);
+int	ltop_dollar(t_data *d, char **new, int exp);
 char	*l_to_p_trans(t_data *d, char *token, int exp);
 
 // var_handling.c
@@ -214,7 +255,7 @@ void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 // env_utils.c
 int	ft_contains_char(const char *s, char c);
 void	ft_add_list(t_envlist **envlist, char *key, char *value);
-void	ft_print_list(t_envlist *envlist);
+void	ft_print_list(t_data *d, t_envlist *envlist);
 void	free_list(t_envlist **envlist);
 void	free_double_array(char **double_array);
 int	ft_split_first_part(char *str, char **double_array);
@@ -229,10 +270,10 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 //export.c
-int	ft_check_arg_for_export(t_envlist *envlist, const char *s);
+int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s);
 int	ft_check_export_input(const char *s);
 void	ft_print_export(t_envlist *envlist);
-void	ft_export(t_envlist **envlist, char **arg);
+void	ft_export(t_data *d, t_envlist **envlist, char **arg);
 
 //unset.c
 int	ft_check_arg_for_unset(const char *s);
@@ -244,12 +285,12 @@ void	ft_unset(t_envlist **envlist, char **arg);
 int	is_builtin(t_com *current);
 
 //cd.c
-int	ft_check_driectory(const char *path);
+int	ft_check_driectory(t_data *d,const char *path);
 void	ft_cd(t_data *d, t_com *current);
 
 //pwd.c
-int	ft_check_arg_for_pwd(const char *s);
-void	ft_pwd(void);
+int	ft_check_arg_for_pwd(t_data *d, const char *s);
+void	ft_pwd(t_data *d);
 
 //echo.c
 void	ft_print_echo(t_data *d, t_com *current, int i);

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_check_arg_for_pwd(const char *s)
+int	ft_check_arg_for_pwd(t_data *d, const char *s)
 {
 	int	i;
 
@@ -15,6 +15,7 @@ int	ft_check_arg_for_pwd(const char *s)
 				return (0);
 			else
 			{
+				d->exit_code = 1;
 				ft_putstr_fd("pwd: -", 2);
 				ft_putchar_fd(((char)s[i + 1]), 2);
 				ft_putstr_fd(": invalid option\n", 2);
@@ -36,6 +37,7 @@ int	ft_check_arg_for_pwd(const char *s)
 				return (0);
 			else
 			{
+				d->exit_code = 1;
 				ft_putstr_fd("pwd: ", 2);
 				ft_putstr_fd((char *)s, 2);
 				ft_putstr_fd(": event not found\n", 2);
@@ -54,28 +56,25 @@ int	ft_check_arg_for_pwd(const char *s)
 	return (0);
 }
 
-void	ft_pwd(void)
+void	ft_pwd(t_data *d)
 {
 	char	*pwd;
 
-	// Allocate memory for pwd based on PATH_MAX
 	pwd = (char *)ft_calloc(1, PATH_MAX);
-	if (pwd == NULL) {
+	if (pwd == NULL) 
+	{
+		d->exit_code = 1;
 		return;
 	}
-
-	// Get the current working directory
-	if (getcwd(pwd, PATH_MAX) == NULL) {
-		ft_putstr_fd("getcwd() error!", 2);
-		free(pwd);  // Free the allocated memory in case of error
+	if (getcwd(pwd, PATH_MAX) == NULL) 
+	{
+		d->exit_code = 1;
+		ft_putstr_fd("getcwd() error!\n", 2);
+		free(pwd);
 		return;
 	}
-
-	// Print the current working directory
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
-
-	// Free the allocated memory
 	free(pwd);
 }
 

@@ -5,12 +5,14 @@ void	close_rdr(t_data *d)
 		if (d->old_fd[OUT] >= 0)
 		{
 			dup2(d->old_fd[OUT], 1);
-			close(d->fd[OUT]);
+			if (d->fd[OUT] >= 0)
+				close(d->fd[OUT]);
 		}
 		if (d->old_fd[IN] >= 0)
 		{
 			dup2(d->old_fd[IN], 0);
-			close(d->fd[IN]);
+			if (d->fd[IN] >= 0)
+				close(d->fd[IN]);
 			// unlink(d->hd_path);
 			// d->fd[IN] = open(d->hd_path, O_WRONLY| O_CREAT | O_TRUNC , 0744);
 			// if (d->fd[IN] >= 0)
@@ -99,73 +101,17 @@ char	*heredoc_expanding(t_data *d, char *heredoc_input)
 
 int	heredoc_start(t_data *d, t_com *current, int j)
 {
-	// char *heredoc_input;
 
-	// heredoc_input = NULL;
 	(void) current;
 	(void) j;
 	if (d->old_fd[IN] != -1)
 		dup2(d->old_fd[IN], 0);
-	// g_signal_int = 2;
-
-	// if (d->heredoc_fd < 0)
-	// 	return (j + 1);
-
-	// d->fd[IN] = dup(d->heredoc_fd);
-	// dup2(d->fd[IN], d->heredoc_fd);
-	// d->fd[IN] = open(".minishell_heredoc_tmp_file", O_RDWR | O_CREAT , 0644);
-
-	// ft_putstr_fd(d->hd_path, 2);
 
 	d->fd[IN] = open(d->hd_path, O_RDONLY | O_CREAT, 0744);
 	if (d->fd[IN] < 0)
 		return (d->heredoc_fd + 1);
 	dup2(d->fd[IN], STDIN_FILENO);
 	return (0);
-/* 	
-	// dup2(d->fd[IN], STDIN_FILENO);
-	
-	while (g_signal_int == 2)
-	{
-		//gnl
-		ft_putstr_fd("> ", 2);
-		heredoc_input = get_next_line(STDIN_FILENO);
-		if (g_signal_int != 2)
-			break ;
-		if (!heredoc_input)
-		{
-			free_n_clean(d, 1);
-			exit (-2);
-			// break ; // control D should exit everything
-		}
-		if (strncmp(heredoc_input, current->rdr[j + 1], ft_strlen(current->rdr[j + 1])) == 0 && heredoc_input[ft_strlen(current->rdr[j + 1])] == '\n')
-			break ;
-		ft_putstr_fd(heredoc_input, d->fd[IN]);
-
-		//readline
-		// ft_putstr_fd("> ", 2);
-		// heredoc_input = readline("");
-
-
-		// if (strcmp(heredoc_input, current->rdr[j + 1]) == 0)
-		// 	break ;
-		// if (current->rdr[j][2] != SGLQUOTE)
-		// {
-		// 	heredoc_input = heredoc_expanding(d, heredoc_input);
-		// 	if (heredoc_input == NULL)
-		// 		return (j + 1);
-		// }
-		// ft_putstr_fd(heredoc_input, d->fd[IN]);
-		// ft_putchar_fd('\n', d->fd[IN]);
-	}
-	g_signal_int = 1;
-	if (d->fd[IN] >= 0)
-		close (d->fd[IN]);
-	d->fd[IN] = open(".minishell_heredoc_tmp_file", O_RDONLY | O_CREAT, 0644);
-	if (d->fd[IN] < 0)
-		return (j + 1);
-	dup2(d->fd[IN], STDIN_FILENO);
-	return (0); */
 }
 
 
@@ -206,8 +152,17 @@ int	rdr_handler(t_data *d, t_com *current)
 			ft_putstr_fd("heredoc error\n", 2);
 		else
 		{
-			ft_putstr_fd(current->rdr[error], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
+			if (access(current->rdr[error] , F_OK) == 0 && access(current->rdr[error] , X_OK) != 0)
+			{
+				ft_putstr_fd(current->rdr[error], 2);
+				ft_putstr_fd(": Permission denied\n", 2);
+			}
+			else
+			{
+
+				ft_putstr_fd(current->rdr[error], 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+			}
 		}
 	}
 
