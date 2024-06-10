@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:57:54 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 20:03:07 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void 	expand_empty(t_data *d, char *new)
+void	expand_empty(t_data *d, char *new)
 {
 	int	i;
 
 	i = 1;
 	if (new[i] && ft_isdigit(new[i]))
 	{
-		ft_memmove(&d->tmp[d->i], &new[i+1], ft_strlen(&new[i + 1]) + 1);
+		ft_memmove(&d->tmp[d->i], &new[i + 1], ft_strlen(&new[i + 1]) + 1);
 		return ;
 	}
-	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
+	while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i])
+			|| new[i] == '_'))
 		i++;
 	if (new[i])
 		ft_memmove(&d->tmp[d->i], &new[i], ft_strlen(&new[i]) + 1);
 	else
 		d->tmp[d->i] = 0;
-
 	return ;
 }
 
@@ -30,7 +42,7 @@ int	setup_ext(t_data *d, char **code, char **exp, int *len)
 	}
 	*len = ft_strlen((*code));
 	(*exp) = (char *) ft_calloc(*len + ft_strlen(d->tmp), sizeof(char));
-	if ((*exp) ==NULL)	
+	if ((*exp) == NULL)
 	{
 		free ((*code));
 		*code = NULL;
@@ -40,27 +52,25 @@ int	setup_ext(t_data *d, char **code, char **exp, int *len)
 	return (0);
 }
 
-void 	expand_exitstatus(t_data *d)
+void	expand_exitstatus(t_data *d)
 {
 	char	*code;
 	char	*exp;
 	int		len;
 
-	// ft_putstr_fd("{...", 2);
-	// ft_putnbr_fd(d->exit_code, 2);
-	// ft_putstr_fd("... expander}\n", 2);
 	if (setup_ext(d, &code, &exp, &len) != 0)
 		return ;
 	ft_memmove(exp, d->tmp, d->i);
 	ft_memmove(&exp[d->i], code, len);
 	if (d->tmp[d->i + 2] != 0)
-		ft_memmove(&exp[ft_strlen(code) + d->i], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
+		ft_memmove(&exp[ft_strlen(code) + d->i], &d->tmp[d->i + 2],
+			ft_strlen(&d->tmp[d->i + 2]));
 	else
 	{
 		while (d->tmp[d->i + len -1])
 		{
 			d->tmp[d->i + len -1] = 0 ;
-			len ++;
+			len++;
 		}
 	}
 	d->i = d->i + ft_strlen(code);
@@ -80,33 +90,37 @@ int	exp_varlen(char *new)
 		return (i);
 	else
 	{
-		while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i]) || new[i] == '_'))//(lex_is_separator(new[i]) == 0 || (new[i] == SGLQUOTE || new[i] == DBLQUOTE)))
+		while (new[i] && (ft_isdigit(new[i]) || ft_isalpha(new[i])
+				|| new[i] == '_'))
 			i++;
 	}
 	return (i);
 }
 
-int 	expand_env(t_data *d, char *new, char *str)
+int	expand_env(t_data *d, char *new, char *str)
 {
-	t_envlist *node;
-	int i;
-	char	*exp;
+	t_envlist	*node;
+	int			i;
+	char		*exp;
 
 	node = *(d->env);
 	i = exp_varlen(new);
 	while (node && node->key)
 	{
-		if ((int) ft_strlen(node->key) + 1 == i && ft_strncmp(node->key, &new[1], i - 1) == 0)
+		if ((int) ft_strlen(node->key) + 1 == i
+			&& ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
-			exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + ft_strlen(node->value));
+			exp = (char *) ft_calloc(sizeof(char),
+					ft_strlen(d->tmp) + ft_strlen(node->value));
 			if (exp == NULL)
 			{
 				d->error = 301;
-				return (-1); // alloc error
+				return (-1);
 			}
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
-			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i], ft_strlen(&str[d->i + i]));
+			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i],
+				ft_strlen(&str[d->i + i]));
 			d->i = d->i + ft_strlen(node->value);
 			free(d->tmp);
 			d->tmp = exp;
@@ -124,12 +138,13 @@ void	expand_shellname(t_data *d)
 	exp = (char *) ft_calloc(sizeof(char), ft_strlen(d->tmp) + 13);
 	if (exp == NULL)
 	{
-		d->error = 301; //alloc error
+		d->error = 301;
 		return ;
 	}
 	ft_memmove(exp, d->tmp, d->i);
 	ft_memmove(&exp[d->i], "minishell <3", 12);
-	ft_memmove(&exp[d->i + 12], &d->tmp[d->i + 2], ft_strlen(&d->tmp[d->i + 2]));
+	ft_memmove(&exp[d->i + 12], &d->tmp[d->i + 2],
+		ft_strlen(&d->tmp[d->i + 2]));
 	free (d->tmp);
 	d->tmp = exp;
 	d->i += 12;
@@ -155,7 +170,8 @@ void	expander(t_data *d, char *new, char *str)
 		expand_exitstatus(d);
 		return ;
 	}
-	else if (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1]) && new[i + 1] != '_')
+	else if (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1])
+		&& new[i + 1] != '_')
 	{
 		d->i++;
 		return ;
