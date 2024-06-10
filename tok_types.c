@@ -42,35 +42,6 @@ void	p_op_type(t_data *d)
 	}
 }
 
-// finds and marks proper variable assignment tokens
-void	p_var(t_data *d)
-{
-	t_tok *current;
-
-	current = d->node;
-	d->i = 0;
-	while (current && current->tok)
-	{
-		d->i = 0;
-		if (current->typ == OP)
-		{
-			current = current->next;
-			continue ;
-		}
-		while (current->tok[d->i])
-		{
-			if (current->tok[d->i] == SGLQUOTE || current->tok[d->i] == DBLQUOTE || current->tok[d->i] == '$')
-				break ;
-			if (current->tok[d->i] == '=')
-			{
-				current->typ = VAR;
-				break ;
-			}
-			d->i++;
-		}
-		current = current->next;
-	}
-}
 
 
 // checks if operators are in syntactically good order (not first, not last, not two in a row)

@@ -13,7 +13,6 @@ void	init_null(t_data *d)
 	d->node = NULL;
 	d->com = NULL;
 	d->tmp = NULL;
-	d->var_node = NULL;
 	d->fd = NULL;
 	d->old_fd = NULL;
 	d->i = 0;

@@ -57,9 +57,6 @@ int	main(int argc, char **argv, char **envp)
 		g_signal_int = 0;
 		free_n_clean(d, 0);
 	}
-	if (d->var_node)
-		free (d->var_node);
-	d->var_node = NULL;
 	free_n_clean(d, 1);
 	return (0);
 } 

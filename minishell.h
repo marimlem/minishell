@@ -74,11 +74,6 @@ typedef struct	s_tok{
 	struct	s_tok *before;
 
 }	t_tok;
-typedef struct	s_var{
-	char	*key;
-	char	*val;
-	struct	s_var *next;
-}	t_var;
 
 // if
 typedef struct	s_com{
@@ -101,7 +96,6 @@ typedef struct s_envlist
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
-	t_var *var_node;
 	t_com	*com;
 	t_envlist	**env;
 	char	**envp;
@@ -237,7 +231,6 @@ char	*l_to_p_trans(t_data *d, char *token, int exp);
 
 // var_handling.c
 int	is_all_var(t_data *d);
-t_var	*var_lst_new();
 void	assign_var(t_data **d);
 void	rm_var(t_data *d);
 
