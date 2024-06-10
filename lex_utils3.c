@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_utils3.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:49:29 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:51:10 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	lex_sep_firstword(t_data *d, t_tok **current)
@@ -11,9 +23,10 @@ int	lex_sep_firstword(t_data *d, t_tok **current)
 		return (2);
 	if (d->i != 0)
 	{
-		ft_memmove((*current)->tok, &(*current)->tok[d->i], ft_strlen(&(*current)->tok[d->i]) + 1);
+		ft_memmove((*current)->tok, &(*current)->tok[d->i],
+			ft_strlen(&(*current)->tok[d->i]) + 1);
 	}
-	d->i = 0; //not sure about this; maybe = 0? (used to be =1)
+	d->i = 0;
 	return (1);
 }
 
@@ -30,7 +43,6 @@ int	lex_sep_words(t_data *d, t_tok **current)
 	(*current) = (*current)->next;
 	d->i = 0;
 	return (1);
-
 }
 
 void	lex_sep_special_mid(t_data *d, t_tok **current)
@@ -39,7 +51,8 @@ void	lex_sep_special_mid(t_data *d, t_tok **current)
 	(*current)->tok[d->i] = 0;
 	(*current) = (*current)->next;
 	d->i = 1;
-	if ((*current)->tok[0] == '|' && ((*current)->tok[1] == '<' || (*current)->tok[1] == '>'))
+	if ((*current)->tok[0] == '|' && ((*current)->tok[1] == '<'
+			|| (*current)->tok[1] == '>'))
 	{
 		lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
 		(*current)->tok[d->i] = 0;
@@ -52,7 +65,8 @@ int	lex_sep_special(t_data *d, t_tok **current)
 {
 	if (d->i != 0)
 		lex_sep_special_mid(d, current);
-	if ((*current)->tok[d->i] == '|' && ((*current)->tok[d->i+1] == '<' || (*current)->tok[d->i+1] == '>'))
+	if ((*current)->tok[d->i] == '|' && ((*current)->tok[d->i + 1] == '<'
+			|| (*current)->tok[d->i + 1] == '>'))
 	{
 		d->i++;
 		lex_lstsqueezein(&(*current), &(*current)->tok[d->i]);
@@ -72,7 +86,6 @@ int	lex_sep_special(t_data *d, t_tok **current)
 		d->i = 0;
 	}
 	return (1);
-
 }
 
 int	lexer_separator(t_data *d, t_tok **current)
