@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:24:49 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:26:09 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_envlist(t_envlist **envlist)
@@ -23,6 +35,7 @@ void	init_null(t_data *d)
 	d->hd_path = NULL;
 	d = NULL;
 }
+
 int	raise_shlvl(char **envp)
 {
 	int	i;
@@ -43,9 +56,7 @@ int	raise_shlvl(char **envp)
 				return (lvl);
 			}
 			else
-			{
 				envp[i][6] = envp[i][6] + 1;
-			}
 			break ;
 		}
 		i++;
