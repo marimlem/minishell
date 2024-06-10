@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 		exit (42);
 	d = NULL;
+	(void) argv;
 	init_d_env(&d, envp);
 	if (!d || !d->env || !*(d->env))
 	{
@@ -60,7 +61,5 @@ int	main(int argc, char **argv, char **envp)
 		free (d->var_node);
 	d->var_node = NULL;
 	free_n_clean(d, 1);
-	(void) argv;
-	// (void) command;
 	return (0);
 } 
