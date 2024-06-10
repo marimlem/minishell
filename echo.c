@@ -1,8 +1,7 @@
 #include "minishell.h"
 
-void	ft_print_echo(t_data *d, t_com *current, int i)
+void	ft_print_echo(t_com *current, int i)
 {
-	(void) d;
 	while (current && current->args && current->args[i])
 	{
 		ft_putstr_fd(current->args[i],STDOUT_FILENO);
@@ -31,23 +30,22 @@ int	is_minusn(char *arg)
 void	ft_echo(t_data *d, t_com *current)
 {
 	int	i;
+	int	newline;
 
 	d->exit_code = 0;
-	if (!(current && current->args && current->args[0] && current->args[1]))
+	i = 1;
+	newline = 1;
+	if (!(current && current->args))
 	{
 		write(1, "\n", STDOUT_FILENO);
-	}
-	else if (is_minusn(current->args[1]) == 0 && current->args[2])
-	{
-		i = 2;
-		ft_print_echo(d, current, i);
-	}
-	else if (is_minusn(current->args[1]) == 0)
 		return ;
-	else
-	{
-		i = 1;
-		ft_print_echo(d, current, i);
-		write(1, "\n", STDOUT_FILENO);
 	}
+	while (current->args[i] && is_minusn(current->args[i]) == 0)
+	{
+		newline = 0;
+		i++;
+	}
+	ft_print_echo(current, i);
+	if (newline)
+		write(1, "\n", STDOUT_FILENO);
 }

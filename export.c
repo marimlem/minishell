@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s)
+int	ft_check_arg_for_export(t_data *d, const char *s)
 {
 	int	i;
 
@@ -8,42 +8,11 @@ int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s)
 	if (s[i] && !((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		if (s[i] == '-')
-		{
-			if (!s[i + 1])
-			{
-				d->exit_code = 1;
-				ft_putstr_fd("export: `-': not a valid identifier\n", 2);
-			}
-			else if (s[i] == '-' && s[i + 1] == '-' && !s[i + 2])
-			{
-				ft_print_list(d, envlist);
-				return (2);
-			}
-			else
-			{
-				d->exit_code = 2;
-				ft_putstr_fd("export: -", 2);
-				ft_putchar_fd(((char)s[i + 1]), 2);
-				ft_putstr_fd(": invalid option\n", 2);
-				//printf("export: -%c: invalid option\n", s[i + 1]);
-			}
-		}
+			handle_dash(s, i, d);
 		else if (s[i] == '!' && s[i + 1])
-		{
-			d->exit_code = 1;
-			ft_putstr_fd("export: ", 2);
-			ft_putstr_fd((char *)s, 2);
-			ft_putstr_fd(": event not found\n", 2);
-			//printf("export: %s: event not found\n", s);
-		}
+			handle_event(s, d);
 		else
-		{
-			d->exit_code = 1;
-			ft_putstr_fd("export: `", 2);
-			ft_putstr_fd((char *)s, 2);
-			ft_putstr_fd(": not a valid indentifier\n", 2);
-		}
-			//printf("export: `%s': not a valid identifier\n", s);
+			print_invalid_identifer(s, d);
 		return (1);
 	}
 	return (0);
@@ -80,7 +49,6 @@ void	ft_print_export(t_envlist *envlist)
 		ft_putstr_fd("=\"", STDOUT_FILENO);
 		ft_putstr_fd((char *)current->value, STDOUT_FILENO);
 		ft_putstr_fd("\"\n", STDOUT_FILENO);
-		//printf("%s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 }
@@ -102,7 +70,6 @@ void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd((char *)arg[i], 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
-			//printf("export: `%s': not a valid identifier\n", arg[i]);
 		}
 		i++;
 	}
