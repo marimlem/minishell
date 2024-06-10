@@ -22,7 +22,6 @@ void	init_null(t_data *d)
 	d->path = NULL;
 	d->hd_path = NULL;
 	d = NULL;
-	
 }
 int	raise_shlvl(char **envp)
 {
@@ -36,7 +35,6 @@ int	raise_shlvl(char **envp)
 		if (ft_strncmp(envp[i], "SHLVL", 5) == 0)
 		{
 			lvl = ft_atoi(&envp[i][6]);
-			// printf("lvl: %s\n", d->envp[i]);
 			if (lvl >= 9)
 			{
 				ft_putstr_fd("minishell error: shell-level too high: ", 2);
