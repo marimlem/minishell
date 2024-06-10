@@ -1,6 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute2.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:22:03 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// int	g_signal_int;
+#include "minishell.h"
 
 //child handler
 void	playground(t_data *d, t_com *current ,int pc, int i)

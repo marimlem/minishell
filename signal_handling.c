@@ -1,5 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_handling.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:22:19 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:22:42 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minishell.h"
 
 void	sighdhandler(int signum)
 {
@@ -21,7 +32,6 @@ void	sighandler(int signum)
 	if (signum == SIGINT)
 	{
 		signal(SIGINT, sighandler);
-
 		ft_putchar_fd('\n', 2);
 		g_signal_int = 130;
 		rl_replace_line("", 0);
@@ -38,8 +48,6 @@ void	sigquithandler(int signum)
 	exit (131);
 
 }
-
-
 
 void	signal_setup(t_data *d, int modus)
 {
@@ -65,7 +73,5 @@ void	signal_setup(t_data *d, int modus)
 		signal(SIGINT, SIG_DFL);
 		// signal(SIGQUIT, SIG_DFL);
 		signal(SIGQUIT, sigquithandler);
-
 	}
-
 }
