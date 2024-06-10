@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:53:23 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:55:45 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_tok	*lex_lstnew(char *ptr)
 {
-	t_tok *list;
+	t_tok	*list;
 
 	list = (t_tok *) malloc(sizeof(t_tok) * 1);
 	if (list == NULL)
-		return (NULL); // set error
+		return (NULL);
 	list->tok = NULL;
 	list->typ = 0;
 	list->next = NULL;
@@ -21,7 +33,6 @@ t_tok	*lex_lstnew(char *ptr)
 	}
 	return (list);
 }
-
 
 t_tok	*lex_lstlast(t_tok *lst)
 {
@@ -49,19 +60,19 @@ void	lex_lstadd_back(t_tok **lst, t_tok *new)
 	else
 		*lst = new;
 }
+
 void	init_list2(t_data *d, char *input)
 {
-
 	d->node = lex_lstnew(input);
 	if (d->node == NULL)
-	{ // error; have to free and exit
+	{
 		d->error = ERR_LEX_ALL;
 	}
 }
 
 void	lst_print(t_tok *lst)
 {
-	t_tok *ptr;
+	t_tok	*ptr;
 
 	ptr = lst;
 	ft_putstr_fd("\n---\nlistprint:\n", 1);
