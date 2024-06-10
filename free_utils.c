@@ -5,7 +5,8 @@ void	free_n_clean(t_data *d, int b)
 	int	i;
 
 	i = 0;
-	
+	if (d == NULL)
+		return ;
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
 	
@@ -51,7 +52,8 @@ void	free_n_clean(t_data *d, int b)
 
 	if (b == 0)
 		return ;
-	free_list(d->env);
+	if (d->env)
+		free_list(d->env);
 	if (d)
 		free (d);
 	d = NULL;
