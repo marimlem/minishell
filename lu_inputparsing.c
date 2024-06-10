@@ -15,20 +15,19 @@ int	is_all_white(char *input)
 	return (0);
 }
 
+void	exit_n_clean(t_data *d, char *str, int ec)
+{
+	ft_putstr_fd(str, 2);
+	free_n_clean(d, 1);
+	exit (ec);
+}
+
 void	inputparsing(t_data *d)
 {
-	int	ec;
-
-	ec = 0;
 	signal_setup(d, MODE_IN);
 	d->input = readline("minishell:$ ");
 	if (!d->input)
-	{
-		ft_putstr_fd("exit\n", 1);
-		ec = d->exit_code;
-		free_n_clean(d, 1);
-		exit(ec);
-	}
+		exit_n_clean(d, "exit\n", d->exit_code);
 	if (g_signal_int == 130)
 	{
 		d->exit_code = 130;
