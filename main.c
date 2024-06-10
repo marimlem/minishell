@@ -30,13 +30,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
 
-	if (argc != 1)
-		return (1);
-	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
-	{
-		ft_putstr_fd("minishell: lol nope\n", 2);
+	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 		exit (42);
-	}
 	d = NULL;
 	init_d_env(&d, envp);
 	if (!d || !d->env || !*(d->env))
