@@ -5,9 +5,8 @@ int	g_signal_int;
 void	init_d_env(t_data **d, char **envp)
 {
 	*d = (t_data *) ft_calloc(1, sizeof(t_data));
-
-	if (d == NULL)
-		return ;
+	if (*d == NULL)
+		return ;	
 	(*d)->env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if ((*d)->env == NULL)
 		return ;
@@ -15,6 +14,7 @@ void	init_d_env(t_data **d, char **envp)
 	if ((*((*d)->env)) == NULL)
 	{
 		free((*d)->env);
+		(*d)->env = NULL;
 		return ;
 	}
 	init_envlist((*d)->env);
@@ -22,14 +22,13 @@ void	init_d_env(t_data **d, char **envp)
 	ft_assign_key_and_value((*d)->env, envp);
 	(*d)->exit_code = 0;
 	g_signal_int = 0;
-
+	signal_setup(*d, MODE_DF);
 }
 
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
-	// t_envlist	**env;
 
 	if (argc != 1)
 		return (1);
@@ -38,15 +37,13 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("minishell: lol nope\n", 2);
 		exit (42);
 	}
-	d= NULL;
+	d = NULL;
 	init_d_env(&d, envp);
 	if (!d || !d->env || !*(d->env))
 	{
 		free_n_clean(d, 1);
 		return (1);
 	}
-
-	signal_setup(d, MODE_DF);
 	while (1)
 	{
 		init_null(d);
