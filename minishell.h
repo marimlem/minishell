@@ -240,7 +240,7 @@ void	p_var(t_data *d);
 void	p_syn_check(t_data *d);
 
 // command_utils.c
-t_com	*com_lstnew();
+t_com	*com_lstnew(void);
 void	com_lstsqueezein(t_com **current);
 void	init_com(t_data *d);
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
