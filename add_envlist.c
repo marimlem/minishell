@@ -45,7 +45,7 @@ void	add_last(t_envlist *envlist, char *key, char *value)
 	new->next = NULL;
 }
 
-void	ft_add_list(t_envlist **envlist, char *key, char *value)
+void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check)
 {
 	t_envlist	*current;
 
@@ -55,6 +55,14 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 		add_first(envlist, key, value);
 	else
 		add_last(current, key, value);
+	while (current->next)
+		current = current->next;
+	if (export_check == 1)
+		current->export_only = 1;
+	else
+		current->export_only = 0;
+	
+	
 }
 
 void	ft_print_list(t_data *d, t_envlist *envlist)
@@ -62,10 +70,14 @@ void	ft_print_list(t_data *d, t_envlist *envlist)
 	d->exit_code = 0;
 	while (envlist != NULL)
 	{
-		ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
-		ft_putstr_fd("=", STDOUT_FILENO);
-		ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		if (envlist->export_only == 0)
+		{
+			printf("eo: %i\n", envlist->export_only);
+			ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		}
 		envlist = envlist->next;
 	}
 }

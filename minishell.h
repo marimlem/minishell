@@ -95,6 +95,7 @@ typedef struct s_envlist
 	char				*key;
 	char				*value;
 	struct s_envlist	*next;
+	int					export_only;
 }						t_envlist;
 
 typedef struct	s_data{
@@ -252,7 +253,7 @@ void	init_com(t_data *d);
 void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
 
 // add_envlist.c
-void	ft_add_list(t_envlist **envlist, char *key, char *value);
+void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check);
 void	ft_print_list(t_data *d, t_envlist *envlist);
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);

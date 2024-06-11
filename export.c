@@ -55,6 +55,17 @@ void	ft_print_export(t_envlist *envlist)
 	}
 }
 
+/* void	ft_add_key_and_value_export(t_envlist **envlist, char *envp)
+{
+	char	**after_split;
+
+	after_split = ft_eqsplit(envp);
+	if (ft_key_exists(*envlist, after_split[0],
+			after_split[1]) == 1)
+		ft_add_list(envlist, after_split[0], after_split[1]);
+	free_double_array(after_split);
+} */
+
 void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 {
 	int	i;
@@ -66,9 +77,11 @@ void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 			ft_add_key_and_value(envlist, arg[i], 1);
 		else if (ft_check_export_input(arg[i]) == 2)
 			ft_add_key_and_value(envlist, arg[i], 2);
+		else if (ft_check_export_input(arg[i]) == 3)
+			ft_add_key_and_value(envlist, arg[i], 3);
 		else if (ft_check_export_input(arg[i]) == 0)
 		{
-			d->exit_code = 1;
+			d->exit_code = 1;	
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd((char *)arg[i], 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
