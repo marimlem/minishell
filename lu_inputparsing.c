@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:35 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 19:21:36 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:28:15 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ int	is_all_white(char *input)
 	int	i;
 
 	i = 0;
-	while(input && input[i])
+	while (input && input[i])
 	{
-		if (input[i] == ' ' || input[i] == '\t' || input[i] == '\r' || input[i] == '\n' || input[i] == '\v' || input[i] == '\f')
+		if (input[i] == ' ' || input[i] == '\t' || input[i] == '\r'
+			|| input[i] == '\n' || input[i] == '\v' || input[i] == '\f')
 			i++;
 		else
 			return (1);
