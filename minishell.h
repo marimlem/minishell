@@ -151,6 +151,7 @@ void	executor2(t_data *d);
 void	execute_builtin(t_data *d, t_com *current, int ec);
 
 // execute_rdr.c
+int	rdr_error(t_com *current, int error);
 int	rdr_handler(t_data *d, t_com *current);
 
 // execute_rdr_utils.c
