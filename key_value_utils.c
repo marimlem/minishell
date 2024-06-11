@@ -57,7 +57,7 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	if (choice == 1 && ft_key_exists(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
-	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
+	else if (choice == 2 && ft_key_exists_for_pe(*envlist, after_split[0],
 			after_split[1]) == 1)
 		ft_add_list(envlist, after_split[0], after_split[1]);
 	free_double_array(after_split);
