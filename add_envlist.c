@@ -72,7 +72,6 @@ void	ft_print_list(t_data *d, t_envlist *envlist)
 	{
 		if (envlist->export_only == 0)
 		{
-			printf("eo: %i\n", envlist->export_only);
 			ft_putstr_fd((char *)envlist->key, STDOUT_FILENO);
 			ft_putstr_fd("=", STDOUT_FILENO);
 			ft_putstr_fd((char *)envlist->value, STDOUT_FILENO);

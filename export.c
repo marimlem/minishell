@@ -48,23 +48,16 @@ void	ft_print_export(t_envlist *envlist)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		ft_putstr_fd((char *)current->key, STDOUT_FILENO);
-		ft_putstr_fd("=\"", STDOUT_FILENO);
-		ft_putstr_fd((char *)current->value, STDOUT_FILENO);
-		ft_putstr_fd("\"\n", STDOUT_FILENO);
+		if (current->export_only == 0)
+		{
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd((char *)current->value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+		}
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		current = current->next;
 	}
 }
-
-/* void	ft_add_key_and_value_export(t_envlist **envlist, char *envp)
-{
-	char	**after_split;
-
-	after_split = ft_eqsplit(envp);
-	if (ft_key_exists(*envlist, after_split[0],
-			after_split[1]) == 1)
-		ft_add_list(envlist, after_split[0], after_split[1]);
-	free_double_array(after_split);
-} */
 
 void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 {

@@ -48,7 +48,10 @@ void	handle_exit(t_data *d, t_com *current, int ec)
 			i++;
 		}
 		if (current->args[2] != NULL)
+		{
 			exit_too_many_args(d);
+			return ;
+		}
 		ec = ft_atoi(current->args[1]);
 	}
 	free_n_clean(d, 1);

@@ -22,6 +22,7 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 			envlist->value = ft_strdup(value);
 			if (envlist->value == NULL)
 				return (-1);
+			envlist->export_only = 0;
 			return (0);
 		}
 		envlist = envlist->next;
@@ -42,6 +43,7 @@ int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value)
 				return (-1);
 			free(envlist->value);
 			envlist->value = valuejoined;
+			envlist->export_only = 0;
 			return (0);
 		}
 		envlist = envlist->next;
