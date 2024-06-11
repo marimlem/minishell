@@ -4,7 +4,7 @@ int	ft_check_driectory(t_data *d, const char *path)
 {
 	DIR	*dp;
 	/* struct dirent *dirp; */
-
+	
 	dp = opendir(path);
 	if (dp == NULL)
 	{
@@ -46,7 +46,7 @@ void	change_directory(t_data *d, const char *path)
 	if (ft_strcmp(path, "..") == 0)
 		chdir("..");
 	else if (ft_strcmp(path, ".") == 0)
-		return;
+		return ;
 	else if (ft_check_driectory(d, path) == 0)
 		chdir(path);
 }
@@ -54,7 +54,6 @@ void	change_directory(t_data *d, const char *path)
 void	ft_cd(t_data *d, t_com *current)
 {
 	d->exit_code = 0;
-
 	if (current->args[1] == NULL)
 		change_to_home_directory(d);
 	else if (current->args[2])

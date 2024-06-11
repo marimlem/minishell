@@ -5,7 +5,8 @@ int	ft_check_arg_for_export(t_data *d, const char *s)
 	int	i;
 
 	i = 0;
-	if (s[i] && !((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
+	if (s[i] && !((s[i] >= 'a' && s[i] <= 'z') || \
+	(s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		if (s[i] == '-')
 			handle_dash(s, i, d);
@@ -23,7 +24,8 @@ int	ft_check_export_input(const char *s)
 	int	i;
 
 	i = 0;
-	if (s[i] && ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
+	if (s[i] && ((s[i] >= 'a' && s[i] <= 'z') || \
+	(s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		while (s[i] && ft_isalnum(s[i]) == 1)
 			i++;
@@ -39,7 +41,7 @@ int	ft_check_export_input(const char *s)
 
 void	ft_print_export(t_envlist *envlist)
 {
-	t_envlist *current;
+	t_envlist	*current;
 
 	current = envlist;
 	while (current != NULL)
@@ -55,7 +57,7 @@ void	ft_print_export(t_envlist *envlist)
 
 void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (arg && arg[i])

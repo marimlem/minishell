@@ -15,7 +15,8 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 {
 	while (envlist)
 	{
-		if (envlist->key != NULL && key != NULL && ft_strcmp(key, envlist->key) == 0)
+		if (envlist->key != NULL && key != NULL && \
+		ft_strcmp(key, envlist->key) == 0)
 		{
 			free(envlist->value);
 			envlist->value = ft_strdup(value);
@@ -28,9 +29,10 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 	return (1);
 }
 
-int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
+int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value)
 {
 	char	*valuejoined;
+
 	while (envlist)
 	{
 		if (ft_strcmp(key, envlist->key) == 0)
@@ -63,7 +65,7 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i])

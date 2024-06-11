@@ -34,7 +34,9 @@ void	handle_unset(t_data *d, t_com *current)
 
 void	handle_exit(t_data *d, t_com *current, int ec)
 {
-	int i = 0;	
+	int	i;
+
+	i = 0;
 	ft_putstr_fd("exit minishell\n", STDOUT_FILENO);
 	if (current->args[1] == NULL)
 		ec = d->exit_code;
@@ -55,7 +57,7 @@ void	handle_exit(t_data *d, t_com *current, int ec)
 
 void	execute_builtin(t_data *d, t_com *current, int ec)
 {
-	int builtin_id;
+	int	builtin_id;
 
 	builtin_id = is_builtin(current);
 	if (builtin_id == 1)

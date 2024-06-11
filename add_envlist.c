@@ -50,7 +50,8 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value)
 	t_envlist	*current;
 
 	current = *envlist;
-	if (!current || (current->key == NULL && current->value == NULL && current->next == NULL))
+	if (!current || (current->key == NULL && \
+	current->value == NULL && current->next == NULL))
 		add_first(envlist, key, value);
 	else
 		add_last(current, key, value);

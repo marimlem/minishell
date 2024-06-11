@@ -5,13 +5,10 @@ void	free_n_clean(t_data *d, int b)
 	int	i;
 
 	i = 0;
-	
 	lex_lst_del(d->node);
 	com_lst_del(d->com);
-	
 	if (d->input)
 		free (d->input);
-
 	if (d->tmp)
 		free (d->tmp);
 	d->error = 0;
@@ -30,7 +27,6 @@ void	free_n_clean(t_data *d, int b)
 		}
 		free (d->path);
 	}
-
 	i = 0;
 	if (d->p)
 	{
@@ -48,7 +44,6 @@ void	free_n_clean(t_data *d, int b)
 		free (d->hd_path);
 		d->hd_path = NULL;
 	}
-
 	if (b == 0)
 		return ;
 	free_list(d->env);

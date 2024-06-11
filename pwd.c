@@ -57,17 +57,17 @@ void	ft_pwd(t_data *d)
 	char	*pwd;
 
 	pwd = (char *)ft_calloc(1, PATH_MAX);
-	if (pwd == NULL) 
+	if (pwd == NULL)
 	{
 		d->exit_code = 1;
-		return;
+		return ;
 	}
-	if (getcwd(pwd, PATH_MAX) == NULL) 
+	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
 		d->exit_code = 1;
 		ft_putstr_fd("getcwd() error!", 2);
 		free(pwd);
-		return;
+		return ;
 	}
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);

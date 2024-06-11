@@ -18,7 +18,7 @@ void	handle_dash(const char *s, int i, t_data *d)
 	else if (s[i] == '-' && s[i + 1] == '-' && !s[i + 2])
 	{
 		ft_print_export(*d->env);
-		return;
+		return ;
 	}
 	else
 	{

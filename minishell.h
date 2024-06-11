@@ -266,7 +266,7 @@ char	**ft_eqsplit(char *str);
 //key_value_utils.c
 char	*ft_find_key_value(t_envlist *envlist, const char *key);
 int	ft_key_exists(t_envlist *envlist, char *key, char *value);
-int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
+int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value);
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 

@@ -5,7 +5,8 @@ int	ft_check_arg_for_unset(const char *s)
 	int	i;
 
 	i = 0;
-	if (s[i] && !((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
+	if (s[i] && !((s[i] >= 'a' && s[i] <= 'z') || \
+	(s[i] >= 'A' && s[i] <= 'Z') || (s[i] == '_')))
 	{
 		if (s[i] == '-' && s[i + 1] == '-' && !s[i + 2])
 			return (0);

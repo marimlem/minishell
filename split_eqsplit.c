@@ -9,7 +9,8 @@ int	ft_split_first_part(char *str, char **double_array)
 	new_index = 0;
 	if (!str || !double_array || !double_array[0])
 		return (-1);
-	while (str[str_index] != '\0' && str[str_index] != '+' && str[str_index] != '=')
+	while (str[str_index] != '\0' && \
+	str[str_index] != '+' && str[str_index] != '=')
 	{
 		double_array[0][new_index] = str[str_index];
 		str_index++;
@@ -35,11 +36,10 @@ void	ft_split_second_part(char *str, char **double_array, int str_index)
 	double_array[1][new_index] = '\0';
 }
 
-
-char **allocate_double_array(size_t len)
+char	**allocate_double_array(size_t len)
 {
-	char **double_array;
-	
+	char	**double_array;
+
 	double_array = (char **)ft_calloc(3, sizeof(char *));
 	if (!double_array)
 		return (NULL);
@@ -62,7 +62,8 @@ char **allocate_double_array(size_t len)
 char	**ft_eqsplit(char *str)
 {
 	char	**double_array;
-	int str_index;
+	int		str_index;
+
 	double_array = allocate_double_array(ft_strlen(str));
 	if (double_array == NULL)
 		return (NULL);
