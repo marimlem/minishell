@@ -10,7 +10,7 @@ SRC = main.c \
 	execute2.c execute_utils.c execute_rdr.c execute_builtin.c execute_heredoc.c execute_path.c\
 	env_utils.c key_value_utils.c export.c unset.c is_builtin.c \
 	cd.c pwd.c echo.c \
-	command_utils2.c command_utils3.c
+	command_utils2.c command_utils3.c expander_exit.c
 OBJ = $(SRC:%.c=%.o)
 
 CFLAGS = -Wall -Werror -Wextra -g

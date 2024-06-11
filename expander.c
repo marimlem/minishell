@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:57:54 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 20:03:07 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:01:47 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,55 +32,6 @@ void	expand_empty(t_data *d, char *new)
 	return ;
 }
 
-int	setup_ext(t_data *d, char **code, char **exp, int *len)
-{
-	(*code) = ft_itoa(d->exit_code % 255);
-	if ((*code) == NULL)
-	{
-		d->error = 231;
-		return (1);
-	}
-	*len = ft_strlen((*code));
-	(*exp) = (char *) ft_calloc(*len + ft_strlen(d->tmp), sizeof(char));
-	if ((*exp) == NULL)
-	{
-		free ((*code));
-		*code = NULL;
-		d->error = 231;
-		return (1);
-	}
-	return (0);
-}
-
-void	expand_exitstatus(t_data *d)
-{
-	char	*code;
-	char	*exp;
-	int		len;
-
-	if (setup_ext(d, &code, &exp, &len) != 0)
-		return ;
-	ft_memmove(exp, d->tmp, d->i);
-	ft_memmove(&exp[d->i], code, len);
-	if (d->tmp[d->i + 2] != 0)
-		ft_memmove(&exp[ft_strlen(code) + d->i], &d->tmp[d->i + 2],
-			ft_strlen(&d->tmp[d->i + 2]));
-	else
-	{
-		while (d->tmp[d->i + len -1])
-		{
-			d->tmp[d->i + len -1] = 0 ;
-			len++;
-		}
-	}
-	d->i = d->i + ft_strlen(code);
-	free(d->tmp);
-	d->tmp = exp;
-	if (code)
-		free (code);
-	return ;
-}
-
 int	exp_varlen(char *new)
 {
 	int	i;
@@ -97,6 +48,18 @@ int	exp_varlen(char *new)
 	return (i);
 }
 
+int	malloc_dat_exp(t_data *d, char **exp, char *value)
+{
+	*exp = (char *) ft_calloc(sizeof(char),
+			ft_strlen(d->tmp) + ft_strlen(value));
+	if (exp == NULL)
+	{
+		d->error = 301;
+		return (1);
+	}
+	return (0);
+}
+
 int	expand_env(t_data *d, char *new, char *str)
 {
 	t_envlist	*node;
@@ -110,13 +73,8 @@ int	expand_env(t_data *d, char *new, char *str)
 		if ((int) ft_strlen(node->key) + 1 == i
 			&& ft_strncmp(node->key, &new[1], i - 1) == 0)
 		{
-			exp = (char *) ft_calloc(sizeof(char),
-					ft_strlen(d->tmp) + ft_strlen(node->value));
-			if (exp == NULL)
-			{
-				d->error = 301;
+			if (malloc_dat_exp(d, &exp, node->value) == 1)
 				return (-1);
-			}
 			ft_memmove(exp, str, d->i);
 			ft_memmove(&exp[d->i], node->value, ft_strlen(node->value));
 			ft_memmove(&exp[ft_strlen(node->value) + d->i], &str[d->i + i],
@@ -156,27 +114,15 @@ void	expander(t_data *d, char *new, char *str)
 
 	i = 0;
 	if (!new[i + 1])
-	{
 		d->i++;
-		return ;
-	}
-	if (new[i + 1] == '0')
-	{
+	else if (new[i + 1] == '0')
 		expand_shellname(d);
-		return ;
-	}
-	if (new[i + 1] == '?')
-	{
+	else if (new[i + 1] == '?')
 		expand_exitstatus(d);
-		return ;
-	}
 	else if (!ft_isdigit(new[i + 1]) && !ft_isalpha(new[i + 1])
 		&& new[i + 1] != '_')
-	{
 		d->i++;
-		return ;
-	}
-	if (expand_env(d, new, str) != 0)
+	else if (expand_env(d, new, str) != 0)
 		return ;
 	else
 		expand_empty(d, new);

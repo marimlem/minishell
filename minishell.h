@@ -224,6 +224,10 @@ void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
 void	expander(t_data *d, char *new, char *str);
 
+// expander_exit.c
+int	setup_ext(t_data *d, char **code, char **exp, int *len);
+void	expand_exitstatus(t_data *d);
+
 // exp_ltop.c
 int		ltop_unquoter(t_data *d, char **new);
 int	ltop_dollar(t_data *d, char **new, int exp);
