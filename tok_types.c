@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:37:34 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 12:26:39 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:29:56 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	p_syn_check(t_data *d)
 		if ((t == 0 && current->typ == '|' * (-1))
 			|| (current->typ == '|' * (-1) && last < -20)
 			|| ((current->typ == '>' * (-1) || current->typ == '<' * (-1))
-			&& (last == '>' * (-1) || last == '<' * (-1))))
+				&& (last == '>' * (-1) || last == '<' * (-1))))
 		{
 			d->error = ERR_PAR_SYN;
 			return ;
