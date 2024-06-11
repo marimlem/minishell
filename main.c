@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 17:56:11 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:06:32 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_d_env(t_data **d, char **envp)
 {
 	*d = (t_data *) ft_calloc(1, sizeof(t_data));
 	if (*d == NULL)
-		return ;	
+		return ;
 	(*d)->env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if ((*d)->env == NULL)
 		return ;
@@ -38,7 +38,7 @@ void	init_d_env(t_data **d, char **envp)
 	init_null(*d);
 }
 
-void clean_shell(t_data *d)
+void	clean_shell(t_data *d)
 {
 	if (g_signal_int == 130)
 		d->exit_code = 130;
@@ -61,7 +61,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
 
-	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
+	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0
+		|| raise_shlvl(envp) != 0)
 		exit (42);
 	d = NULL;
 	(void) argv;
@@ -81,4 +82,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	free_n_clean(d, 1);
 	return (0);
-} 
+}

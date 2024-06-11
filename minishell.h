@@ -228,6 +228,7 @@ void	expander(t_data *d, char *new, char *str);
 // expander_exit.c
 int	setup_ext(t_data *d, char **code, char **exp, int *len);
 void	expand_exitstatus(t_data *d);
+int	malloc_dat_exp(t_data *d, char **exp, char *value);
 
 // exp_ltop.c
 int		ltop_unquoter(t_data *d, char **new);
