@@ -240,10 +240,24 @@ void	p_var(t_data *d);
 void	p_syn_check(t_data *d);
 
 // command_utils.c
+int	rdr_append(t_data *d, t_tok *current, t_com *c_cur, int r);
+int	arg_append(t_data *d, t_tok *current, t_com *c_cur, int a);
+void	fill_com_loop(t_data *d, t_tok *current, t_com *c_cur);
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
+
+// command_utils2.c
 t_com	*com_lstnew(void);
 void	com_lstsqueezein(t_com **current);
 void	init_com(t_data *d);
-void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
+char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r);
+int	count_type(t_data *d, t_tok *t_node, int dec);
+
+
+// command_utils3.c
+void	alloc_coms(t_com *c_cur, int rdr_c, int arg_c);
+void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node);
+int	fill_file_ifnecessary(t_data *d);
+
 
 // env_utils.c
 int	ft_contains_char(const char *s, char c);
