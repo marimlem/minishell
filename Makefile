@@ -8,8 +8,8 @@ SRC = main.c \
 	init_utils.c signal_handling.c list_utils.c free_utils.c\
 	lu_inputparsing.c ft_strncmp.c get_next_line.c get_next_line_utils.c \
 	execute2.c execute_utils.c execute_rdr.c execute_builtin.c execute_heredoc.c execute_path.c\
-	env_utils.c key_value_utils.c export.c unset.c is_builtin.c \
-	cd.c pwd.c echo.c
+	add_envlist.c key_value_utils.c export.c unset.c is_builtin.c \
+	cd.c pwd.c echo.c split_eqsplit.c exit_utils.c export_utils.c
 OBJ = $(SRC:%.c=%.o)
 
 CFLAGS = -Wall -Werror -Wextra -g
