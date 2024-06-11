@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_heredoc.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 20:29:56 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*heredoc_path(t_data *d)
 {
-	t_envlist *node;
+	t_envlist	*node;
 
 	node = (*d->env);
 	while (node)
@@ -18,10 +30,9 @@ char	*heredoc_path(t_data *d)
 
 void	early_heredoc(t_data *d, t_com *current)
 {
-	int	j;
-	char *heredoc_input;
-	int	fd;
-
+	int		j;
+	char	*heredoc_input;
+	int		fd;
 
 	if (!current->rdr)
 		return ;
@@ -36,7 +47,7 @@ void	early_heredoc(t_data *d, t_com *current)
 				d->hd_path = heredoc_path(d);
 				if (d->hd_path == NULL)
 				{
-					d->error = 1; // alloc error
+					d->error = 1;
 					return ;
 				}
 			}
@@ -55,12 +66,14 @@ void	early_heredoc(t_data *d, t_com *current)
 					if (fd >= 0)
 						close (fd);
 					return ;
-				} 
+				}
 				signal_setup(d, MODE_DF);
 				if (!heredoc_input)
 				{
-					ft_putstr_fd("minishell: warning: here-document delimited by end-of-file instead of given delimiter\n", 2);
-					break;
+					ft_putstr_fd("minishell: warning: ", 2);
+					ft_putstr_fd("here-document delimited by ", 2);
+					ft_putstr_fd("end-of-file instead of given delimiter\n", 2);
+					break ;
 				}
 				if (ft_strcmp(heredoc_input, current->rdr[j + 1]) == 0)
 					break ;
@@ -84,4 +97,3 @@ void	early_heredoc(t_data *d, t_com *current)
 		j++;
 	}
 }
-

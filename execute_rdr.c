@@ -1,46 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_rdr.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 20:23:15 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 20:25:46 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	close_rdr(t_data *d)
 {
-		if (d->old_fd[OUT] >= 0)
-		{
-			dup2(d->old_fd[OUT], 1);
-			if (d->fd[OUT] >= 0)
-				close(d->fd[OUT]);
-		}
-		if (d->old_fd[IN] >= 0)
-		{
-			dup2(d->old_fd[IN], 0);
-			if (d->fd[IN] >= 0)
-				close(d->fd[IN]);
-			// unlink(d->hd_path);
-			// d->fd[IN] = open(d->hd_path, O_WRONLY| O_CREAT | O_TRUNC , 0744);
-			// if (d->fd[IN] >= 0)
-			// 	close(d->fd[IN]);
-		}
-		// else
-		// {	
-			// unlink(d->hd_path);
-		// 	d->fd[IN] = open(d->hd_path, O_TRUNC , 0744);
-		// 	if (d->fd[IN] >= 0)
-		// 		close(d->fd[IN]);
-		// }
+	if (d->old_fd[OUT] >= 0)
+	{
+		dup2(d->old_fd[OUT], 1);
+		if (d->fd[OUT] >= 0)
+			close(d->fd[OUT]);
+	}
+	if (d->old_fd[IN] >= 0)
+	{
+		dup2(d->old_fd[IN], 0);
+		if (d->fd[IN] >= 0)
+			close(d->fd[IN]);
+	}
 }
 
 int	rdr_out(t_data *d, t_com *current, int j)
 {
-	if (d->old_fd[OUT] < 0) // first round
+	if (d->old_fd[OUT] < 0)
 		d->old_fd[OUT] = dup(STDOUT_FILENO);
 	else if (d->fd[OUT] >= 0)
 		close(d->fd[OUT]);
 	if (current->rdr[j][1] == 0)
-		d->fd[OUT] = open(current->rdr[j + 1], O_WRONLY | O_CREAT | O_TRUNC, 0744);
+		d->fd[OUT] = open(current->rdr[j + 1],
+				O_WRONLY | O_CREAT | O_TRUNC, 0744);
 	else
-		d->fd[OUT] = open(current->rdr[j + 1], O_WRONLY | O_CREAT | O_APPEND, 0744);
-	if(d->fd[OUT] < 0)
+		d->fd[OUT] = open(current->rdr[j + 1],
+				O_WRONLY | O_CREAT | O_APPEND, 0744);
+	if (d->fd[OUT] < 0)
 	{
-		// printf("rdr > : error opening file\n");
-		// ft_putstr_fd("rdr > : error opening file\n", 2);
 		dup2(d->old_fd[OUT], 1);
 		return (j + 1);
 	}
@@ -57,7 +58,7 @@ int	rdr_in(t_data *d, t_com *current, int j)
 		close(d->fd[IN]);
 		d->fd[IN] = -1;
 	}
-	if (current->rdr[j][1] == '<') //&& heredoc_start(d, current, j) != 0)
+	if (current->rdr[j][1] == '<')
 	{
 		if (heredoc_start(d, current, j) != 0)
 			return (j + 1);
@@ -69,8 +70,6 @@ int	rdr_in(t_data *d, t_com *current, int j)
 		d->fd[IN] = open(current->rdr[j + 1], O_RDONLY);
 		if (d->fd[IN] < 0)
 		{
-			// printf("rdr <: error opening file\n");
-			// ft_putstr_fd("rdr < : error opening file\n", 2);
 			dup2(d->old_fd[IN], 0);
 			return (j + 1);
 		}
@@ -101,19 +100,16 @@ char	*heredoc_expanding(t_data *d, char *heredoc_input)
 
 int	heredoc_start(t_data *d, t_com *current, int j)
 {
-
 	(void) current;
 	(void) j;
 	if (d->old_fd[IN] != -1)
 		dup2(d->old_fd[IN], 0);
-
 	d->fd[IN] = open(d->hd_path, O_RDONLY | O_CREAT, 0744);
 	if (d->fd[IN] < 0)
 		return (d->heredoc_fd + 1);
 	dup2(d->fd[IN], STDIN_FILENO);
 	return (0);
 }
-
 
 int	rdr_handler(t_data *d, t_com *current)
 {
@@ -126,13 +122,10 @@ int	rdr_handler(t_data *d, t_com *current)
 	{
 		if (current->rdr[j][0] == '>')
 		{
-			// return (1);
 			if (error == 0)
 				error = rdr_out(d, current, j);
 			else
 				rdr_out(d, current, j);
-
-			//what happens when rdr fails? should abort rdr or continue with next rdr
 		}
 		else if (current->rdr[j][0] == '<')
 		{
@@ -140,31 +133,29 @@ int	rdr_handler(t_data *d, t_com *current)
 				error = rdr_in(d, current, j);
 			else
 				rdr_in(d, current, j);
-
-			// return (1);
 		}
 		j = j + 2;
 	}
 	if (error != 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		if (current->rdr[error-1][0] == '<' && current->rdr[error-1][1] == '<')
+		if (current->rdr[error - 1][0] == '<'
+			&& current->rdr[error - 1][1] == '<')
 			ft_putstr_fd("heredoc error\n", 2);
 		else
 		{
-			if (access(current->rdr[error] , F_OK) == 0 && access(current->rdr[error] , X_OK) != 0)
+			if (access(current->rdr[error], F_OK) == 0
+				&& access(current->rdr[error], X_OK) != 0)
 			{
 				ft_putstr_fd(current->rdr[error], 2);
 				ft_putstr_fd(": Permission denied\n", 2);
 			}
 			else
 			{
-
 				ft_putstr_fd(current->rdr[error], 2);
 				ft_putstr_fd(": No such file or directory\n", 2);
 			}
 		}
 	}
-
 	return (error);
 }

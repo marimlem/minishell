@@ -74,11 +74,6 @@ typedef struct	s_tok{
 	struct	s_tok *before;
 
 }	t_tok;
-typedef struct	s_var{
-	char	*key;
-	char	*val;
-	struct	s_var *next;
-}	t_var;
 
 // if
 typedef struct	s_com{
@@ -102,7 +97,6 @@ typedef struct s_envlist
 typedef struct	s_data{
 	char *input;
 	t_tok *node;
-	t_var *var_node;
 	t_com	*com;
 	t_envlist	**env;
 	char	**envp;
@@ -232,6 +226,10 @@ void 	expand_empty(t_data *d, char *new);
 void 	expand_shellpid();
 void	expander(t_data *d, char *new, char *str);
 
+// expander_exit.c
+int	setup_ext(t_data *d, char **code, char **exp, int *len);
+void	expand_exitstatus(t_data *d);
+
 // exp_ltop.c
 int		ltop_unquoter(t_data *d, char **new);
 int	ltop_dollar(t_data *d, char **new, int exp);
@@ -239,7 +237,6 @@ char	*l_to_p_trans(t_data *d, char *token, int exp);
 
 // var_handling.c
 int	is_all_var(t_data *d);
-t_var	*var_lst_new();
 void	assign_var(t_data **d);
 void	rm_var(t_data *d);
 
@@ -249,10 +246,24 @@ void	p_var(t_data *d);
 void	p_syn_check(t_data *d);
 
 // command_utils.c
-t_com	*com_lstnew();
+int	rdr_append(t_data *d, t_tok *current, t_com *c_cur, int r);
+int	arg_append(t_data *d, t_tok *current, t_com *c_cur, int a);
+void	fill_com_loop(t_data *d, t_tok *current, t_com *c_cur);
+void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
+
+// command_utils2.c
+t_com	*com_lstnew(void);
 void	com_lstsqueezein(t_com **current);
 void	init_com(t_data *d);
-void	fill_com(t_data *d, t_tok *t_node, t_com *c_node);
+char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r);
+int	count_type(t_data *d, t_tok *t_node, int dec);
+
+
+// command_utils3.c
+void	alloc_coms(t_com *c_cur, int rdr_c, int arg_c);
+void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node);
+int	fill_file_ifnecessary(t_data *d);
+
 
 // add_envlist.c
 void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check);

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:51:32 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:52:30 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	lex_lstsqueezein(t_tok **current, char *str)
 {
 	t_tok	*new;
-	
+
 	new = lex_lstnew(str);
 	if (new == NULL)
 		return ;
@@ -12,11 +24,10 @@ void	lex_lstsqueezein(t_tok **current, char *str)
 	return ;
 }
 
-
 void	lex_lst_rmone(t_tok *current)
 {
-	t_tok *to_delete;
-	t_tok *next;
+	t_tok	*to_delete;
+	t_tok	*next;
 
 	to_delete = current->next;
 	next = current->next->next;
@@ -52,7 +63,6 @@ char	*lex_strjoin(char const *s1, char const *s2, char deli)
 	return (new);
 }
 
-
 int	lex_is_separator(char c)
 {
 	if (c == S || c == T || c == N)
@@ -64,12 +74,12 @@ int	lex_is_separator(char c)
 
 // check for unclosed quotes, error if odd number
 // doesn't consider quotes of other type after opened quote
-int even_quotes(t_data *d)
+int	even_quotes(t_data *d)
 {
-	int	i;
+	int		i;
 	char	quote;
 
-	i=0;
+	i = 0;
 	quote = 0;
 	while (d && d->input && d->input[i])
 	{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:24:49 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:26:09 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_envlist(t_envlist **envlist)
@@ -14,7 +26,6 @@ void	init_null(t_data *d)
 	d->node = NULL;
 	d->com = NULL;
 	d->tmp = NULL;
-	d->var_node = NULL;
 	d->fd = NULL;
 	d->old_fd = NULL;
 	d->i = 0;
@@ -24,8 +35,8 @@ void	init_null(t_data *d)
 	d->path = NULL;
 	d->hd_path = NULL;
 	d = NULL;
-	
 }
+
 int	raise_shlvl(char **envp)
 {
 	int	i;
@@ -38,7 +49,6 @@ int	raise_shlvl(char **envp)
 		if (ft_strncmp(envp[i], "SHLVL", 5) == 0)
 		{
 			lvl = ft_atoi(&envp[i][6]);
-			// printf("lvl: %s\n", d->envp[i]);
 			if (lvl >= 9)
 			{
 				ft_putstr_fd("minishell error: shell-level too high: ", 2);
@@ -47,9 +57,7 @@ int	raise_shlvl(char **envp)
 				return (lvl);
 			}
 			else
-			{
 				envp[i][6] = envp[i][6] + 1;
-			}
 			break ;
 		}
 		i++;

@@ -1,44 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/10 19:21:50 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	g_signal_int;
 
+void	init_d_env(t_data **d, char **envp)
+{
+	*d = (t_data *) ft_calloc(1, sizeof(t_data));
+	if (*d == NULL)
+		return ;	
+	(*d)->env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
+	if ((*d)->env == NULL)
+		return ;
+	*((*d)->env) = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
+	if ((*((*d)->env)) == NULL)
+	{
+		free((*d)->env);
+		(*d)->env = NULL;
+		return ;
+	}
+	init_envlist((*d)->env);
+	(*d)->envp = envp;
+	ft_assign_key_and_value((*d)->env, envp);
+	(*d)->exit_code = 0;
+	g_signal_int = 0;
+	signal_setup(*d, MODE_DF);
+}
 
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
-	t_envlist	**env;
 
-	if (argc != 1)
-		return (1);
-
-	if (*envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
-	{
-		ft_putstr_fd("minishell: lol nope\n", 2);
+	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
 		exit (42);
-	}
-
-	d = (t_data *) ft_calloc(1, sizeof(t_data));
-
-	if (d == NULL)
-		return 1;
-	env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
-	if (env == NULL)
-		return 1;
-	*env = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
-	if ((*env) == NULL)
+	d = NULL;
+	(void) argv;
+	init_d_env(&d, envp);
+	if (!d || !d->env || !*(d->env))
 	{
-		free(env);
-		return 1;
+		free_n_clean(d, 1);
+		return (1);
 	}
-	init_envlist(env);
-	d->envp = envp;
-	ft_assign_key_and_value(env, envp);
-	d->env = env;
-	d->exit_code = 0;
-	g_signal_int = 0;
-
-	signal_setup(d, MODE_DF);
 	while (1)
 	{
 		init_null(d);
@@ -56,11 +69,6 @@ int	main(int argc, char **argv, char **envp)
 		g_signal_int = 0;
 		free_n_clean(d, 0);
 	}
-	if (d->var_node)
-		free (d->var_node);
-	d->var_node = NULL;
 	free_n_clean(d, 1);
-	(void) argv;
-	// (void) command;
 	return (0);
 } 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lu_inputparsing.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:21:35 by lknobloc          #+#    #+#             */
+/*   Updated: 2024/06/11 14:28:15 by lknobloc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	is_all_white(char *input)
@@ -5,9 +17,10 @@ int	is_all_white(char *input)
 	int	i;
 
 	i = 0;
-	while(input && input[i])
+	while (input && input[i])
 	{
-		if (input[i] == ' ' || input[i] == '\t' || input[i] == '\r' || input[i] == '\n' || input[i] == '\v' || input[i] == '\f')
+		if (input[i] == ' ' || input[i] == '\t' || input[i] == '\r'
+			|| input[i] == '\n' || input[i] == '\v' || input[i] == '\f')
 			i++;
 		else
 			return (1);
@@ -15,31 +28,23 @@ int	is_all_white(char *input)
 	return (0);
 }
 
+void	exit_n_clean(t_data *d, char *str, int ec)
+{
+	ft_putstr_fd(str, 2);
+	free_n_clean(d, 1);
+	exit (ec);
+}
+
 void	inputparsing(t_data *d)
 {
-	int	ec;
-
-	ec = 0;
 	signal_setup(d, MODE_IN);
-	// ft_putnbr_fd(d->exit_code, 2);
 	d->input = readline("minishell:$ ");
 	if (!d->input)
-	{
-		ft_putstr_fd("exit\n", 1);
-		ec = d->exit_code;
-		free_n_clean(d, 1);
-		exit(ec);
-	}
-	// g_signal_int = 130;
+		exit_n_clean(d, "exit\n", d->exit_code);
 	if (g_signal_int == 130)
 	{
-		// ft_putnbr_fd(g_signal_int, 2);
-		// ft_putstr_fd("... :)\n", 2);
-
 		d->exit_code = 130;
 		g_signal_int = 0;
-		// ft_putnbr_fd(d->exit_code, 2);
-
 	}
 	signal_setup(d, MODE_DF);
 	if (ft_strcmp(d->input, "") == 0 || is_all_white(d->input) == 0)
