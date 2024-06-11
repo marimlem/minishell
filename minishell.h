@@ -151,12 +151,14 @@ void	executor2(t_data *d);
 void	execute_builtin(t_data *d, t_com *current, int ec);
 
 // execute_rdr.c
+int	rdr_handler(t_data *d, t_com *current);
+
+// execute_rdr_utils.c
 void	close_rdr(t_data *d);
 int	rdr_out(t_data *d, t_com *current, int j);
 int	rdr_in(t_data *d, t_com *current, int j);
-int	heredoc_start(t_data *d, t_com *current, int j);
-int	rdr_handler(t_data *d, t_com *current);
 char	*heredoc_expanding(t_data *d, char *heredoc_input);
+int	heredoc_start(t_data *d, t_com *current, int j);
 
 
 

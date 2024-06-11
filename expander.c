@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:57:54 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 18:11:47 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:13:30 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	exp_varlen(char *new)
 	}
 	return (i);
 }
-
 
 int	expand_env(t_data *d, char *new, char *str)
 {
