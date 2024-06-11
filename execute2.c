@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 20:22:01 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:46:32 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 	ec = 0;
 	if (current->rdr && rdr_handler(d, current) != 0)
 	{
+		close_rdr(d);
 		free_n_clean(d, 1);
 		exit (1);
 	}
@@ -30,11 +31,13 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 		execute_builtin(d, current, 0);
 		if (d->exit_code != 0)
 			ec = d->exit_code;
+		close_rdr(d);
 		free_n_clean(d, 1);
 		exit (ec);
 	}
 	if (!current->args || !current->args[0])
 	{
+		close_rdr(d);
 		free_n_clean(d, 1);
 		exit(0);
 	}
@@ -50,6 +53,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 			if (current->file)
 				ft_putstr_fd(current->file, 2);
 			ft_putstr_fd("\n", 2);
+			close_rdr(d);
 			free_n_clean(d, 1);
 			exit(127);
 		}
@@ -59,6 +63,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 			if (current->args && current->args[0])
 				ft_putstr_fd(current->args[0], 2);
 			ft_putstr_fd("\n", 2);
+			close_rdr(d);
 			free_n_clean(d, 1);
 			exit(127);
 		}
@@ -68,6 +73,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 			if (current->args && current->args[0])
 				ft_putstr_fd(current->args[0], 2);
 			ft_putstr_fd("\n", 2);
+			close_rdr(d);
 			free_n_clean(d, 1);
 			exit(126);
 		}
@@ -77,6 +83,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 			if (current->args && current->args[0])
 				ft_putstr_fd(current->args[0], 2);
 			ft_putstr_fd("\n", 2);
+			close_rdr(d);
 			free_n_clean(d, 1);
 			exit(127);
 		}

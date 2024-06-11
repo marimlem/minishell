@@ -9,6 +9,7 @@ void	exit_check_numeric(t_data *d, t_com *current, int ec, int i)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(current->args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+		close_rdr(d);
 		free_n_clean(d, 1);
 		exit(ec);
 	}
