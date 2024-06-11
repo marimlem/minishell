@@ -17,6 +17,7 @@ void	init_envlist(t_envlist **envlist)
 	(*envlist)->key = NULL;
 	(*envlist)->value = NULL;
 	(*envlist)->next = NULL;
+	(*envlist)->export_only = 0;
 }
 
 void	init_null(t_data *d)

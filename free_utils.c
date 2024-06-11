@@ -66,3 +66,32 @@ void	free_n_clean(t_data *d, int b)
 		free (d);
 	d = NULL;
 }
+
+void	free_double_array(char **double_array)
+{
+	if (double_array)
+	{
+		if (double_array[0])
+			free(double_array[0]);
+		if (double_array[1])
+			free(double_array[1]);
+		free(double_array);
+	}
+}
+
+void	free_list(t_envlist **envlist)
+{
+	t_envlist	*current;
+	t_envlist	*next;
+
+	current = *envlist;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->key);
+		free(current->value);
+		free(current);
+		current = next;
+	}
+	free(envlist);
+}

@@ -15,12 +15,14 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 {
 	while (envlist)
 	{
-		if (envlist->key != NULL && key != NULL && ft_strcmp(key, envlist->key) == 0)
+		if (envlist->key != NULL && key != NULL && \
+		ft_strcmp(key, envlist->key) == 0)
 		{
 			free(envlist->value);
 			envlist->value = ft_strdup(value);
 			if (envlist->value == NULL)
 				return (-1);
+			envlist->export_only = 0;
 			return (0);
 		}
 		envlist = envlist->next;
@@ -28,9 +30,10 @@ int	ft_key_exists(t_envlist *envlist, char *key, char *value)
 	return (1);
 }
 
-int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
+int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value)
 {
 	char	*valuejoined;
+
 	while (envlist)
 	{
 		if (ft_strcmp(key, envlist->key) == 0)
@@ -40,6 +43,7 @@ int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value)
 				return (-1);
 			free(envlist->value);
 			envlist->value = valuejoined;
+			envlist->export_only = 0;
 			return (0);
 		}
 		envlist = envlist->next;
@@ -54,16 +58,19 @@ void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 	after_split = ft_eqsplit(envp);
 	if (choice == 1 && ft_key_exists(*envlist, after_split[0],
 			after_split[1]) == 1)
-		ft_add_list(envlist, after_split[0], after_split[1]);
-	else if (choice == 2 && ft_key_exists_for_PE(*envlist, after_split[0],
+		ft_add_list(envlist, after_split[0], after_split[1], 0);
+	else if (choice == 2 && ft_key_exists_for_pe(*envlist, after_split[0],
 			after_split[1]) == 1)
-		ft_add_list(envlist, after_split[0], after_split[1]);
+		ft_add_list(envlist, after_split[0], after_split[1], 0);
+	else if (choice == 3 && ft_key_exists(*envlist, after_split[0],
+			after_split[1]) == 1)
+		ft_add_list(envlist, after_split[0], after_split[1], 1);
 	free_double_array(after_split);
 }
 
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i])

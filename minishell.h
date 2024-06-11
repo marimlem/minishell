@@ -91,6 +91,7 @@ typedef struct s_envlist
 	char				*key;
 	char				*value;
 	struct s_envlist	*next;
+	int					export_only;
 }						t_envlist;
 
 typedef struct	s_data{
@@ -180,7 +181,8 @@ void	envlist_del(t_envlist *env);
 
 // free_utils.c
 void	free_n_clean(t_data *d, int b);
-
+void	free_list(t_envlist **envlist);
+void	free_double_array(char **double_array);
 
 // signal_handling.c
 void	sighdhandler(int signum);
@@ -263,12 +265,14 @@ void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node);
 int	fill_file_ifnecessary(t_data *d);
 
 
-// env_utils.c
-int	ft_contains_char(const char *s, char c);
-void	ft_add_list(t_envlist **envlist, char *key, char *value);
+// add_envlist.c
+void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check);
 void	ft_print_list(t_data *d, t_envlist *envlist);
-void	free_list(t_envlist **envlist);
-void	free_double_array(char **double_array);
+int	ft_split_first_part(char *str, char **double_array);
+void	ft_split_second_part(char *str, char **double_array, int str_index);
+char	**ft_eqsplit(char *str);
+
+//split_eqsplit.c
 int	ft_split_first_part(char *str, char **double_array);
 void	ft_split_second_part(char *str, char **double_array, int str_index);
 char	**ft_eqsplit(char *str);
@@ -276,15 +280,20 @@ char	**ft_eqsplit(char *str);
 //key_value_utils.c
 char	*ft_find_key_value(t_envlist *envlist, const char *key);
 int	ft_key_exists(t_envlist *envlist, char *key, char *value);
-int	ft_key_exists_for_PE(t_envlist *envlist, char *key, char *value);
+int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value);
 void	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
 void	ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 //export.c
-int	ft_check_arg_for_export(t_data *d, t_envlist *envlist, const char *s);
+int	ft_check_arg_for_export(t_data *d, const char *s);
 int	ft_check_export_input(const char *s);
 void	ft_print_export(t_envlist *envlist);
 void	ft_export(t_data *d, t_envlist **envlist, char **arg);
+
+//export_utils.c
+void	print_invalid_identifer(const char *s, t_data *d);
+void	handle_dash(const char *s, int i, t_data *d);
+void	handle_event(const char *s, t_data *d);
 
 //unset.c
 int	ft_check_arg_for_unset(const char *s);
@@ -304,7 +313,11 @@ int	ft_check_arg_for_pwd(t_data *d, const char *s);
 void	ft_pwd(t_data *d);
 
 //echo.c
-void	ft_print_echo(t_data *d, t_com *current, int i);
+void	ft_print_echo(t_com *current, int i);
 void	ft_echo(t_data *d, t_com *current);
+
+//exit_utils.c
+void    exit_check_numeric(t_data *d, t_com *current, int ec, int i);
+void    exit_too_many_args(t_data *d);
 
 #endif
