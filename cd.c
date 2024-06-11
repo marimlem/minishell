@@ -3,20 +3,25 @@
 int	ft_check_driectory(t_data *d, const char *path)
 {
 	DIR	*dp;
-	/* struct dirent *dirp; */
-	
+
 	dp = opendir(path);
 	if (dp == NULL)
 	{
 		d->exit_code = 1;
 		if (errno == EACCES)
-			ft_putstr_fd("cd: ", 2), ft_putstr_fd((char *)path, 2), ft_putstr_fd(": Permission denied\n", 2);
+		{
+			ft_putstr_fd("cd: ", 2);
+			ft_putstr_fd((char *)path, 2);
+			ft_putstr_fd(": Permission denied\n", 2);
+		}
 		else if (errno == ENOENT)
-			ft_putstr_fd("cd: ", 2), ft_putstr_fd((char *)path, 2), ft_putstr_fd(": No such file or directory\n", 2);
+		{
+			ft_putstr_fd("cd: ", 2);
+			ft_putstr_fd((char *)path, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 		return (1);
 	}
-	/* else
-		dirp = readdir(dp); */
 	closedir(dp);
 	return (0);
 }

@@ -74,7 +74,7 @@ void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 			ft_add_key_and_value(envlist, arg[i], 3);
 		else if (ft_check_export_input(arg[i]) == 0)
 		{
-			d->exit_code = 1;	
+			d->exit_code = 1;
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd((char *)arg[i], 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);

@@ -45,7 +45,8 @@ void	add_last(t_envlist *envlist, char *key, char *value)
 	new->next = NULL;
 }
 
-void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check)
+void	ft_add_list(t_envlist **envlist, char *key, char *value, \
+int export_check)
 {
 	t_envlist	*current;
 
@@ -61,8 +62,6 @@ void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check)
 		current->export_only = 1;
 	else
 		current->export_only = 0;
-	
-	
 }
 
 void	ft_print_list(t_data *d, t_envlist *envlist)
