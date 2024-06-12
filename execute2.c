@@ -6,63 +6,11 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 18:43:39 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:42:25 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	close_clean_exit(t_data *d, int ec)
-{
-	close_rdr(d);
-	free_n_clean(d, 1);
-	exit (ec);
-}
-
-void	execve_errormsg2(t_data *d, t_com *current)
-{
-	if (access(current->file, X_OK) != 0)
-	{
-		ft_putstr_fd("minishell: Permission denied: ", 2);
-		if (current->args && current->args[0])
-			ft_putstr_fd(current->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 126);
-	}
-	else
-	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		if (current->args && current->args[0])
-			ft_putstr_fd(current->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
-	}
-}
-
-void	execve_errormsg1(t_data *d, t_com *current)
-{
-	if (current->file && (current->file[0] == '/'
-			|| (current->file[0] == '.'
-				& current->file[1] == '/') || (current->file[0] == '.'
-				&& current->file[1] == '.' && current->file[2] == '/'))
-		&& access(current->file, F_OK) != 0)
-	{
-		ft_putstr_fd("minishell: No such file or directory: ", 2);
-		if (current->file)
-			ft_putstr_fd(current->file, 2);
-		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
-	}
-	else if (access(current->file, F_OK) != 0)
-	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		if (current->args && current->args[0])
-			ft_putstr_fd(current->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
-	}
-	execve_errormsg2(d, current);
-}
 
 //child handler
 void	playground(t_data *d, t_com *current, int pc, int i)
@@ -131,11 +79,6 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	}
 }
 
-void	print_coredumped(int ec)
-{
-	if (ec == 131)
-		ft_putstr_fd("Quit (core dumped)\n", 2);
-}
 
 // pc == pipecount
 void	execute_loop(t_data *d, int pc)
@@ -157,12 +100,7 @@ void	execute_loop(t_data *d, int pc)
 	current = d->com;
 	if (pc == 0 && current->builtin == 1)
 		return ;
-	while (current)
-	{
-		waitpid(current->pid, &(current->status), 0);
-		d->exit_code = current->status % 255;
-		current = current->next;
-	}
+	get_exit_status(d, current);
 	print_coredumped(d->exit_code);
 	signal_setup(d, MODE_DF);
 }

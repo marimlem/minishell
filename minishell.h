@@ -143,6 +143,14 @@ void	execute_loop(t_data *d, int pc);
 void	executor2(t_data *d);
 void	execute_builtin(t_data *d, t_com *current, int ec);
 
+// execute2_utils.c
+void	print_coredumped(int ec);
+void	close_clean_exit(t_data *d, int ec);
+void	execve_errormsg2(t_data *d, t_com *current);
+void	execve_errormsg1(t_data *d, t_com *current);
+void	get_exit_status(t_data *d, t_com *current);
+
+
 // execute_rdr.c
 int	rdr_error(t_com *current, int error);
 int	rdr_handler(t_data *d, t_com *current);
