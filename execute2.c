@@ -6,11 +6,63 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 20:46:32 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:43:39 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	close_clean_exit(t_data *d, int ec)
+{
+	close_rdr(d);
+	free_n_clean(d, 1);
+	exit (ec);
+}
+
+void	execve_errormsg2(t_data *d, t_com *current)
+{
+	if (access(current->file, X_OK) != 0)
+	{
+		ft_putstr_fd("minishell: Permission denied: ", 2);
+		if (current->args && current->args[0])
+			ft_putstr_fd(current->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		close_clean_exit(d, 126);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		if (current->args && current->args[0])
+			ft_putstr_fd(current->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		close_clean_exit(d, 127);
+	}
+}
+
+void	execve_errormsg1(t_data *d, t_com *current)
+{
+	if (current->file && (current->file[0] == '/'
+			|| (current->file[0] == '.'
+				& current->file[1] == '/') || (current->file[0] == '.'
+				&& current->file[1] == '.' && current->file[2] == '/'))
+		&& access(current->file, F_OK) != 0)
+	{
+		ft_putstr_fd("minishell: No such file or directory: ", 2);
+		if (current->file)
+			ft_putstr_fd(current->file, 2);
+		ft_putstr_fd("\n", 2);
+		close_clean_exit(d, 127);
+	}
+	else if (access(current->file, F_OK) != 0)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		if (current->args && current->args[0])
+			ft_putstr_fd(current->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		close_clean_exit(d, 127);
+	}
+	execve_errormsg2(d, current);
+}
 
 //child handler
 void	playground(t_data *d, t_com *current, int pc, int i)
@@ -19,11 +71,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 
 	ec = 0;
 	if (current->rdr && rdr_handler(d, current) != 0)
-	{
-		close_rdr(d);
-		free_n_clean(d, 1);
-		exit (1);
-	}
+		close_clean_exit(d, 1);
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 	if (current->builtin == 1)
@@ -31,63 +79,27 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 		execute_builtin(d, current, 0);
 		if (d->exit_code != 0)
 			ec = d->exit_code;
-		close_rdr(d);
-		free_n_clean(d, 1);
-		exit (ec);
+		close_clean_exit(d, ec);
 	}
 	if (!current->args || !current->args[0])
-	{
-		close_rdr(d);
-		free_n_clean(d, 1);
-		exit(0);
-	}
+		close_clean_exit(d, 0);
 	else if (execve(current->file, current->args, d->envp) == -1)
 	{
-		if (current->file && (current->file[0] == '/'
-				|| (current->file[0] == '.'
-					& current->file[1] == '/') || (current->file[0] == '.'
-					&& current->file[1] == '.' && current->file[2] == '/'))
-			&& access(current->file, F_OK) != 0)
-		{
-			ft_putstr_fd("minishell: No such file or directory: ", 2);
-			if (current->file)
-				ft_putstr_fd(current->file, 2);
-			ft_putstr_fd("\n", 2);
-			close_rdr(d);
-			free_n_clean(d, 1);
-			exit(127);
-		}
-		else if (access(current->file, F_OK) != 0)
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			if (current->args && current->args[0])
-				ft_putstr_fd(current->args[0], 2);
-			ft_putstr_fd("\n", 2);
-			close_rdr(d);
-			free_n_clean(d, 1);
-			exit(127);
-		}
-		else if (access(current->file, X_OK) != 0)
-		{
-			ft_putstr_fd("minishell: Permission denied: ", 2);
-			if (current->args && current->args[0])
-				ft_putstr_fd(current->args[0], 2);
-			ft_putstr_fd("\n", 2);
-			close_rdr(d);
-			free_n_clean(d, 1);
-			exit(126);
-		}
-		else
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			if (current->args && current->args[0])
-				ft_putstr_fd(current->args[0], 2);
-			ft_putstr_fd("\n", 2);
-			close_rdr(d);
-			free_n_clean(d, 1);
-			exit(127);
-		}
+		execve_errormsg1(d, current);
 	}
+}
+
+int	simple_command(t_data *d, t_com *current, int ec, int pc)
+{
+	if (pc == 0 && current->builtin == 1)
+	{
+		if (rdr_handler(d, current) != 0)
+			return (0);
+		execute_builtin(d, current, ec);
+		return (0);
+	}
+	else
+		return (1);
 }
 
 void	process_handler(t_data *d, t_com *current, int pc, int i)
@@ -98,16 +110,9 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	d->heredoc_fd = 0;
 	early_heredoc(d, current);
 	if (g_signal_int == 130)
-	{
 		return ;
-	}
-	if (pc == 0 && current->builtin == 1)
-	{
-		if (rdr_handler(d, current) != 0)
-			return ;
-		execute_builtin(d, current, ec);
+	if (simple_command(d, current, ec, pc) == 0)
 		return ;
-	}
 	if (pc != 0 && i != pc)
 		pipe(d->p[i]);
 	current->pid = fork();
@@ -126,6 +131,12 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 	}
 }
 
+void	print_coredumped(int ec)
+{
+	if (ec == 131)
+		ft_putstr_fd("Quit (core dumped)\n", 2);
+}
+
 // pc == pipecount
 void	execute_loop(t_data *d, int pc)
 {
@@ -142,7 +153,6 @@ void	execute_loop(t_data *d, int pc)
 		close_rdr(d);
 		i++;
 		current = current->next;
-		usleep(5);
 	}
 	current = d->com;
 	if (pc == 0 && current->builtin == 1)
@@ -153,8 +163,7 @@ void	execute_loop(t_data *d, int pc)
 		d->exit_code = current->status % 255;
 		current = current->next;
 	}
-	if (d->exit_code == 131)
-		ft_putstr_fd("Quit (core dumped)\n", 2);
+	print_coredumped(d->exit_code);
 	signal_setup(d, MODE_DF);
 }
 
