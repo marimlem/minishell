@@ -10,7 +10,8 @@ SRC = main.c \
 	execute2.c execute_utils.c execute_rdr.c execute_builtin.c execute_heredoc.c execute_path.c \
 	add_envlist.c key_value_utils.c export.c unset.c is_builtin.c \
 	cd.c pwd.c echo.c split_eqsplit.c exit_utils.c export_utils.c \
-	command_utils2.c command_utils3.c expander_exit.c execute_rdr_utils.c
+	command_utils2.c command_utils3.c expander_exit.c execute_rdr_utils.c \
+	execute_heredoc_utils.c
 
 OBJ = $(SRC:%.c=%.o)
 

@@ -64,8 +64,6 @@
 # define MODE_DF 3
 # define MODE_HD 4
 
-
-
 typedef struct	s_tok{
 	char	*tok;
 	int		typ;
@@ -115,7 +113,6 @@ typedef struct	s_data{
 	// __pid_t	status;
 }	t_data;
 
-
 extern int	g_signal_int;
 
 // ft_strncmp.c
@@ -139,10 +136,6 @@ int	no_path(t_data *d, t_com *current);
 int	relative_path(t_data *d, t_com *current);
 int	setup_cmdpath(t_data *d);
 
-
-
-
-
 // execute2.c
 void	playground(t_data *d, t_com *current ,int pc, int i);
 void	process_handler(t_data *d, t_com *current, int pc, int i);
@@ -161,7 +154,9 @@ int	rdr_in(t_data *d, t_com *current, int j);
 char	*heredoc_expanding(t_data *d, char *heredoc_input);
 int	heredoc_start(t_data *d, t_com *current, int j);
 
-
+// execute_heredoc_utils.c
+char	*heredoc_expanding(t_data *d, char *heredoc_input);
+int	heredoc_start(t_data *d, t_com *current, int j);
 
 // execute_utils.c
 int	setup_fds(t_data *d);
@@ -169,7 +164,6 @@ int	setup_pipes(t_data *d, int pipecount);
 int	d_lstsize(t_com *lst);
 void	close_pipes(int *tube);
 void	pipe_handler(t_data *d, int pc, int i);
-
 
 // init_utils.c
 void	init_envlist(t_envlist **envlist);
@@ -197,14 +191,12 @@ void	inputparsing(t_data *d);
 // lexer.c
 void	lexer(t_data *d);
 
-
 // lex_utils.c
 t_tok	*lex_lstnew(char *ptr);
 t_tok	*lex_lstlast(t_tok *lst);
 void	lex_lstadd_back(t_tok **lst, t_tok *new);
 void	lst_print(t_tok *lst);
 void	init_list2(t_data *d, char *input);
-
 
 // lex_utils2.c
 void	lex_lstsqueezein(t_tok **current, char *str);
@@ -261,12 +253,10 @@ void	init_com(t_data *d);
 char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r);
 int	count_type(t_data *d, t_tok *t_node, int dec);
 
-
 // command_utils3.c
 void	alloc_coms(t_com *c_cur, int rdr_c, int arg_c);
 void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node);
 int	fill_file_ifnecessary(t_data *d);
-
 
 // add_envlist.c
 void	ft_add_list(t_envlist **envlist, char *key, char *value, int export_check);
