@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 21:15:22 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:09:47 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,32 @@ int	hd_open_path(t_data *d)
 	return (open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0777));
 }
 
-int	print_heredoc_warning(void)
+int	hd_handle_input(t_data *d, t_com *current, char *heredoc_input, int fd)
 {
-	ft_putstr_fd("minishell: warning: ", 2);
-	ft_putstr_fd("here-document delimited by ", 2);
-	ft_putstr_fd("end-of-file instead of given delimiter\n", 2);
+	if (!heredoc_input)
+	{
+		print_heredoc_warning();
+		return (2);
+	}
+	if (ft_strcmp(heredoc_input, current->rdr[d->heredoc_fd + 1]) == 0)
+		return (2);
+	if (current->rdr[d->heredoc_fd][2] != SGLQUOTE)
+	{
+		heredoc_input = heredoc_expanding(d, heredoc_input);
+		if (heredoc_input == NULL)
+		{
+			if (fd >= 0)
+				close (fd);
+			return (1);
+		}
+	}
 	return (0);
 }
 
-void	hd_loop(t_data *d, int fd, t_com *current, int j)
+int	hd_loop(t_data *d, int fd, t_com *current, int j)
 {
 	char	*heredoc_input;
+	int	var;
 
 	d->heredoc_fd = j;
 	while (1)
@@ -66,28 +81,15 @@ void	hd_loop(t_data *d, int fd, t_com *current, int j)
 			d->exit_code = 130;
 			if (fd >= 0)
 				close (fd);
-			return ;
+			return (1);
 		}
-		if (!heredoc_input)
-		{
-			print_heredoc_warning();
-			break ;
-		}
-		if (ft_strcmp(heredoc_input, current->rdr[j + 1]) == 0)
-			break ;
-		if (current->rdr[j][2] != SGLQUOTE)
-		{
-			heredoc_input = heredoc_expanding(d, heredoc_input);
-			if (heredoc_input == NULL)
-			{
-				if (fd >= 0)
-					close (fd);
-				return ;
-			}
-		}
+		var = hd_handle_input(d, current, heredoc_input, fd);
+		if (var != 0)
+			return (var);
 		ft_putstr_fd(heredoc_input, fd);
 		ft_putchar_fd('\n', fd);
 	}
+	return (0);
 }
 
 void	early_heredoc(t_data *d, t_com *current)
@@ -109,7 +111,8 @@ void	early_heredoc(t_data *d, t_com *current)
 		fd = hd_open_path(d);
 		if (fd < 0)
 			return ;
-		hd_loop(d, fd, current, j);
+		if (hd_loop(d, fd, current, j) != 0)
+			return ;
 		if (fd >= 0)
 			close (fd);
 		j++;

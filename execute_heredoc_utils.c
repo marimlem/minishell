@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:52:57 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 18:52:58 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:09:09 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,3 +44,12 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 	dup2(d->fd[IN], STDIN_FILENO);
 	return (0);
 }
+
+int	print_heredoc_warning(void)
+{
+	ft_putstr_fd("minishell: warning: ", 2);
+	ft_putstr_fd("here-document delimited by ", 2);
+	ft_putstr_fd("end-of-file instead of given delimiter\n", 2);
+	return (0);
+}
+

@@ -129,6 +129,8 @@ void	execute_builtin(t_data *d, t_com *current, int ec);
 char	*heredoc_path(t_data *d);
 void	early_heredoc(t_data *d, t_com *current);
 
+
+
 // execute_path.c
 int	setup_path(t_data *d);
 int	absolut_path(t_data *d, t_com *current);
@@ -165,6 +167,8 @@ int	heredoc_start(t_data *d, t_com *current, int j);
 // execute_heredoc_utils.c
 char	*heredoc_expanding(t_data *d, char *heredoc_input);
 int	heredoc_start(t_data *d, t_com *current, int j);
+int	print_heredoc_warning(void);
+
 
 // execute_utils.c
 int	setup_fds(t_data *d);
