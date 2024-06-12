@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:52:57 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 20:09:09 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:19:17 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,3 @@ int	print_heredoc_warning(void)
 	ft_putstr_fd("end-of-file instead of given delimiter\n", 2);
 	return (0);
 }
-
