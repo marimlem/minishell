@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:58:22 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 19:47:17 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:15:45 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	print_coredumped(int ec)
 {
 	if (ec == 131)
-		ft_putstr_fd("Quit (core dumped)\n", 2);
+		ft_putstr_fd("Quit (core dumped)", 2);
+	ft_putchar_fd('\n', 2);
 }
 
 void	close_clean_exit(t_data *d, int ec)
@@ -79,7 +80,7 @@ void	get_exit_status(t_data *d, t_com *current)
 		if (current->next == NULL && WIFSIGNALED(current->status) != 0)
 		{
 			d->exit_code = WTERMSIG(current->status) + 128;
-			ft_putstr_fd("\n", 2);
+			print_coredumped(d->exit_code);
 		}
 		current = current->next;
 	}

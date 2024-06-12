@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 19:42:25 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:13:15 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	execute_loop(t_data *d, int pc)
 	if (pc == 0 && current->builtin == 1)
 		return ;
 	get_exit_status(d, current);
-	print_coredumped(d->exit_code);
+	// print_coredumped(d->exit_code);
 	signal_setup(d, MODE_DF);
 }
 
