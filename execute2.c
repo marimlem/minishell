@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 13:32:53 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:39:22 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,27 @@ void	execute_loop(t_data *d, int pc)
 		process_handler(d, current, pc, i);
 		if (g_signal_int == 130)
 			return ;
-		close_rdr(d);
+		if (current->rdr)
+			close_rdr(d);
 		i++;
 		current = current->next;
 	}
+	// if (d->old_fd[OUT] >= 0)
+	// 	close (d->old_fd[OUT]);
+	// if (d->old_fd[IN] >= 0)
+	// 	close (d->old_fd[IN]);
+
 	current = d->com;
 	if (pc == 0 && current->builtin == 1)
 		return ;
 	get_exit_status(d, current);
+
+	
+	// while (pc != 0 && i != 0)
+	// 	close_pipes(d->p[i-- - 1]);
+
+
+		
 	signal_setup(d, MODE_DF);
 }
 
