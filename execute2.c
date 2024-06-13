@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 16:39:22 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:00:41 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ void	execute_loop(t_data *d, int pc)
 		process_handler(d, current, pc, i);
 		if (g_signal_int == 130)
 			return ;
-		if (current->rdr)
-			close_rdr(d);
+		// if (current->rdr)
 		i++;
 		current = current->next;
 	}
@@ -106,9 +105,17 @@ void	execute_loop(t_data *d, int pc)
 	// 	close (d->old_fd[IN]);
 
 	current = d->com;
+	close_rdr(d);
 	if (pc == 0 && current->builtin == 1)
 		return ;
 	get_exit_status(d, current);
+
+	// if (d->fd[IN] >= 0)
+	// 	close (d->fd[IN]);
+	// if (d->fd[OUT] >= 0)
+	// 	close (d->fd[OUT]);
+
+
 
 	
 	// while (pc != 0 && i != 0)
