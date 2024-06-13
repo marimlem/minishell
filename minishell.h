@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:28:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:18:49 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:29:47 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ int		rdr_out(t_data *d, t_com *current, int j);
 int		rdr_in(t_data *d, t_com *current, int j);
 char	*heredoc_expanding(t_data *d, char *heredoc_input);
 int		heredoc_start(t_data *d, t_com *current, int j);
+char	*double_join(t_data *d, t_com *current, int i);
 
 // execute_heredoc_utils.c
 char	*heredoc_expanding(t_data *d, char *heredoc_input);
@@ -261,7 +262,7 @@ void	setup_coms(t_data *d, t_tok *t_node, t_com *c_node);
 int		fill_file_ifnecessary(t_data *d);
 
 // add_envlist.c
-int	ft_add_list(t_envlist **envlist, char *key, char *value,
+int		ft_add_list(t_envlist **envlist, char *key, char *value,
 			int export_check);
 void	ft_print_list(t_data *d, t_envlist *envlist);
 int		ft_split_first_part(char *str, char **double_array);
@@ -277,14 +278,14 @@ char	**ft_eqsplit(char *str);
 char	*ft_find_key_value(t_envlist *envlist, const char *key);
 int		ft_key_exists(t_envlist *envlist, char *key, char *value);
 int		ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value);
-int	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
-int	ft_assign_key_and_value(t_envlist **envlist, char **envp);
+int		ft_add_key_and_value(t_envlist **envlist, char *envp, int choice);
+int		ft_assign_key_and_value(t_envlist **envlist, char **envp);
 
 //export.c
 int		ft_check_arg_for_export(t_data *d, const char *s);
 int		ft_check_export_input(const char *s);
 void	ft_print_export(t_envlist *envlist);
-int	ft_export(t_data *d, t_envlist **envlist, char **arg);
+int		ft_export(t_data *d, t_envlist **envlist, char **arg);
 
 //export_utils.c
 void	print_invalid_identifer(const char *s, t_data *d);

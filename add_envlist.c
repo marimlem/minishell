@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:54:57 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/13 20:11:36 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:26:41 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,7 @@ int export_check)
 	{
 		if (add_last(current, key, value) != 0)
 			return (1);
-
 	}
-	
 	while (current->next)
 		current = current->next;
 	if (export_check == 1)

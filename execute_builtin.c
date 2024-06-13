@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:55:07 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/13 18:36:16 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:25:37 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 		if (handle_export(d, current) != 0)
 		{
 			d->error = 1;
-			return ; 
+			return ;
 		}
 	}
 	else if (builtin_id == 5)

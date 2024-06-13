@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 18:15:41 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 17:00:13 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:27:15 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	close_rdr(t_data *d)
 	{
 		dup2(d->old_fd[OUT], 1);
 		close (d->old_fd[OUT]);
-		// d->old_fd[OUT] = -1;
 	}
 	if (d->fd[OUT] >= 0)
 	{
@@ -28,7 +27,6 @@ void	close_rdr(t_data *d)
 	{
 		dup2(d->old_fd[IN], 0);
 		close (d->old_fd[IN]);
-		// d->old_fd[IN] = -1;
 	}
 	if (d->fd[IN] >= 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:31:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:24:16 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:29:17 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,6 @@ int	absolut_path(t_data *d, t_com *current)
 	}
 	(void) d;
 	return (0);
-}
-
-char	*double_join(t_data *d, t_com *current, int i)
-{
-	char	*t;
-	char	*tmp;
-	
-	t = ft_strjoin(d->path[i], "/");
-	if (t == NULL)
-	{
-		d->error = 1;
-		return (NULL);
-	}
-	tmp = ft_strjoin(t, current->file);
-	free (t);
-	t = NULL;
-	if (tmp == NULL)
-	{
-		d->error = 1;
-		return (NULL);
-	}
-	return (tmp);
 }
 
 int	no_path(t_data *d, t_com *current)

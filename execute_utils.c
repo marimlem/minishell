@@ -6,12 +6,11 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:35:13 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 14:31:13 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:26:59 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	setup_pipes(t_data *d, int pipecount)
 {

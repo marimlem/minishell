@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:17:35 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:25:57 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ int	g_signal_int;
 
 void	set_err_free(t_data *d)
 {
-
 	d->error = 1;
 	if (d->env)
 	{
 		free (d->env);
 		d->env = NULL;
 	}
-	
 }
 
 void	init_d_env(t_data **d, char **envp)

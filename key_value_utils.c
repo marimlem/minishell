@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:55:21 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/13 19:41:19 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:26:23 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	ft_key_exists_for_pe(t_envlist *envlist, char *key, char *value)
 int	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 {
 	char	**after_split;
-	int	err;
+	int		err;
 
 	err = 0;
 	after_split = ft_eqsplit(envp);
@@ -80,7 +80,7 @@ int	ft_add_key_and_value(t_envlist **envlist, char *envp, int choice)
 		err = ft_add_list(envlist, after_split[0], after_split[1], 0);
 	else if (choice == 3 && ft_key_exists(*envlist, after_split[0],
 			after_split[1]) == 1)
-		err =ft_add_list(envlist, after_split[0], after_split[1], 1);
+		err = ft_add_list(envlist, after_split[0], after_split[1], 1);
 	free_double_array(after_split);
 	if (err != 0)
 		return (1);
