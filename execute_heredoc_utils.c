@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:52:57 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 20:19:17 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:45:51 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	heredoc_start(t_data *d, t_com *current, int j)
 	(void) j;
 	if (d->old_fd[IN] != -1)
 		dup2(d->old_fd[IN], 0);
+	if (d->fd[IN] >= 0)
+		close (d->fd[IN]);
 	d->fd[IN] = open(d->hd_path, O_RDONLY | O_CREAT, 0744);
 	if (d->fd[IN] < 0)
 		return (d->heredoc_fd + 1);
