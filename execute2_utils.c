@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:58:22 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 20:15:45 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:33:34 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ void	print_coredumped(int ec)
 	ft_putchar_fd('\n', 2);
 }
 
-void	close_clean_exit(t_data *d, int ec)
+void	close_clean_exit(t_data *d, int ec, int i)
 {
+	if (d->p && i != 0)
+		close_pipes(d->p[i - 1]);
 	close_rdr(d);
 	free_n_clean(d, 1);
 	exit (ec);
 }
 
-void	execve_errormsg2(t_data *d, t_com *current)
+void	execve_errormsg2(t_data *d, t_com *current, int i)
 {
 	if (access(current->file, X_OK) != 0)
 	{
@@ -34,7 +36,7 @@ void	execve_errormsg2(t_data *d, t_com *current)
 		if (current->args && current->args[0])
 			ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 126);
+		close_clean_exit(d, 126, i);
 	}
 	else
 	{
@@ -42,11 +44,11 @@ void	execve_errormsg2(t_data *d, t_com *current)
 		if (current->args && current->args[0])
 			ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
+		close_clean_exit(d, 127, i);
 	}
 }
 
-void	execve_errormsg1(t_data *d, t_com *current)
+void	execve_errormsg1(t_data *d, t_com *current, int i)
 {
 	if (current->file && (current->file[0] == '/'
 			|| (current->file[0] == '.'
@@ -58,7 +60,7 @@ void	execve_errormsg1(t_data *d, t_com *current)
 		if (current->file)
 			ft_putstr_fd(current->file, 2);
 		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
+		close_clean_exit(d, 127, i);
 	}
 	else if (access(current->file, F_OK) != 0)
 	{
@@ -66,9 +68,9 @@ void	execve_errormsg1(t_data *d, t_com *current)
 		if (current->args && current->args[0])
 			ft_putstr_fd(current->args[0], 2);
 		ft_putstr_fd("\n", 2);
-		close_clean_exit(d, 127);
+		close_clean_exit(d, 127, i);
 	}
-	execve_errormsg2(d, current);
+	execve_errormsg2(d, current, i);
 }
 
 void	get_exit_status(t_data *d, t_com *current)

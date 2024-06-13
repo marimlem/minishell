@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:55:07 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/12 19:55:08 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/13 20:25:37 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,18 @@ void	handle_pwd(t_data *d, t_com *current)
 	}
 }
 
-void	handle_export(t_data *d, t_com *current)
+int	handle_export(t_data *d, t_com *current)
 {
 	d->exit_code = 0;
 	if (current->args[1] != NULL)
 	{
 		if (ft_check_arg_for_export(d, current->args[1]) == 0)
-			ft_export(d, d->env, current->args);
+			if (ft_export(d, d->env, current->args) != 0)
+				return (1);
 	}
 	else
 		ft_print_export(*d->env);
+	return (0);
 }
 
 void	handle_unset(t_data *d, t_com *current)
@@ -83,7 +85,13 @@ void	execute_builtin(t_data *d, t_com *current, int ec)
 	else if (builtin_id == 3)
 		handle_pwd(d, current);
 	else if (builtin_id == 4)
-		handle_export(d, current);
+	{
+		if (handle_export(d, current) != 0)
+		{
+			d->error = 1;
+			return ;
+		}
+	}
 	else if (builtin_id == 5)
 		handle_unset(d, current);
 	else if (builtin_id == 6)

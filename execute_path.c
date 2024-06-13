@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:31:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 19:34:23 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:29:17 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ int	setup_path(t_data *d)
 {
 	t_envlist	*current;
 
+	if (d == NULL || d->env == NULL || *(d->env) == NULL
+		|| (*d->env)->key == NULL)
+		return (1);
 	current = *(d->env);
 	while (current && ft_strcmp("PATH", current->key) != 0)
 		current = current->next;
@@ -57,17 +60,18 @@ int	absolut_path(t_data *d, t_com *current)
 int	no_path(t_data *d, t_com *current)
 {
 	char	*tmp;
-	char	*t;
 	int		i;
 
 	i = 0;
 	tmp = NULL;
 	while (current->file && d->path && d->path[i])
 	{
-		t = ft_strjoin(d->path[i], "/");
-		tmp = ft_strjoin(t, current->file);
-		free (t);
-		t = NULL;
+		tmp = double_join(d, current, i);
+		if (tmp == NULL)
+		{
+			d->error = 1;
+			return (1);
+		}
 		if (access(tmp, X_OK) == 0)
 		{
 			free (current->file);
@@ -105,6 +109,8 @@ int	setup_cmdpath(t_data *d)
 		}
 		current = current->next;
 	}
+	if (d->error != 0)
+		return (1);
 	return (0);
 }
 

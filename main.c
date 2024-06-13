@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 18:06:32 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:25:57 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,22 @@
 
 int	g_signal_int;
 
+void	set_err_free(t_data *d)
+{
+	d->error = 1;
+	if (d->env)
+	{
+		free (d->env);
+		d->env = NULL;
+	}
+}
+
 void	init_d_env(t_data **d, char **envp)
 {
 	*d = (t_data *) ft_calloc(1, sizeof(t_data));
 	if (*d == NULL)
 		return ;
+	init_null(*d);
 	(*d)->env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if ((*d)->env == NULL)
 		return ;
@@ -31,11 +42,14 @@ void	init_d_env(t_data **d, char **envp)
 	}
 	init_envlist((*d)->env);
 	(*d)->envp = envp;
-	ft_assign_key_and_value((*d)->env, envp);
+	if (ft_assign_key_and_value((*d)->env, envp) != 0)
+	{
+		set_err_free(*d);
+		return ;
+	}
 	(*d)->exit_code = 0;
 	g_signal_int = 0;
 	signal_setup(*d, MODE_DF);
-	init_null(*d);
 }
 
 void	clean_shell(t_data *d)
@@ -49,10 +63,11 @@ void	clean_shell(t_data *d)
 
 void	parsing_error(t_data *d)
 {
+	if (d->error > 1)
+		ft_putstr_fd("syntax ", 2);
 	if (d->error != 0)
 	{
-		ft_putstr_fd("error: ", 2);
-		ft_putnbr_fd(d->error, 2);
+		ft_putstr_fd("error", 2);
 		ft_putstr_fd("\n", 2);
 	}
 }
@@ -67,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	d = NULL;
 	(void) argv;
 	init_d_env(&d, envp);
-	if (!d || !d->env || !*(d->env))
+	if (!d || !d->env || !*(d->env) || d->error != 0)
 	{
 		free_n_clean(d, 1);
 		return (1);
@@ -76,7 +91,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		inputparsing(d);
 		parsing_error(d);
-		if (d->com)
+		if (d->com && d->error == 0)
 			executor2(d);
 		clean_shell(d);
 	}

@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:23:15 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 18:21:28 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:28:28 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,26 @@ int	rdr_handler(t_data *d, t_com *current)
 		j = j + 2;
 	}
 	return (rdr_error(current, error));
+}
+
+char	*double_join(t_data *d, t_com *current, int i)
+{
+	char	*t;
+	char	*tmp;
+
+	t = ft_strjoin(d->path[i], "/");
+	if (t == NULL)
+	{
+		d->error = 1;
+		return (NULL);
+	}
+	tmp = ft_strjoin(t, current->file);
+	free (t);
+	t = NULL;
+	if (tmp == NULL)
+	{
+		d->error = 1;
+		return (NULL);
+	}
+	return (tmp);
 }
