@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 20:19:34 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:32:53 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 
 	ec = 0;
 	if (current->rdr && rdr_handler(d, current) != 0)
-		close_clean_exit(d, 1);
+		close_clean_exit(d, 1, i);
 	if (pc != 0)
 		pipe_handler(d, pc, i);
 	if (current->builtin == 1)
@@ -27,13 +27,13 @@ void	playground(t_data *d, t_com *current, int pc, int i)
 		execute_builtin(d, current, 0);
 		if (d->exit_code != 0)
 			ec = d->exit_code;
-		close_clean_exit(d, ec);
+		close_clean_exit(d, ec, i);
 	}
 	if (!current->args || !current->args[0])
-		close_clean_exit(d, 0);
+		close_clean_exit(d, 0, i);
 	else if (execve(current->file, current->args, d->envp) == -1)
 	{
-		execve_errormsg1(d, current);
+		execve_errormsg1(d, current, i);
 	}
 }
 
@@ -76,6 +76,9 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 		signal_setup(d, MODE_IG);
 		if (pc != 0 && i != 0)
 			close_pipes(d->p[i - 1]);
+		// else if (pc != 0 && i == 0)
+		// 	close_pipes(d->p[i]);
+
 	}
 }
 

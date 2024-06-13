@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:35:13 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 19:36:54 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:26:57 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	d_lstsize(t_com *lst)
 
 void	close_pipes(int *tube)
 {
-	close (tube[0]);
-	close (tube[1]);
+	if (tube[0] >= 0)
+		close (tube[0]);
+	if (tube[1] >= 0)
+		close (tube[1]);
 }
