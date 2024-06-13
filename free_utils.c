@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:48:00 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 11:48:01 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:14:51 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,17 @@ void	free_double_array(char **double_array)
 	if (double_array)
 	{
 		if (double_array[0])
+		{
 			free(double_array[0]);
+			double_array[0] = NULL;
+		}
 		if (double_array[1])
+		{
 			free(double_array[1]);
+			double_array[1] = NULL;
+		}
 		free(double_array);
+		double_array = NULL;
 	}
 }
 
@@ -96,14 +103,23 @@ void	free_list(t_envlist **envlist)
 	t_envlist	*current;
 	t_envlist	*next;
 
+	if (envlist == NULL)
+		return ;
 	current = *envlist;
 	while (current != NULL)
 	{
 		next = current->next;
-		free(current->key);
-		free(current->value);
-		free(current);
+		if (current->key != NULL)
+			free(current->key);
+		current->key = NULL;
+		if (current->value != NULL)
+			free(current->value);
+		current->value = NULL;
+		if (current)
+			free(current);
+		current = NULL;
 		current = next;
 	}
 	free(envlist);
+	envlist = NULL;
 }

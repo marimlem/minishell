@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   add_envlist.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:54:57 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/12 19:54:58 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/13 20:11:36 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_first(t_envlist **envlist, char *key, char *value)
+int	add_first(t_envlist **envlist, char *key, char *value)
 {
 	t_envlist	*current;
 
+	if (envlist == NULL || *envlist == NULL)
+		return (1);
 	current = *envlist;
 	if (current->key == NULL && current->value == NULL && current->next == NULL)
 	{
@@ -25,22 +27,27 @@ void	add_first(t_envlist **envlist, char *key, char *value)
 		{
 			free(current->key);
 			free(current->value);
+			current->key = NULL;
+			current->value = NULL;
 			free(current);
-			return ;
+			current = NULL;
+			free (*envlist);
+			*envlist = NULL;
+			return (1);
 		}
 		current->next = NULL;
-		return ;
 	}
+	return (0);
 }
 
-void	add_last(t_envlist *envlist, char *key, char *value)
+int	add_last(t_envlist *envlist, char *key, char *value)
 {
 	t_envlist	*current;
 	t_envlist	*new;
 
 	new = (t_envlist *)ft_calloc(1, sizeof(t_envlist));
 	if (new == NULL)
-		return ;
+		return (1);
 	new->key = ft_strdup(key);
 	new->value = ft_strdup(value);
 	if (new->key == NULL || new->value == NULL)
@@ -48,16 +55,17 @@ void	add_last(t_envlist *envlist, char *key, char *value)
 		free(new->key);
 		free(new->value);
 		free(new);
-		return ;
+		return (1);
 	}
 	current = envlist;
 	while (current->next)
 		current = current->next;
 	current->next = new;
 	new->next = NULL;
+	return (0);
 }
 
-void	ft_add_list(t_envlist **envlist, char *key, char *value, \
+int	ft_add_list(t_envlist **envlist, char *key, char *value, \
 int export_check)
 {
 	t_envlist	*current;
@@ -65,15 +73,24 @@ int export_check)
 	current = *envlist;
 	if (!current || (current->key == NULL && \
 	current->value == NULL && current->next == NULL))
-		add_first(envlist, key, value);
+	{
+		if (add_first(envlist, key, value) != 0)
+			return (1);
+	}
 	else
-		add_last(current, key, value);
+	{
+		if (add_last(current, key, value) != 0)
+			return (1);
+
+	}
+	
 	while (current->next)
 		current = current->next;
 	if (export_check == 1)
 		current->export_only = 1;
 	else
 		current->export_only = 0;
+	return (0);
 }
 
 void	ft_print_list(t_data *d, t_envlist *envlist)

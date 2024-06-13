@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:55:13 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/12 19:55:14 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/13 19:08:11 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,21 @@ void	ft_print_export(t_envlist *envlist)
 	}
 }
 
-void	ft_export(t_data *d, t_envlist **envlist, char **arg)
+int	ft_export(t_data *d, t_envlist **envlist, char **arg)
 {
 	int	i;
+	int	err;
 
+	err = 0;
 	i = 1;
 	while (arg && arg[i])
 	{
 		if (ft_check_export_input(arg[i]) == 1)
-			ft_add_key_and_value(envlist, arg[i], 1);
+			err = ft_add_key_and_value(envlist, arg[i], 1);
 		else if (ft_check_export_input(arg[i]) == 2)
-			ft_add_key_and_value(envlist, arg[i], 2);
+			err = ft_add_key_and_value(envlist, arg[i], 2);
 		else if (ft_check_export_input(arg[i]) == 3)
-			ft_add_key_and_value(envlist, arg[i], 3);
+			err = ft_add_key_and_value(envlist, arg[i], 3);
 		else if (ft_check_export_input(arg[i]) == 0)
 		{
 			d->exit_code = 1;
@@ -91,6 +93,9 @@ void	ft_export(t_data *d, t_envlist **envlist, char **arg)
 			ft_putstr_fd((char *)arg[i], 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
 		}
+		if (err != 0)
+			return (1);
 		i++;
 	}
+	return (0);
 }
