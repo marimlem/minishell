@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:31:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:12:32 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:24:16 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	setup_path(t_data *d)
 {
 	t_envlist	*current;
 
-	if (d == NULL || d->env == NULL || *(d->env) == NULL || (*d->env)->key == NULL)
+	if (d == NULL || d->env == NULL || *(d->env) == NULL
+		|| (*d->env)->key == NULL)
 		return (1);
 	current = *(d->env);
 	while (current && ft_strcmp("PATH", current->key) != 0)
@@ -56,25 +57,38 @@ int	absolut_path(t_data *d, t_com *current)
 	return (0);
 }
 
+char	*double_join(t_data *d, t_com *current, int i)
+{
+	char	*t;
+	char	*tmp;
+	
+	t = ft_strjoin(d->path[i], "/");
+	if (t == NULL)
+	{
+		d->error = 1;
+		return (NULL);
+	}
+	tmp = ft_strjoin(t, current->file);
+	free (t);
+	t = NULL;
+	if (tmp == NULL)
+	{
+		d->error = 1;
+		return (NULL);
+	}
+	return (tmp);
+}
+
 int	no_path(t_data *d, t_com *current)
 {
 	char	*tmp;
-	char	*t;
 	int		i;
 
 	i = 0;
 	tmp = NULL;
 	while (current->file && d->path && d->path[i])
 	{
-		t = ft_strjoin(d->path[i], "/");
-		if (t == NULL)
-		{
-			d->error = 1;
-			return (1);
-		}
-		tmp = ft_strjoin(t, current->file);
-		free (t);
-		t = NULL;
+		tmp = double_join(d, current, i);
 		if (tmp == NULL)
 		{
 			d->error = 1;

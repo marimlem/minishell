@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:02 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 17:52:47 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 20:19:47 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,6 @@ void	process_handler(t_data *d, t_com *current, int pc, int i)
 		signal_setup(d, MODE_IG);
 		if (pc != 0 && i != 0)
 			close_pipes(d->p[i - 1]);
-		// else if (pc != 0 && i == 0)
-		// 	close_pipes(d->p[i]);
-
 	}
 }
 
@@ -98,34 +95,14 @@ void	execute_loop(t_data *d, int pc)
 			close_rdr(d);
 			return ;
 		}
-		// if (current->rdr)
 		i++;
 		current = current->next;
 	}
-	// if (d->old_fd[OUT] >= 0)
-	// 	close (d->old_fd[OUT]);
-	// if (d->old_fd[IN] >= 0)
-	// 	close (d->old_fd[IN]);
-
 	current = d->com;
 	close_rdr(d);
 	if (pc == 0 && current->builtin == 1)
 		return ;
 	get_exit_status(d, current);
-
-	// if (d->fd[IN] >= 0)
-	// 	close (d->fd[IN]);
-	// if (d->fd[OUT] >= 0)
-	// 	close (d->fd[OUT]);
-
-
-
-	
-	// while (pc != 0 && i != 0)
-	// 	close_pipes(d->p[i-- - 1]);
-
-
-		
 	signal_setup(d, MODE_DF);
 }
 
