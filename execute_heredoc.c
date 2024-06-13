@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 13:43:44 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:33:14 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ int	hd_open_path(t_data *d)
 	return (open(d->hd_path, O_WRONLY | O_CREAT | O_TRUNC, 0777));
 }
 
-int	hd_handle_input(t_data *d, t_com *current, char *heredoc_input, int fd)
+int	hd_handle_input(t_data *d, t_com *current, char **heredoc_input, int fd)
 {
-	if (!heredoc_input)
+	if (!*heredoc_input)
 	{
 		print_heredoc_warning();
 		return (2);
 	}
-	if (ft_strcmp(heredoc_input, current->rdr[d->heredoc_fd + 1]) == 0)
+	if (ft_strcmp(*heredoc_input, current->rdr[d->heredoc_fd + 1]) == 0)
 	{
 		if (fd >= 0)
 			close (fd);
@@ -57,8 +57,8 @@ int	hd_handle_input(t_data *d, t_com *current, char *heredoc_input, int fd)
 	}
 	if (current->rdr[d->heredoc_fd][2] != SGLQUOTE)
 	{
-		heredoc_input = heredoc_expanding(d, heredoc_input);
-		if (heredoc_input == NULL)
+		*heredoc_input = heredoc_expanding(d, *heredoc_input);
+		if (*heredoc_input == NULL)
 		{
 			if (fd >= 0)
 				close (fd);
@@ -87,7 +87,7 @@ int	hd_loop(t_data *d, int fd, t_com *current, int j)
 				close (fd);
 			return (1);
 		}
-		var = hd_handle_input(d, current, heredoc_input, fd);
+		var = hd_handle_input(d, current, &heredoc_input, fd);
 		if (var != 0)
 			return (var);
 		ft_putstr_fd(heredoc_input, fd);
