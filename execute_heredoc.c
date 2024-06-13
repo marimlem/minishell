@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 17:33:14 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:36:15 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	hd_loop(t_data *d, int fd, t_com *current, int j)
 			return (var);
 		ft_putstr_fd(heredoc_input, fd);
 		ft_putchar_fd('\n', fd);
+		free (heredoc_input);
 	}
 	return (0);
 }
