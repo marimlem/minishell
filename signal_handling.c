@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 19:30:02 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:19:01 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ void	sighandler(int signum)
 	return ;
 }
 
-void	sigquithandler(int signum)
-{
-	(void) signum;
-	exit (131);
-}
-
 void	signal_setup(t_data *d, int modus)
 {
 	(void) d;
@@ -69,6 +63,6 @@ void	signal_setup(t_data *d, int modus)
 	else if (modus == MODE_DF)
 	{
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, sigquithandler);
+		signal(SIGQUIT, SIG_DFL);
 	}
 }

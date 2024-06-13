@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:57:54 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 16:01:47 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:13:30 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,6 @@ int	exp_varlen(char *new)
 			i++;
 	}
 	return (i);
-}
-
-int	malloc_dat_exp(t_data *d, char **exp, char *value)
-{
-	*exp = (char *) ft_calloc(sizeof(char),
-			ft_strlen(d->tmp) + ft_strlen(value));
-	if (exp == NULL)
-	{
-		d->error = 301;
-		return (1);
-	}
-	return (0);
 }
 
 int	expand_env(t_data *d, char *new, char *str)

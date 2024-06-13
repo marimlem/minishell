@@ -6,12 +6,11 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:30:38 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 14:05:24 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:25:08 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	rdr_append(t_data *d, t_tok *current, t_com *c_cur, int r)
 {

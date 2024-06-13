@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 15:19:22 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/05/08 12:13:05 by luca             ###   ########.fr       */
+/*   Updated: 2024/06/13 11:42:27 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ int	ft_atoi(const char *nptr)
 		i++;
 	}
 	while (str[i] >= 48 && str[i] <= 57)
-	{
-		num = num * 10 + str[i] - 48;
-		i++;
-	}
+		num = num * 10 + str[i++] - 48;
 	num = num * m;
 	return (num);
 }

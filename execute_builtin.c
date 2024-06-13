@@ -54,6 +54,7 @@ void	handle_exit(t_data *d, t_com *current, int ec)
 		}
 		ec = ft_atoi(current->args[1]);
 	}
+	close_rdr(d);
 	free_n_clean(d, 1);
 	exit(ec);
 }

@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/10 19:21:50 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:06:32 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_d_env(t_data **d, char **envp)
 {
 	*d = (t_data *) ft_calloc(1, sizeof(t_data));
 	if (*d == NULL)
-		return ;	
+		return ;
 	(*d)->env = (t_envlist **)ft_calloc(1, sizeof(t_envlist *));
 	if ((*d)->env == NULL)
 		return ;
@@ -35,14 +35,34 @@ void	init_d_env(t_data **d, char **envp)
 	(*d)->exit_code = 0;
 	g_signal_int = 0;
 	signal_setup(*d, MODE_DF);
+	init_null(*d);
 }
 
+void	clean_shell(t_data *d)
+{
+	if (g_signal_int == 130)
+		d->exit_code = 130;
+	g_signal_int = 0;
+	free_n_clean(d, 0);
+	init_null(d);
+}
+
+void	parsing_error(t_data *d)
+{
+	if (d->error != 0)
+	{
+		ft_putstr_fd("error: ", 2);
+		ft_putnbr_fd(d->error, 2);
+		ft_putstr_fd("\n", 2);
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*d;
 
-	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0 || raise_shlvl(envp) != 0)
+	if (argc != 1 || *envp == NULL || ft_strcmp(envp[0], "") == 0
+		|| raise_shlvl(envp) != 0)
 		exit (42);
 	d = NULL;
 	(void) argv;
@@ -54,21 +74,12 @@ int	main(int argc, char **argv, char **envp)
 	}
 	while (1)
 	{
-		init_null(d);
 		inputparsing(d);
-		if (d->error != 0)
-		{
-			ft_putstr_fd("error: ", 2);
-			ft_putnbr_fd(d->error, 2);
-			ft_putstr_fd("\n", 2);
-		}
+		parsing_error(d);
 		if (d->com)
 			executor2(d);
-		if (g_signal_int == 130)
-			d->exit_code = 130;
-		g_signal_int = 0;
-		free_n_clean(d, 0);
+		clean_shell(d);
 	}
 	free_n_clean(d, 1);
 	return (0);
-} 
+}

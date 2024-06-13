@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:38:11 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 14:38:15 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:12:44 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,16 @@ void	expand_exitstatus(t_data *d)
 	if (code)
 		free (code);
 	return ;
+}
+
+int	malloc_dat_exp(t_data *d, char **exp, char *value)
+{
+	*exp = (char *) ft_calloc(sizeof(char),
+			ft_strlen(d->tmp) + ft_strlen(value));
+	if (exp == NULL)
+	{
+		d->error = 301;
+		return (1);
+	}
+	return (0);
 }
