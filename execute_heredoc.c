@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/14 14:06:36 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/14 14:39:39 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,12 @@ int	hd_loop(t_data *d, int fd, t_com *current, int j)
 		}
 		var = hd_handle_input(d, current, &heredoc_input, fd);
 		if (var != 0)
+		{
+			if (heredoc_input)
+				free (heredoc_input);
+			heredoc_input = NULL;
 			return (var);
+		}
 		ft_putstr_fd(heredoc_input, fd);
 		ft_putchar_fd('\n', fd);
 		free (heredoc_input);
@@ -120,7 +125,7 @@ void	early_heredoc(t_data *d, t_com *current)
 		fd = hd_open_path(d);
 		if (fd < 0)
 			return ;
-		if (hd_loop(d, fd, current, j) != 0)
+		if (hd_loop(d, fd, current, j) == 1)
 			return ;
 		if (fd >= 0)
 			close (fd);
