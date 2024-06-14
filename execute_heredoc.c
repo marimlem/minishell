@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 17:36:15 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/14 09:47:13 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	hd_handle_input(t_data *d, t_com *current, char **heredoc_input, int fd)
 {
 	if (!*heredoc_input)
 	{
+		if (fd >= 0)
+			close (fd);
 		print_heredoc_warning();
 		return (2);
 	}

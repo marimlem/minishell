@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:04:33 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/11 14:08:00 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/13 22:08:48 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	init_com(t_data *d)
 
 char	*heredoc_exp(t_data *d, char *tok, t_com *current, int r)
 {
-	if (!strchr(tok, '\'') && !strchr(tok, '\"'))
+	if (!ft_strchr(tok, '\'') && !ft_strchr(tok, '\"'))
 	{
-		return (strdup(tok));
+		return (ft_strdup(tok));
 	}
 	current->rdr[r][2] = SGLQUOTE;
 	return (l_to_p_trans(d, tok, 0));
