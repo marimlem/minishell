@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:28:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:29:47 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:45:07 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,7 @@ void	ft_print_echo(t_com *current, int i);
 void	ft_echo(t_data *d, t_com *current);
 
 //exit_utils.c
-void	exit_check_numeric(t_data *d, t_com *current, int ec, int i);
+void	exit_check_numeric(t_data *d, t_com *current, int ec);
 void	exit_too_many_args(t_data *d);
 
 #endif

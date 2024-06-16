@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute2_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 18:58:22 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 13:33:34 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:46:13 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	execve_errormsg1(t_data *d, t_com *current, int i)
 {
 	if (current->file && (current->file[0] == '/'
 			|| (current->file[0] == '.'
-				& current->file[1] == '/') || (current->file[0] == '.'
+				&& current->file[1] == '/') || (current->file[0] == '.'
 				&& current->file[1] == '.' && current->file[2] == '/'))
 		&& access(current->file, F_OK) != 0)
 	{
