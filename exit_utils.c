@@ -6,7 +6,7 @@
 /*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:47:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/16 11:45:11 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/16 12:02:01 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	is_valid_number(const char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (str[i])
@@ -29,11 +30,15 @@ int	is_valid_number(const char *str)
 
 int	is_within_int_range(const char *str)
 {
-	char	*int_max = "2147483647";
-	char	*int_min = "-2147483648";
-	int		len = ft_strlen(str);
-	int		max_len = ft_strlen(int_max);
+	char	*int_max;
+	char	*int_min;
+	int		len;
+	int		max_len;
 
+	int_max = "2147483647";
+	int_min = "-2147483648";
+	len = ft_strlen(str);
+	max_len = ft_strlen(int_max);
 	if (str[0] == '-')
 	{
 		if (len > max_len || (len == max_len && ft_strcmp(str, int_min) > 0))
@@ -49,9 +54,8 @@ int	is_within_int_range(const char *str)
 
 void	exit_check_numeric(t_data *d, t_com *current, int ec)
 {
-	/* if (!ft_isdigit(current->args[1][i]) && \
-	(i != 0 || current->args[1][i] != '-')) */
-	if (!is_valid_number(current->args[1]) || !is_within_int_range(current->args[1]))
+	if (!is_valid_number(current->args[1]) || \
+	!is_within_int_range(current->args[1]))
 	{
 		ec = 2;
 		ft_putstr_fd("minishell: exit: ", 2);
