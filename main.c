@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:21:49 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 20:25:57 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:23:45 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,15 @@ void	clean_shell(t_data *d)
 
 void	parsing_error(t_data *d)
 {
-	if (d->error > 1)
-		ft_putstr_fd("syntax ", 2);
-	if (d->error != 0)
+	if (d->error == 1)
 	{
-		ft_putstr_fd("error", 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("error\n", 2);
+		d->exit_code = 1;
+	}
+	else if (d->error > 1)
+	{
+		ft_putstr_fd("syntax error\n", 2);
+		d->exit_code = 2;
 	}
 }
 
