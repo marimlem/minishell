@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:03:26 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/14 10:00:04 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:12:57 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ int	ltop_dollar(t_data *d, char **new, int exp)
 		d->q = (*new)[d->i + 1];
 		ft_memmove(&(*new)[d->i], &(*new)[d->i + 2],
 			ft_strlen(&(*new)[d->i]) - 1);
-		if (d->q != (*new)[d->i])
-			d->i++;
 		return (0);
 	}
 	else if ((d->q == 0 || d->q == DBLQUOTE) && (*new)[d->i] == '$' && exp == 1)
