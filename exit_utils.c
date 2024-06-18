@@ -6,7 +6,7 @@
 /*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:47:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/16 12:02:01 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/18 15:18:52 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,23 @@ int	is_valid_number(const char *str)
 
 int	is_within_int_range(const char *str)
 {
-	char	*int_max;
-	char	*int_min;
+	char	*long_max;
+	char	*long_min;
 	int		len;
 	int		max_len;
 
-	int_max = "2147483647";
-	int_min = "-2147483648";
+	long_max = "9223372036854775807";
+	long_min = "-9223372036854775808";
 	len = ft_strlen(str);
-	max_len = ft_strlen(int_max);
+	max_len = ft_strlen(long_max);
 	if (str[0] == '-')
 	{
-		if (len > max_len || (len == max_len && ft_strcmp(str, int_min) > 0))
+		if (len > (max_len + 1) || (len == (max_len + 1) && ft_strcmp(str, long_min) > 0))
 			return (0);
 	}
 	else
 	{
-		if (len > max_len || (len == max_len && ft_strcmp(str, int_max) > 0))
+		if (len > max_len || (len == max_len && ft_strcmp(str, long_max) > 0))
 			return (0);
 	}
 	return (1);
