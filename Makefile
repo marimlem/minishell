@@ -34,7 +34,8 @@ $(LIBFT):
 	make bonus -C $(LIB_D)
 
 v:
-	valgrind --suppressions=supp.supp --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
+	# valgrind --suppressions=supp.supp --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
 
 vns:
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes ./minishell
