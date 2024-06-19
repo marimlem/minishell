@@ -3,19 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:47:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/13 11:47:49 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:18:52 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_check_numeric(t_data *d, t_com *current, int ec, int i)
+int	is_valid_number(const char *str)
 {
-	if (!ft_isdigit(current->args[1][i]) && \
-	(i != 0 || current->args[1][i] != '-'))
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	is_within_int_range(const char *str)
+{
+	char	*long_max;
+	char	*long_min;
+	int		len;
+	int		max_len;
+
+	long_max = "9223372036854775807";
+	long_min = "-9223372036854775808";
+	len = ft_strlen(str);
+	max_len = ft_strlen(long_max);
+	if (str[0] == '-')
+	{
+		if (len > (max_len + 1) || (len == (max_len + 1) && ft_strcmp(str, long_min) > 0))
+			return (0);
+	}
+	else
+	{
+		if (len > max_len || (len == max_len && ft_strcmp(str, long_max) > 0))
+			return (0);
+	}
+	return (1);
+}
+
+void	exit_check_numeric(t_data *d, t_com *current, int ec)
+{
+	if (!is_valid_number(current->args[1]) || \
+	!is_within_int_range(current->args[1]))
 	{
 		ec = 2;
 		ft_putstr_fd("minishell: exit: ", 2);

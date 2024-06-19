@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:55:07 by hluo              #+#    #+#             */
-/*   Updated: 2024/06/13 20:25:37 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:45:30 by hluo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	handle_exit(t_data *d, t_com *current, int ec)
 	{
 		while (current->args[1][i])
 		{
-			exit_check_numeric(d, current, ec, i);
+			exit_check_numeric(d, current, ec);
 			i++;
 		}
 		if (current->args[2] != NULL)
