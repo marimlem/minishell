@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:26:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/14 14:39:39 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:09:20 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,8 @@ int	hd_loop(t_data *d, int fd, t_com *current, int j)
 		signal_setup(d, MODE_HD);
 		heredoc_input = readline("> ");
 		signal_setup(d, MODE_DF);
-		if (g_signal_int == 130)
-		{
-			if(heredoc_input)
-				free(heredoc_input);
-			d->exit_code = 130;
-			if (fd >= 0)
-				close (fd);
+		if (hd_sig_int(d, heredoc_input, fd) == 1)
 			return (1);
-		}
 		var = hd_handle_input(d, current, &heredoc_input, fd);
 		if (var != 0)
 		{

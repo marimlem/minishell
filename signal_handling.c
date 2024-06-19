@@ -6,7 +6,7 @@
 /*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:19 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/12 20:19:01 by lknobloc         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:08:54 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,16 @@ void	signal_setup(t_data *d, int modus)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 	}
+}
+
+int	hd_sig_int(t_data *d, char *heredoc_input, int fd)
+{
+	if (g_signal_int != 130)
+		return (0);
+	if (heredoc_input)
+		free(heredoc_input);
+	d->exit_code = 130;
+	if (fd >= 0)
+		close (fd);
+	return (1);
 }

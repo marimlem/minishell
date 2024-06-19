@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 11:47:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/18 15:18:52 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/19 15:10:25 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	is_within_int_range(const char *str)
 	max_len = ft_strlen(long_max);
 	if (str[0] == '-')
 	{
-		if (len > (max_len + 1) || (len == (max_len + 1) && ft_strcmp(str, long_min) > 0))
+		if (len > (max_len + 1) || (len == (max_len + 1)
+				&& ft_strcmp(str, long_min) > 0))
 			return (0);
 	}
 	else

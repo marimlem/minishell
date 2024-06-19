@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hluo <hluo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lknobloc <lknobloc@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:28:48 by lknobloc          #+#    #+#             */
-/*   Updated: 2024/06/16 11:45:07 by hluo             ###   ########.fr       */
+/*   Updated: 2024/06/19 15:09:57 by lknobloc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	free_double_array(char **double_array);
 void	sighdhandler(int signum);
 void	sighandler(int signum);
 void	signal_setup(t_data *d, int modus);
+int		hd_sig_int(t_data *d, char *heredoc_input, int fd);
 
 // lu_inputparsing.c
 void	inputparsing(t_data *d);
